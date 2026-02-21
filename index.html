@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Norbert MUZILA – Space & Data Science Professional</title>
+  <meta name="description"
+    content="Personal portfolio of Norbert MUZILA – MSS student at ISU, Data Scientist, Space Engineer, passionate about geospatial AI and remote sensing." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav id="navbar">
+    <div class="nav-container">
+      <a href="#hero" class="nav-logo">NM<span class="dot">.</span></a>
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#experience">Experience</a></li>
+        <li><a href="#projects">Projects & Certs</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#interests">Interests</a></li>
+        <li><a href="#contact" class="nav-cta">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ===== HERO ===== -->
+  <section id="hero">
+    <div class="hero-bg-grid"></div>
+    <div class="hero-content">
+      <p class="hero-greeting">👋 Hello, I'm</p>
+      <h1 class="hero-name">Norbert <span class="accent">MUZILA</span></h1>
+      <h2 class="hero-tagline"><span id="typed-text"></span><span class="cursor">|</span></h2>
+      <p class="hero-description">
+        Space enthusiast &amp; ISU Master's student passionate about geospatial AI,
+        remote sensing, satellite engineering, and data-driven solutions for climate
+        monitoring and environmental intelligence.
+      </p>
+      <div class="hero-buttons">
+        <a href="#projects" class="btn btn-primary">View My Work</a>
+        <a href="#contact" class="btn btn-secondary">Get In Touch</a>
+      </div>
+      <div class="hero-socials">
+        <a href="https://www.linkedin.com/in/norbert-muzila-646330235" aria-label="LinkedIn" target="_blank"><i
+            class="fab fa-linkedin"></i></a>
+        <div class="email-dropdown">
+          <a href="#" aria-label="Email" class="email-trigger"><i class="fas fa-envelope"></i></a>
+          <div class="email-dropdown-menu">
+            <a href="mailto:norbertmuzila600@gmail.com"><i class="fas fa-envelope"></i> norbertmuzila600@gmail.com</a>
+            <a href="mailto:norbert.muzila@spacegeneration.org"><i class="fas fa-envelope"></i>
+              norbert.muzila@spacegeneration.org</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-scroll-indicator">
+      <div class="scroll-line"></div>
+      <span>Scroll</span>
+    </div>
+  </section>
+
+  <!-- ===== ABOUT ===== -->
+  <section id="about" class="section">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-tag">Who I Am</span>
+        <h2>About <span class="accent">Me</span></h2>
+      </div>
+      <div class="about-grid">
+        <div class="about-photo-wrap reveal">
+          <div class="about-photo-frame">
+            <img src="avatar.jpg" alt="Norbert MUZILA" class="about-photo" id="profile-img" />
+            <div class="photo-glow"></div>
+          </div>
+          <div class="about-badges">
+            <div class="badge"><i class="fas fa-map-marker-alt"></i> Illkirch-Graffenstaden, France</div>
+            <div class="badge"><i class="fas fa-rocket"></i> ISU Master's Student 🛸</div>
+            <div class="badge"><i class="fas fa-globe-africa"></i> Open to Relocate</div>
+          </div>
+        </div>
+        <div class="about-text reveal">
+          <p class="about-intro">
+            Hi! I'm <strong>Norbert MUZILA</strong>, a highly motivated Master's student in
+            <strong>Space Studies (Space Engineering &amp; Applications)</strong> at the
+            <strong>International Space University</strong>, with a rigorous background in
+            <strong>Data Science &amp; Systems</strong> from the University of Zimbabwe.
+          </p>
+          <p>
+            I'm a strong Python developer experienced in building performance analysis tools,
+            space missions planning, and artificial intelligence — combining hands-on satellite
+            engineering experience with proven expertise in data analysis, Machine Learning,
+            and Deep Neural Networks.
+          </p>
+          <p>
+            I'm passionate about applying <strong>geospatial AI</strong> and <strong>remote sensing</strong>
+            to climate monitoring and environmental intelligence, seeking to contribute to key challenges
+            in modern space technology.
+          </p>
+          <div class="about-stats">
+            <div class="stat-item">
+              <span class="stat-num">3+</span>
+              <span class="stat-label">Years Experience</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-num">6</span>
+              <span class="stat-label">Certifications</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-num">3</span>
+              <span class="stat-label">Languages</span>
+            </div>
+          </div>
+          <div class="about-languages">
+            <span class="tag">🇬🇧 English — Full Proficiency</span>
+            <span class="tag">🇨🇳 Chinese — Conversational</span>
+            <span class="tag">🇫🇷 French — Learning</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== EXPERIENCE ===== -->
+  <section id="experience" class="section section-alt">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-tag">My Journey</span>
+        <h2>Experience &amp; <span class="accent">Education</span></h2>
+      </div>
+      <div class="timeline">
+
+        <!-- Current: MSS at ISU -->
+        <div class="timeline-item reveal">
+          <div class="timeline-dot timeline-dot-edu"></div>
+          <div class="timeline-card glass-card">
+            <div class="timeline-header">
+              <div>
+                <h3 class="timeline-role">🎓 Masters of Space Studies (MSS)</h3>
+                <p class="timeline-company"><i class="fas fa-university"></i> International Space University (ISU)</p>
+              </div>
+              <span class="timeline-date">Sep 2025 – Present</span>
+            </div>
+            <p class="timeline-desc">
+              Currently pursuing an MSS in the <strong>Space Engineering &amp; Applications</strong> track
+              at ISU in Illkirch-Graffenstaden, France. Coursework includes Space Systems Engineering,
+              Astrodynamics, Satellite Communications, Orbital Mechanics, Mission Planning, MBSE,
+              and Remote Sensing.
+            </p>
+            <div class="timeline-tags">
+              <span class="tag">Space Engineering</span>
+              <span class="tag">Astrodynamics</span>
+              <span class="tag">Satellite Comms</span>
+              <span class="tag">Remote Sensing</span>
+              <span class="tag">MBSE</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Data Science Researcher at CHPC -->
+        <div class="timeline-item reveal">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card glass-card">
+            <div class="timeline-header">
+              <div>
+                <h3 class="timeline-role">Data Science Residence Researcher</h3>
+                <p class="timeline-company"><i class="fas fa-building"></i> Zimbabwe Centre for High Performance
+                  Computing</p>
+              </div>
+              <span class="timeline-date">Dec 2024 – Jul 2025</span>
+            </div>
+            <p class="timeline-desc">
+              Processed large-scale datasets and designed Python ETL pipelines for analytics.
+              Conducted statistical and time-series analysis on monitoring datasets.
+              Applied ML optimisation techniques for high-performance computing environments.
+              Awarded <strong>Certificate of Competence in AI and Big Data Analytics</strong>.
+            </p>
+            <div class="timeline-tags">
+              <span class="tag">Python</span>
+              <span class="tag">ETL Pipelines</span>
+              <span class="tag">HPC</span>
+              <span class="tag">ML Optimisation</span>
+              <span class="tag">Big Data</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Steward Bank Intern -->
+        <div class="timeline-item reveal">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card glass-card">
+            <div class="timeline-header">
+              <div>
+                <h3 class="timeline-role">Strategy &amp; Digital Transformation Intern</h3>
+                <p class="timeline-company"><i class="fas fa-building"></i> Steward Bank</p>
+              </div>
+              <span class="timeline-date">Aug 2022 – Aug 2023</span>
+            </div>
+            <p class="timeline-desc">
+              Leveraged Machine Learning and Deep Neural Networks for complex data analysis and
+              customer churn prediction. Built performance analysis tools and automated CI/CD pipelines
+              using Docker. Designed interactive Python/Jupyter and Power BI dashboards for executive reporting.
+              Improved development efficiency by <strong>70%</strong> by analysing logs via Elastic Search
+              and visualising real-time error messages in Kibana.
+            </p>
+            <div class="timeline-tags">
+              <span class="tag">Machine Learning</span>
+              <span class="tag">Docker</span>
+              <span class="tag">CI/CD</span>
+              <span class="tag">Power BI</span>
+              <span class="tag">Elastic Search</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- BSc University of Zimbabwe -->
+        <div class="timeline-item reveal">
+          <div class="timeline-dot timeline-dot-edu"></div>
+          <div class="timeline-card glass-card">
+            <div class="timeline-header">
+              <div>
+                <h3 class="timeline-role">🎓 BSc (Hons) Data Science &amp; Systems</h3>
+                <p class="timeline-company"><i class="fas fa-university"></i> University of Zimbabwe</p>
+              </div>
+              <span class="timeline-date">Sep 2020 – Jul 2025</span>
+            </div>
+            <p class="timeline-desc">
+              Graduated with Honours in Data Science and Systems. Built a strong foundation in
+              Python development, statistical modelling, predictive analytics, machine learning,
+              and software development.
+            </p>
+            <div class="timeline-tags">
+              <span class="tag">Data Science</span>
+              <span class="tag">Python</span>
+              <span class="tag">Statistics</span>
+              <span class="tag">Software Dev</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PROJECTS & CERTIFICATIONS ===== -->
+  <section id="projects" class="section">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-tag">Certifications &amp; Projects</span>
+        <h2>My <span class="accent">Work</span></h2>
+      </div>
+      <div class="projects-grid">
+
+        <!-- ISU Executive Space Course -->
+        <div class="project-card glass-card reveal">
+          <div class="project-icon"><i class="fas fa-satellite"></i></div>
+          <h3 class="project-title">Executive Space Course – ISU</h3>
+          <p class="project-desc">
+            Certified participant of the Executive Space Course at the International
+            Space University, October 2025. Engaged with global space leaders on
+            space exploration, policy, and the commercialisation of space.
+          </p>
+          <div class="project-tags">
+            <span class="tag">Space Policy</span>
+            <span class="tag">ISU 2025</span>
+            <span class="tag">Leadership</span>
+          </div>
+          <div class="project-links">
+            <a href="https://www.isunet.edu" class="icon-link" aria-label="ISU Website" target="_blank"><i
+                class="fas fa-external-link-alt"></i></a>
+          </div>
+        </div>
+
+        <!-- AI and Big Data -->
+        <div class="project-card glass-card reveal">
+          <div class="project-icon"><i class="fas fa-brain"></i></div>
+          <h3 class="project-title">AI &amp; Big Data Analytics – CHPC</h3>
+          <p class="project-desc">
+            Certificate of Competence in AI and Big Data Analytics,
+            awarded by the Zimbabwe Centre for High Performance Computing (August 2025).
+            Intensive training in ML, deep learning, and large-scale data processing.
+          </p>
+          <div class="project-tags">
+            <span class="tag">AI</span>
+            <span class="tag">Big Data</span>
+            <span class="tag">HPC</span>
+          </div>
+        </div>
+
+        <!-- CubeSat Integration -->
+        <div class="project-card glass-card reveal">
+          <div class="project-icon"><i class="fas fa-rocket"></i></div>
+          <h3 class="project-title">CubeSat Subsystems Integration</h3>
+          <p class="project-desc">
+            Hands-on satellite engineering: CubeSat subsystem integration, EO payload design,
+            and AI pipeline development for Earth observation data processing and analysis.
+          </p>
+          <div class="project-tags">
+            <span class="tag">CubeSat</span>
+            <span class="tag">EO Payload</span>
+            <span class="tag">AI Pipeline</span>
+            <span class="tag">Satellite Engineering</span>
+          </div>
+        </div>
+
+        <!-- Megafan EO Mapping -->
+        <div class="project-card glass-card reveal">
+          <div class="project-icon"><i class="fas fa-globe"></i></div>
+          <h3 class="project-title">Megafan EO Mapping (MODIS)</h3>
+          <p class="project-desc">
+            Geospatial analysis project using MODIS satellite imagery for megafan
+            mapping and Earth observation. Applied remote sensing and QGIS for
+            environmental intelligence and land-cover classification.
+          </p>
+          <div class="project-tags">
+            <span class="tag">MODIS</span>
+            <span class="tag">QGIS</span>
+            <span class="tag">Remote Sensing</span>
+            <span class="tag">Geospatial AI</span>
+          </div>
+        </div>
+
+        <!-- AWS Cloud -->
+        <div class="project-card glass-card reveal">
+          <div class="project-icon"><i class="fab fa-aws"></i></div>
+          <h3 class="project-title">AWS Cloud Technical Essentials</h3>
+          <p class="project-desc">
+            Completed AWS Cloud Technical Essentials (Coursera). Cloud infrastructure
+            fundamentals, EC2, S3, IAM, and cloud architecture best practices.
+          </p>
+          <div class="project-tags">
+            <span class="tag">AWS</span>
+            <span class="tag">Cloud</span>
+            <span class="tag">Coursera</span>
+          </div>
+        </div>
+
+        <!-- Google Data Analytics -->
+        <div class="project-card glass-card reveal">
+          <div class="project-icon"><i class="fas fa-chart-line"></i></div>
+          <h3 class="project-title">Google Advanced Data Analytics</h3>
+          <p class="project-desc">
+            Completed the Google Advanced Data Analytics Capstone (Coursera). Advanced
+            statistical modelling, predictive analytics, and data-driven decision making.
+          </p>
+          <div class="project-tags">
+            <span class="tag">Google</span>
+            <span class="tag">Data Analytics</span>
+            <span class="tag">Coursera</span>
+          </div>
+        </div>
+
+        <!-- Cisco Cybersecurity -->
+        <div class="project-card glass-card reveal">
+          <div class="project-icon"><i class="fas fa-shield-alt"></i></div>
+          <h3 class="project-title">Introduction to Cybersecurity – Cisco</h3>
+          <p class="project-desc">
+            Completed Introduction to Cybersecurity by Cisco Networking Academy.
+            Foundations of network security, threat analysis, and cyber defence.
+          </p>
+          <div class="project-tags">
+            <span class="tag">Cisco</span>
+            <span class="tag">Cybersecurity</span>
+            <span class="tag">Networking</span>
+          </div>
+        </div>
+
+        <!-- Customer Churn ML Project -->
+        <div class="project-card glass-card reveal">
+          <div class="project-icon"><i class="fas fa-chart-bar"></i></div>
+          <h3 class="project-title">Customer Churn Prediction (ML)</h3>
+          <p class="project-desc">
+            Built ML and Deep Neural Network models for customer churn prediction at
+            Steward Bank, leveraging classification algorithms and feature engineering
+            to deliver actionable business insights for retention strategy.
+          </p>
+          <div class="project-tags">
+            <span class="tag">Machine Learning</span>
+            <span class="tag">Python</span>
+            <span class="tag">Deep Learning</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SKILLS ===== -->
+  <section id="skills" class="section section-alt">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-tag">Technical Arsenal</span>
+        <h2>My <span class="accent">Skills</span></h2>
+      </div>
+      <div class="skills-grid">
+        <div class="skill-category glass-card reveal">
+          <h3><i class="fas fa-code"></i> Programming & Data</h3>
+          <div class="skill-tags">
+            <span class="tag">Python</span>
+            <span class="tag">R</span>
+            <span class="tag">SQL</span>
+            <span class="tag">Jupyter Notebook</span>
+            <span class="tag">SPSS</span>
+            <span class="tag">Predictive Modeling</span>
+          </div>
+        </div>
+        <div class="skill-category glass-card reveal">
+          <h3><i class="fas fa-brain"></i> AI & Machine Learning</h3>
+          <div class="skill-tags">
+            <span class="tag">Machine Learning</span>
+            <span class="tag">Deep Neural Networks</span>
+            <span class="tag">Big Data Analytics</span>
+            <span class="tag">Data Analysis</span>
+            <span class="tag">ETL Pipelines</span>
+          </div>
+        </div>
+        <div class="skill-category glass-card reveal">
+          <h3><i class="fas fa-satellite-dish"></i> Space Engineering</h3>
+          <div class="skill-tags">
+            <span class="tag">Space Systems Engineering</span>
+            <span class="tag">Astrodynamics</span>
+            <span class="tag">Satellite Communications</span>
+            <span class="tag">Orbital Mechanics</span>
+            <span class="tag">Mission Planning</span>
+            <span class="tag">CubeSat Integration</span>
+            <span class="tag">MBSE</span>
+            <span class="tag">Remote Sensing</span>
+          </div>
+        </div>
+        <div class="skill-category glass-card reveal">
+          <h3><i class="fas fa-tools"></i> DevOps & Tools</h3>
+          <div class="skill-tags">
+            <span class="tag">Git</span>
+            <span class="tag">Docker</span>
+            <span class="tag">CI/CD</span>
+            <span class="tag">Elastic Search</span>
+            <span class="tag">Kibana</span>
+            <span class="tag">Power BI</span>
+            <span class="tag">Microsoft Excel</span>
+            <span class="tag">QGIS</span>
+            <span class="tag">AWS</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== INTERESTS ===== -->
+  <section id="interests" class="section">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-tag">Beyond Work</span>
+        <h2>My <span class="accent">Interests</span></h2>
+      </div>
+      <div class="interests-grid">
+        <div class="interest-card glass-card reveal">
+          <div class="interest-icon"><i class="fas fa-rocket"></i></div>
+          <h3>Space Exploration</h3>
+          <p>Fascinated by humanity's journey beyond Earth — from satellite technology and space policy to the
+            commercialisation of space.</p>
+        </div>
+        <div class="interest-card glass-card reveal">
+          <div class="interest-icon"><i class="fas fa-laptop-code"></i></div>
+          <h3>AI & Data Science</h3>
+          <p>Passionate about applying machine learning and geospatial AI to solve real-world problems in climate and
+            environmental intelligence.</p>
+        </div>
+        <div class="interest-card glass-card reveal">
+          <div class="interest-icon"><i class="fas fa-satellite-dish"></i></div>
+          <h3>Remote Sensing</h3>
+          <p>Exploring how satellite imagery and Earth observation data can monitor climate change and support
+            environmental decision-making.</p>
+        </div>
+        <div class="interest-card glass-card reveal">
+          <div class="interest-icon"><i class="fas fa-globe-africa"></i></div>
+          <h3>Africa & Development</h3>
+          <p>Passionate about leveraging space technology and innovation to drive sustainable development across Africa.
+          </p>
+        </div>
+        <div class="interest-card glass-card reveal">
+          <div class="interest-icon"><i class="fas fa-book-open"></i></div>
+          <h3>Continuous Learning</h3>
+          <p>Always pursuing new certifications, courses, and knowledge — from AWS to cybersecurity to advanced data
+            analytics.</p>
+        </div>
+        <div class="interest-card glass-card reveal">
+          <div class="interest-icon"><i class="fas fa-hands-helping"></i></div>
+          <h3>Community</h3>
+          <p>Giving back through mentoring, collaboration, and supporting the next generation of space and tech
+            professionals.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CONTACT ===== -->
+  <section id="contact" class="section section-alt">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-tag">Say Hello</span>
+        <h2>Get In <span class="accent">Touch</span></h2>
+      </div>
+      <div class="contact-grid">
+        <div class="contact-left reveal">
+          <p class="contact-intro">
+            I'm always open to new opportunities, collaborations, and interesting conversations
+            in space technology, data science, and AI. Whether you have a project in mind or
+            just want to say hi — my inbox is open!
+          </p>
+          <div class="contact-info">
+            <div class="contact-item">
+              <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+              <div>
+                <span class="contact-label">Email</span>
+                <a href="mailto:norbertmuzila600@gmail.com" class="contact-value">norbertmuzila600@gmail.com</a>
+                <a href="mailto:norbert.muzila@spacegeneration.org"
+                  class="contact-value">norbert.muzila@spacegeneration.org</a>
+              </div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-icon"><i class="fas fa-phone"></i></div>
+              <div>
+                <span class="contact-label">Phone</span>
+                <span class="contact-value">(+33) 602 549 977</span>
+              </div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-icon"><i class="fab fa-linkedin"></i></div>
+              <div>
+                <span class="contact-label">LinkedIn</span>
+                <a href="https://www.linkedin.com/in/norbert-muzila-646330235" class="contact-value"
+                  target="_blank">norbert-muzila</a>
+              </div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div>
+              <div>
+                <span class="contact-label">Location</span>
+                <span class="contact-value">Illkirch-Graffenstaden, France</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <form class="contact-form glass-card reveal" id="contact-form">
+          <div class="form-group">
+            <label for="name">Your Name</label>
+            <input type="text" id="name" name="name" placeholder="John Doe" required />
+          </div>
+          <div class="form-group">
+            <label for="email">Your Email</label>
+            <input type="email" id="email" name="email" placeholder="john@example.com" required />
+          </div>
+          <div class="form-group">
+            <label for="message">Message</label>
+            <textarea id="message" name="message" rows="5" placeholder="Tell me about your project or just say hi!"
+              required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary btn-full">
+            <i class="fas fa-paper-plane"></i> Send Message
+          </button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer id="footer">
+    <div class="container">
+      <div class="footer-content">
+        <a href="#hero" class="footer-logo">NM<span class="dot">.</span></a>
+        <p class="footer-text">
+          Designed &amp; Built by <strong>Norbert MUZILA</strong> &copy; <span id="year"></span>
+        </p>
+        <div class="footer-socials">
+          <a href="https://www.linkedin.com/in/norbert-muzila-646330235" aria-label="LinkedIn" target="_blank"><i
+              class="fab fa-linkedin"></i></a>
+          <div class="email-dropdown">
+            <a href="#" aria-label="Email" class="email-trigger"><i class="fas fa-envelope"></i></a>
+            <div class="email-dropdown-menu email-dropdown-up">
+              <a href="mailto:norbertmuzila600@gmail.com"><i class="fas fa-envelope"></i> norbertmuzila600@gmail.com</a>
+              <a href="mailto:norbert.muzila@spacegeneration.org"><i class="fas fa-envelope"></i>
+                norbert.muzila@spacegeneration.org</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+
+</html>

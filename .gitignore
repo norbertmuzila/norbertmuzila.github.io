@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+preview.py
+preview.bat
+package.json
+node_modules/
+.DS_Store
+Thumbs.db
