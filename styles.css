@@ -764,6 +764,19 @@ body {
     flex-wrap: wrap;
 }
 
+.timeline-subheading {
+    padding-left: 74px;
+    margin-bottom: 16px;
+    margin-top: 8px;
+}
+
+.timeline-subheading h3 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.5px;
+}
+
 /* ── PROJECTS ── */
 .projects-grid {
     display: grid;
