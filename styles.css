@@ -352,8 +352,43 @@ body {
 .hero-greeting {
     font-size: 1.1rem;
     color: var(--text-secondary);
-    margin-bottom: 16px;
+    margin-bottom: 8px;
     font-weight: 400;
+}
+
+.hero-welcome {
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    font-weight: 500;
+    color: var(--accent);
+    margin-bottom: 16px;
+    animation: slideInLeft 1s ease-out forwards, gentlePulse 3s ease-in-out 1.5s infinite;
+    opacity: 0;
+    font-family: var(--font-mono);
+    letter-spacing: 0.5px;
+}
+
+@keyframes slideInLeft {
+    0% {
+        opacity: 0;
+        transform: translateX(-40px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes gentlePulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.7;
+    }
 }
 
 .hero-name {
