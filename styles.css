@@ -63,9 +63,11 @@ body {
 
 /* ── UTILITIES ── */
 .container {
-    max-width: 1200px;
+    max-width: 1440px;
+    /* Expanded for a wider, fuller landscape view */
     margin: 0 auto;
-    padding: 0 24px;
+    padding: 0 4% 0 4%;
+    /* Responsive edge padding */
 }
 
 .accent {
@@ -211,9 +213,9 @@ body {
 }
 
 .nav-container {
-    max-width: 1200px;
+    max-width: 1440px;
     margin: 0 auto;
-    padding: 0 24px;
+    padding: 0 4% 0 4%;
     height: 100%;
     display: flex;
     align-items: center;
@@ -346,7 +348,8 @@ body {
 .hero-content {
     position: relative;
     z-index: 1;
-    max-width: 760px;
+    max-width: 1000px;
+    /* Expanded hero text area */
 }
 
 .hero-greeting {
@@ -428,7 +431,8 @@ body {
 .hero-description {
     font-size: 1.05rem;
     color: var(--text-secondary);
-    max-width: 560px;
+    max-width: 700px;
+    /* Expanded hero subtext area */
     margin: 0 auto 36px;
     line-height: 1.8;
     font-weight: 400;
@@ -581,7 +585,8 @@ body {
 .about-grid {
     display: grid;
     grid-template-columns: 320px 1fr;
-    gap: 64px;
+    gap: 80px;
+    /* Increased gap for wider layout */
     align-items: start;
 }
 
@@ -699,7 +704,8 @@ body {
 /* ── EXPERIENCE (TIMELINE) ── */
 .timeline {
     position: relative;
-    max-width: 860px;
+    max-width: 1100px;
+    /* Expanded timeline max-width */
     margin: 0 auto;
 }
 
@@ -815,8 +821,9 @@ body {
 /* ── PROJECTS ── */
 .projects-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 24px;
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    /* Larger minimum width so they don't get too squished, but fill nicely */
+    gap: 32px;
 }
 
 .project-card {
@@ -887,8 +894,9 @@ body {
 /* ── INTERESTS ── */
 .interests-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 24px;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    /* Accommodate wider layout */
+    gap: 32px;
 }
 
 .interest-card {
@@ -937,8 +945,9 @@ body {
 /* ── SKILLS ── */
 .skills-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 24px;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    /* Better fill on large screens */
+    gap: 32px;
 }
 
 .skill-category {
@@ -976,9 +985,13 @@ body {
 /* ── CONTACT ── */
 .contact-grid {
     display: grid;
-    grid-template-columns: 1fr 1.2fr;
-    gap: 64px;
-    align-items: start;
+    grid-template-columns: 1fr 1fr;
+    /* Keep 50/50 but the parent container is wider now */
+    gap: 80px;
+    /* Increased gap */
+    max-width: 1100px;
+    /* Widened max-width */
+    margin: 0 auto;
 }
 
 .contact-intro {
