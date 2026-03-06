@@ -434,10 +434,13 @@
             Space University, October 2025. Engaged with global space leaders on
             space exploration, policy, and the commercialisation of space.
           </p>
-          <div class="project-tags">
+          <div class="project-tags" style="align-items: center;">
             <span class="tag">Space Policy</span>
             <span class="tag">ISU 2025</span>
             <span class="tag">Leadership</span>
+            <button type="button" class="btn btn-secondary btn-sm" onclick="openCertModal()"
+              style="padding: 4px 12px; font-size: 0.75rem; margin-left: auto;"><i class="fas fa-certificate"></i> View
+              Certificate</button>
           </div>
           <div class="project-links">
             <a href="https://www.isunet.edu" class="icon-link" aria-label="ISU Website" target="_blank"><i
@@ -717,6 +720,11 @@
       </div>
     </div>
   </footer>
+  <!-- Certificate Modal -->
+  <div id="certModal" class="modal">
+    <span class="modal-close" onclick="closeCertModal()">&times;</span>
+    <img class="modal-content" id="certImage" src="isu-certificate.jpg" alt="ISU Executive Space Course Certificate">
+  </div>
 
   <script src="script.js"></script>
 </body>

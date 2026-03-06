@@ -155,3 +155,18 @@ if (profileImg) {
         wrapper.appendChild(svg);
     };
 }
+
+// ── Certificate Modal ──
+const certModal = document.getElementById('certModal');
+function openCertModal() {
+    if (certModal) certModal.style.display = 'block';
+}
+function closeCertModal() {
+    if (certModal) certModal.style.display = 'none';
+}
+// Close on outside click
+window.addEventListener('click', (e) => {
+    if (e.target === certModal) {
+        closeCertModal();
+    }
+});
