@@ -158,8 +158,11 @@ if (profileImg) {
 
 // ── Certificate Modal ──
 const certModal = document.getElementById('certModal');
-function openCertModal() {
-    if (certModal) certModal.style.display = 'block';
+function openCertModal(imageSrc) {
+    if (certModal) {
+        document.getElementById('certImage').src = imageSrc || 'isu-certificate.jpg';
+        certModal.style.display = 'block';
+    }
 }
 function closeCertModal() {
     if (certModal) certModal.style.display = 'none';
