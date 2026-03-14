@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pension Fund Digital Twin — Zimbabwe</title>
+  <meta name="description" content="Interactive digital twin dashboard simulating Zimbabwe pension fund challenges including hyperinflation, currency instability, and demographic pressures." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ===== HEADER ===== -->
+  <header id="header">
+    <div class="header-left">
+      <svg class="header-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM17.5 14v7M14 17.5h7"/>
+      </svg>
+      <h1>Pension Fund Digital Twin</h1>
+    </div>
+    <div class="header-right">
+      <button class="mode-btn active" id="btn-scenario" data-mode="scenario">Scenario Mode</button>
+      <button class="mode-btn" id="btn-live" data-mode="live">Live Data Mode</button>
+    </div>
+  </header>
+
+  <!-- ===== MAIN DASHBOARD ===== -->
+  <main id="dashboard">
+
+    <!-- LEFT PANEL: Scenario Editor -->
+    <section id="left-panel">
+      <div class="panel-header">
+        <h2>SCENARIO EDITOR</h2>
+        <div class="action-buttons">
+          <button class="action-btn run-btn" id="btn-run">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><polygon points="5,3 19,12 5,21"/></svg>
+            Run Simulation
+          </button>
+          <button class="action-btn stop-btn" id="btn-stop">Stop</button>
+          <button class="action-btn reset-btn" id="btn-reset">Reset Scenario</button>
+        </div>
+      </div>
+
+      <!-- Scenario Parameters -->
+      <div class="editor-area" id="editor-area">
+        <div class="param-group">
+          <label class="param-label">
+            <span class="param-name">Monthly Contribution (USD)</span>
+            <span class="param-value" id="val-contribution">50</span>
+          </label>
+          <input type="range" class="param-slider" id="slider-contribution" min="10" max="500" value="50" step="5" />
+        </div>
+        <div class="param-group">
+          <label class="param-label">
+            <span class="param-name">Annual Inflation Rate (%)</span>
+            <span class="param-value" id="val-inflation">25</span>
+          </label>
+          <input type="range" class="param-slider" id="slider-inflation" min="1" max="500" value="25" step="1" />
+        </div>
+        <div class="param-group">
+          <label class="param-label">
+            <span class="param-name">Retirement Age</span>
+            <span class="param-value" id="val-retirement">60</span>
+          </label>
+          <input type="range" class="param-slider" id="slider-retirement" min="50" max="75" value="60" step="1" />
+        </div>
+        <div class="param-group">
+          <label class="param-label">
+            <span class="param-name">Current Age</span>
+            <span class="param-value" id="val-age">30</span>
+          </label>
+          <input type="range" class="param-slider" id="slider-age" min="18" max="65" value="30" step="1" />
+        </div>
+        <div class="param-group">
+          <label class="param-label">
+            <span class="param-name">Annual Return Rate (%)</span>
+            <span class="param-value" id="val-return">8</span>
+          </label>
+          <input type="range" class="param-slider" id="slider-return" min="0" max="30" value="8" step="0.5" />
+        </div>
+        <div class="param-group">
+          <label class="param-label">
+            <span class="param-name">Monthly Payout (USD)</span>
+            <span class="param-value" id="val-payout">200</span>
+          </label>
+          <input type="range" class="param-slider" id="slider-payout" min="50" max="2000" value="200" step="10" />
+        </div>
+        <div class="param-group">
+          <label class="param-label">
+            <span class="param-name">Currency</span>
+          </label>
+          <select class="param-select" id="select-currency">
+            <option value="USD">USD (US Dollar)</option>
+            <option value="ZiG">ZiG (Zimbabwe Gold)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Terminal / Analysis Output -->
+      <div class="terminal-section">
+        <div class="terminal-header">ANALYSIS OUTPUT</div>
+        <div class="terminal-body" id="terminal-body">
+          <p class="terminal-line info">System initialized. Configure scenario parameters and click <strong>Run Simulation</strong>.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- RIGHT PANEL: Canvas -->
+    <section id="right-panel">
+      <!-- Status Overlay -->
+      <div class="status-overlay" id="status-overlay">
+        <div class="status-row"><span class="status-label">Status:</span> <span id="status-state">Idle</span></div>
+        <div class="status-row"><span class="status-label">Fund Balance:</span> <span id="status-balance">$0</span></div>
+        <div class="status-row"><span class="status-label">Monthly Payout:</span> <span id="status-payout">$0</span></div>
+        <div class="status-row"><span class="status-label">Inflation:</span> <span id="status-inflation">0%</span></div>
+        <div class="status-row"><span class="status-label">Yrs to Depletion:</span> <span id="status-depletion">—</span></div>
+      </div>
+
+      <!-- Settings Gear -->
+      <button class="settings-gear" id="settings-gear" aria-label="Settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="22" height="22">
+          <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        </svg>
+      </button>
+
+      <!-- Canvas -->
+      <canvas id="sim-canvas"></canvas>
+
+      <!-- Bottom Controls -->
+      <div class="canvas-controls" id="canvas-controls">
+        <span class="canvas-tip">Click on the chart to add challenge events.</span>
+        <div class="challenge-picker">
+          <label class="challenge-label">Challenge:</label>
+          <select class="challenge-select" id="select-challenge">
+            <option value="hyperinflation">Hyperinflation Spike</option>
+            <option value="currency">Currency Devaluation</option>
+            <option value="drought">Drought / Crisis</option>
+            <option value="policy">Policy Change</option>
+            <option value="demographic">Demographic Shift</option>
+          </select>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===== SETTINGS MODAL ===== -->
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal" id="modal-settings">
+      <div class="modal-header">
+        <h3>Simulator Configuration</h3>
+        <button class="modal-close" id="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-field">
+          <label>Projection Years</label>
+          <select id="setting-years">
+            <option value="20">20 Years</option>
+            <option value="30" selected>30 Years</option>
+            <option value="40">40 Years</option>
+            <option value="50">50 Years</option>
+          </select>
+        </div>
+        <div class="modal-field">
+          <label>Inflation Model</label>
+          <select id="setting-inflation-model">
+            <option value="constant" selected>Constant Rate</option>
+            <option value="volatile">Volatile (Zimbabwe-style)</option>
+            <option value="decreasing">Gradually Decreasing</option>
+          </select>
+        </div>
+        <div class="modal-field">
+          <label>Display Currency</label>
+          <select id="setting-currency">
+            <option value="USD" selected>USD (US Dollar)</option>
+            <option value="ZiG">ZiG (Zimbabwe Gold)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== BACK LINK ===== -->
+  <a href="../index.html" class="back-link" id="back-link">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="15 18 9 12 15 6"/></svg>
+    Back to Portfolio
+  </a>
+
+  <script src="main.js"></script>
+</body>
+</html>
