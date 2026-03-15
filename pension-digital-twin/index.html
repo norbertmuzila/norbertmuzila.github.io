@@ -28,11 +28,11 @@
     <div class="header-right">
       <select class="preset-select" id="preset-select">
         <option value="custom">Custom Scenario</option>
-        <option value="2008crisis">📉 2008 Hyperinflation Crisis</option>
-        <option value="covid2020">🦠 COVID-19 Impact (2020)</option>
-        <option value="zig2024">💰 ZiG Currency Transition (2024)</option>
-        <option value="stable">✅ Stable Growth Baseline</option>
-        <option value="nssa">🏛️ NSSA Default Parameters</option>
+        <option value="2008crisis">2008 Hyperinflation Crisis</option>
+        <option value="covid2020">COVID-19 Impact (2020)</option>
+        <option value="zig2024">ZiG Currency Transition (2024)</option>
+        <option value="stable">Stable Growth Baseline</option>
+        <option value="nssa">NSSA Default Parameters</option>
       </select>
     </div>
   </header>
@@ -99,13 +99,7 @@
               <span class="param-name">Retirement Age</span>
               <span class="param-value" id="val-retirement">60</span>
             </label>
-            <select class="param-select" id="select-retirement">
-              <option value="55">55 — Early Retirement</option>
-              <option value="60" selected>60 — Normal Retirement</option>
-              <option value="65">65 — Late Retirement</option>
-              <option value="custom">Custom (use slider)</option>
-            </select>
-            <input type="range" class="param-slider" id="slider-retirement" min="50" max="75" value="60" step="1" style="display:none;" />
+            <input type="range" class="param-slider" id="slider-retirement" min="18" max="120" value="60" step="1" />
           </div>
         </div>
         <div class="param-section-title">Currency & Inflation</div>
@@ -116,7 +110,7 @@
           <select class="param-select" id="select-currency">
             <option value="USD">USD (US Dollar)</option>
             <option value="ZiG">ZiG (Zimbabwe Gold)</option>
-            <option value="MOT">🪙 Gold Index (Mosi oa Tunya)</option>
+            <option value="MOT">Gold Index (Mosi oa Tunya)</option>
           </select>
         </div>
         <div class="param-group">
@@ -259,7 +253,7 @@
 
       <!-- IPEC Compliance Badge -->
       <div class="ipec-badge" id="ipec-badge">
-        <span class="ipec-icon">⚖️</span>
+        <span class="ipec-icon">IPEC</span>
         <span class="ipec-status" id="ipec-status-text">IPEC: —</span>
       </div>
 
@@ -294,7 +288,7 @@
   <div class="modal-overlay" id="pensioner-overlay">
     <div class="modal pensioner-modal" id="modal-pensioner">
       <div class="modal-header">
-        <h3>🧓 Your Pension Summary — Simple View</h3>
+        <h3>Your Pension Summary — Simple View</h3>
         <button class="modal-close" id="pensioner-close">&times;</button>
       </div>
       <div class="modal-body pensioner-body" id="pensioner-body">
@@ -319,7 +313,7 @@
           <div class="pensioner-card-sub" id="p-health-advice">Run a simulation to see your pension health</div>
         </div>
         <div class="pensioner-tips" id="pensioner-tips">
-          <h4>💡 What You Can Do</h4>
+          <h4>What You Can Do</h4>
           <ul id="p-tips-list">
             <li>Run a simulation first to get personalized advice</li>
           </ul>
@@ -332,7 +326,7 @@
   <div class="modal-overlay" id="modal-overlay">
     <div class="modal" id="modal-settings">
       <div class="modal-header">
-        <h3>⚙️ Simulator Configuration</h3>
+        <h3>Simulator Configuration</h3>
         <button class="modal-close" id="modal-close">&times;</button>
       </div>
       <div class="modal-body">

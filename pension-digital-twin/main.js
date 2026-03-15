@@ -136,20 +136,8 @@
   // Allocation total tracking
   const allocSliders = ['allocEquities', 'allocBonds', 'allocRealestate', 'allocMoney', 'allocGold'];
 
-  // Retirement age dropdown
-  const retirementSelect = document.getElementById('select-retirement');
-  if (retirementSelect) {
-    retirementSelect.addEventListener('change', () => {
-      const v = retirementSelect.value;
-      if (v === 'custom') {
-        sliders.retirement.style.display = '';
-      } else {
-        sliders.retirement.style.display = 'none';
-        sliders.retirement.value = v;
-        vals.retirement.textContent = v;
-      }
-    });
-  }
+
+
   allocSliders.forEach(k => {
     sliders[k].addEventListener('input', updateAllocTotal);
   });
@@ -200,7 +188,7 @@
     cx2d.fill();
 
     // Center text
-    cx2d.fillStyle = '#0f172a';
+    cx2d.fillStyle = '#000000';
     cx2d.font = '700 14px "Plus Jakarta Sans"';
     cx2d.textAlign = 'center';
     cx2d.fillText(total + '%', cx, cy + 5);
@@ -622,7 +610,7 @@
     logTerminal(`Peak Balance: ${fmtCur(peak)}`, 'data', 'log');
     logTerminal(`Final Nominal: ${fmtCur(final.balance)} | Real: ${fmtCur(final.realBalance)}`, 'data', 'log');
     logTerminal(`Gold Holdings: ${final.goldHoldings.toFixed(4)} oz (${fmtCur(final.goldValue)})`, 'gold', 'log');
-    if (depPt > 0) logTerminal(`⚠ FUND DEPLETED at year ${ytd}`, 'error', 'log');
+    if (depPt > 0) logTerminal(`FUND DEPLETED at year ${ytd}`, 'error', 'log');
     else logTerminal('✓ Fund solvent through projection period.', 'success', 'log');
 
     // IPEC tab
@@ -672,7 +660,7 @@
     const preRetIncome = (parseFloat(sliders.employeeContrib.value) + parseFloat(sliders.employerContrib.value)) * 4;
     const actualReplRatio = preRetIncome > 0 ? (monthlyIncome / preRetIncome * 100).toFixed(1) : 0;
 
-    addTermLine(term, '⚖️ IPEC COMPLIANCE ASSESSMENT', 'ipec');
+    addTermLine(term, 'IPEC COMPLIANCE ASSESSMENT', 'ipec');
     addTermLine(term, '────────────────────────────────', 'info');
     addTermLine(term, `Min Funding Ratio Required: ${minFunding}%`, 'data');
     addTermLine(term, `Avg Funding Ratio Achieved: ${avgFundingRatio.toFixed(1)}%`, avgFundingRatio >= minFunding ? 'success' : 'error');
@@ -684,7 +672,7 @@
     addTermLine(term, `Fund Balance at Retirement: ${fmtCur(retData.balance)}`, 'data');
     addTermLine(term, `Total Contributions: ${fmtCur(retData.totalContributions)}`, 'data');
     addTermLine(term, `Gold Hedge Value: ${fmtCur(retData.goldValue)} (${retData.goldHoldings.toFixed(4)} oz)`, 'gold');
-    if (depPt > 0) addTermLine(term, `⚠ WARNING: Fund depletes at year ${(depPt/12).toFixed(1)} — fails sustainability test`, 'error');
+    if (depPt > 0) addTermLine(term, `WARNING: Fund depletes at year ${(depPt/12).toFixed(1)} — fails sustainability test`, 'error');
     else addTermLine(term, '✓ Fund passes IPEC long-term sustainability test', 'success');
   }
 
@@ -711,41 +699,41 @@
     const equityAlloc = parseInt(sliders.allocEquities.value);
     const cashAlloc = parseInt(sliders.allocMoney.value);
 
-    addTermLine(term, '💡 STRATEGIC RECOMMENDATIONS', 'success');
+    addTermLine(term, 'STRATEGIC RECOMMENDATIONS', 'success');
     addTermLine(term, '────────────────────────────────', 'info');
 
     // Contribution analysis
     if (empContrib + erContrib < 150) {
-      addTermLine(term, `📈 INCREASE CONTRIBUTIONS: Total $${empContrib + erContrib}/mo is below recommended. Target ≥$150/mo combined.`, 'warning');
+      addTermLine(term, `INCREASE CONTRIBUTIONS: Total $${empContrib + erContrib}/mo is below recommended. Target >=$150/mo combined.`, 'warning');
       addTermLine(term, `   → Advocate for employer match increase under Pension & Provident Funds Act`, 'info');
     }
 
     // Inflation hedging
     if (inflation > 50 && goldAlloc < 15) {
-      addTermLine(term, `🪙 GOLD HEDGE: With ${inflation}% inflation, increase Mosi oa Tunya Gold allocation from ${goldAlloc}% to 15-20%.`, 'gold');
+      addTermLine(term, `GOLD HEDGE: With ${inflation}% inflation, increase Mosi oa Tunya Gold allocation from ${goldAlloc}% to 15-20%.`, 'gold');
       addTermLine(term, `   → Gold coins preserve purchasing power per RBZ Exchange Control Directive`, 'info');
     }
 
     // Asset allocation advice
-    if (equityAlloc > 60) addTermLine(term, `⚠ DIVERSIFY: ${equityAlloc}% equities exceeds IPEC prudential limit. Consider rebalancing.`, 'warning');
-    if (cashAlloc > 30 && inflation > 10) addTermLine(term, `📉 REDUCE CASH: ${cashAlloc}% in money market losing value at ${inflation}% inflation. Shift to inflation-linked bonds.`, 'warning');
+    if (equityAlloc > 60) addTermLine(term, `DIVERSIFY: ${equityAlloc}% equities exceeds IPEC prudential limit. Consider rebalancing.`, 'warning');
+    if (cashAlloc > 30 && inflation > 10) addTermLine(term, `REDUCE CASH: ${cashAlloc}% in money market losing value at ${inflation}% inflation. Shift to inflation-linked bonds.`, 'warning');
 
     // Fund depletion
     if (depPt > 0) {
       addTermLine(term, '', 'info');
-      addTermLine(term, '🚨 CRITICAL: FUND DEPLETION RISK', 'error');
+      addTermLine(term, 'CRITICAL: FUND DEPLETION RISK', 'error');
       addTermLine(term, `   Solution 1: Reduce monthly payout from $${payout} to $${Math.round(payout * 0.6)}`, 'info');
       addTermLine(term, `   Solution 2: Extend working years (delay retirement by 3-5 years)`, 'info');
       addTermLine(term, `   Solution 3: Implement annuity-based drawdown (IPEC Directive 2/2020)`, 'info');
       addTermLine(term, `   Solution 4: Increase gold allocation as inflation hedge`, 'gold');
     } else {
       addTermLine(term, '', 'info');
-      addTermLine(term, '✅ Fund is sustainable — consider these optimizations:', 'success');
+      addTermLine(term, 'Fund is sustainable — consider these optimizations:', 'success');
     }
 
     // Zimbabwe-specific
     addTermLine(term, '', 'info');
-    addTermLine(term, '🇿🇼 ZIMBABWE-SPECIFIC STRATEGIES:', 'ipec');
+    addTermLine(term, 'ZIMBABWE-SPECIFIC STRATEGIES:', 'ipec');
     addTermLine(term, `   • Multi-currency strategy (USD/ZiG/Gold) mitigates FX risk`, 'info');
     addTermLine(term, `   • Mosi oa Tunya Gold coins: LBMA-pegged store of value`, 'gold');
     addTermLine(term, `   • Regional diversification: invest in SADC pension markets`, 'info');
@@ -773,15 +761,15 @@
 
       const healthCard = $('p-health-card');
       if (depPt > 0 && (depPt - retM) / 12 < 10) {
-        $('p-health').textContent = '⚠️ At Risk';
+        $('p-health').textContent = 'At Risk';
         $('p-health-advice').textContent = 'Your fund may not last through retirement. See tips below.';
         healthCard.className = 'pensioner-card red';
       } else if (depPt > 0) {
-        $('p-health').textContent = '⚡ Fair';
+        $('p-health').textContent = 'Fair';
         $('p-health-advice').textContent = 'Your fund has limited runway. Consider increasing savings.';
         healthCard.className = 'pensioner-card orange';
       } else {
-        $('p-health').textContent = '✅ Healthy';
+        $('p-health').textContent = 'Healthy';
         $('p-health-advice').textContent = 'Your pension fund is on a sustainable path.';
         healthCard.className = 'pensioner-card green';
       }
