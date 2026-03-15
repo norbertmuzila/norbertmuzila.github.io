@@ -53,7 +53,7 @@ body { font-family: var(--font-main); background: var(--bg-primary); color: var(
   gap: 12px;
 }
 .header-left { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
-.header-icon { width: 26px; height: 26px; color: var(--accent); }
+.header-logo { height: 36px; width: auto; object-fit: contain; }
 #header h1 {
   font-size: 1.05rem; font-weight: 700; letter-spacing: -0.5px;
   background: linear-gradient(135deg, #000000, #1e40af);

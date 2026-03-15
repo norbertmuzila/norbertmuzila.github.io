@@ -15,9 +15,7 @@
   <!-- ===== HEADER ===== -->
   <header id="header">
     <div class="header-left">
-      <svg class="header-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-        <path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM17.5 14v7M14 17.5h7"/>
-      </svg>
+      <img class="header-logo" src="zapf-logo.jpg" alt="ZAPF Logo" />
       <h1>Pension Fund Digital Twin</h1>
       <span class="header-badge">ZAPF Research</span>
     </div>
@@ -99,7 +97,13 @@
               <span class="param-name">Retirement Age</span>
               <span class="param-value" id="val-retirement">60</span>
             </label>
-            <input type="range" class="param-slider" id="slider-retirement" min="18" max="120" value="60" step="1" />
+            <select class="param-select" id="select-retirement">
+              <option value="55">55 - Early Retirement</option>
+              <option value="60" selected>60 - Normal Retirement</option>
+              <option value="65">65 - Late Retirement</option>
+              <option value="custom">Custom (use slider)</option>
+            </select>
+            <input type="range" class="param-slider" id="slider-retirement" min="18" max="120" value="60" step="1" style="display:none;" />
           </div>
         </div>
         <div class="param-section-title">Currency & Inflation</div>

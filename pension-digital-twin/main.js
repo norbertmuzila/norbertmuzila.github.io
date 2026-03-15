@@ -135,8 +135,20 @@
 
   // Allocation total tracking
   const allocSliders = ['allocEquities', 'allocBonds', 'allocRealestate', 'allocMoney', 'allocGold'];
-
-
+  // Retirement age dropdown
+  const retirementSelect = document.getElementById('select-retirement');
+  if (retirementSelect) {
+    retirementSelect.addEventListener('change', () => {
+      const v = retirementSelect.value;
+      if (v === 'custom') {
+        sliders.retirement.style.display = '';
+      } else {
+        sliders.retirement.style.display = 'none';
+        sliders.retirement.value = v;
+        vals.retirement.textContent = v;
+      }
+    });
+  }
 
   allocSliders.forEach(k => {
     sliders[k].addEventListener('input', updateAllocTotal);
