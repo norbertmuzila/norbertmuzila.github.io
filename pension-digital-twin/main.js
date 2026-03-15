@@ -135,6 +135,21 @@
 
   // Allocation total tracking
   const allocSliders = ['allocEquities', 'allocBonds', 'allocRealestate', 'allocMoney', 'allocGold'];
+
+  // Retirement age dropdown
+  const retirementSelect = document.getElementById('select-retirement');
+  if (retirementSelect) {
+    retirementSelect.addEventListener('change', () => {
+      const v = retirementSelect.value;
+      if (v === 'custom') {
+        sliders.retirement.style.display = '';
+      } else {
+        sliders.retirement.style.display = 'none';
+        sliders.retirement.value = v;
+        vals.retirement.textContent = v;
+      }
+    });
+  }
   allocSliders.forEach(k => {
     sliders[k].addEventListener('input', updateAllocTotal);
   });
@@ -181,11 +196,11 @@
     // Inner circle (donut hole)
     cx2d.beginPath();
     cx2d.arc(cx, cy, r * 0.55, 0, Math.PI * 2);
-    cx2d.fillStyle = '#111827';
+    cx2d.fillStyle = '#ffffff';
     cx2d.fill();
 
     // Center text
-    cx2d.fillStyle = '#e2e8f0';
+    cx2d.fillStyle = '#0f172a';
     cx2d.font = '700 14px "Plus Jakarta Sans"';
     cx2d.textAlign = 'center';
     cx2d.fillText(total + '%', cx, cy + 5);
@@ -412,20 +427,20 @@
     const w = canvas.width, h = canvas.height;
     ctx.clearRect(0, 0, w, h);
     const bg = ctx.createLinearGradient(0, 0, 0, h);
-    bg.addColorStop(0, '#0a0f1e'); bg.addColorStop(1, '#0f172a');
+    bg.addColorStop(0, '#ffffff'); bg.addColorStop(1, '#f1f5f9');
     ctx.fillStyle = bg; ctx.fillRect(0, 0, w, h);
 
-    ctx.strokeStyle = 'rgba(56,189,248,0.05)'; ctx.lineWidth = 1;
+    ctx.strokeStyle = 'rgba(15,23,42,0.06)'; ctx.lineWidth = 1;
     for (let x = P.left; x < w - P.right; x += 40) { ctx.beginPath(); ctx.moveTo(x, P.top); ctx.lineTo(x, h - P.bottom); ctx.stroke(); }
     for (let y = P.top; y < h - P.bottom; y += 40) { ctx.beginPath(); ctx.moveTo(P.left, y); ctx.lineTo(w - P.right, y); ctx.stroke(); }
 
-    ctx.strokeStyle = 'rgba(56,189,248,0.25)'; ctx.lineWidth = 1.5;
+    ctx.strokeStyle = 'rgba(15,23,42,0.2)'; ctx.lineWidth = 1.5;
     ctx.beginPath(); ctx.moveTo(P.left, P.top); ctx.lineTo(P.left, h - P.bottom); ctx.lineTo(w - P.right, h - P.bottom); ctx.stroke();
 
     ctx.fillStyle = '#64748b'; ctx.font = '10px "JetBrains Mono"'; ctx.textAlign = 'center';
     ctx.fillText('Years →', w/2, h - P.bottom + 35);
     ctx.save(); ctx.translate(16, h/2); ctx.rotate(-Math.PI/2); ctx.fillText('Fund Balance →', 0, 0); ctx.restore();
-    ctx.fillStyle = '#94a3b8'; ctx.font = '600 12px "Plus Jakarta Sans"'; ctx.textAlign = 'center';
+    ctx.fillStyle = '#0f172a'; ctx.font = '600 12px "Plus Jakarta Sans"'; ctx.textAlign = 'center';
     ctx.fillText('Pension Fund Projection — Zimbabwe', w/2, 26);
   }
 
@@ -455,9 +470,9 @@
     const retM = data.findIndex(d => d.phase === 'drawdown');
     if (retM > 0 && retM < stepCount) {
       const rx = xS(retM);
-      ctx.strokeStyle = 'rgba(245,158,11,0.35)'; ctx.lineWidth = 1.5; ctx.setLineDash([5,3]);
+      ctx.strokeStyle = 'rgba(217,119,6,0.4)'; ctx.lineWidth = 1.5; ctx.setLineDash([5,3]);
       ctx.beginPath(); ctx.moveTo(rx, P.top); ctx.lineTo(rx, h - P.bottom); ctx.stroke(); ctx.setLineDash([]);
-      ctx.fillStyle = '#f59e0b'; ctx.font = '600 9px "JetBrains Mono"'; ctx.textAlign = 'center';
+      ctx.fillStyle = '#d97706'; ctx.font = '600 9px "JetBrains Mono"'; ctx.textAlign = 'center';
       ctx.fillText('RETIREMENT', rx, P.top - 6);
     }
 
@@ -471,11 +486,11 @@
     if (lifeMonth > 0 && lifeMonth < totalM) {
       // Longevity band
       const lx1 = xS(Math.max(0, lifeMinMonth)), lx2 = xS(Math.min(totalM, lifeMaxMonth));
-      ctx.fillStyle = 'rgba(168,85,247,0.06)'; ctx.fillRect(lx1, P.top, lx2 - lx1, cH);
+      ctx.fillStyle = 'rgba(124,58,237,0.06)'; ctx.fillRect(lx1, P.top, lx2 - lx1, cH);
       const lx = xS(lifeMonth);
-      ctx.strokeStyle = 'rgba(168,85,247,0.35)'; ctx.lineWidth = 1; ctx.setLineDash([3,3]);
+      ctx.strokeStyle = 'rgba(124,58,237,0.35)'; ctx.lineWidth = 1; ctx.setLineDash([3,3]);
       ctx.beginPath(); ctx.moveTo(lx, P.top); ctx.lineTo(lx, h - P.bottom); ctx.stroke(); ctx.setLineDash([]);
-      ctx.fillStyle = '#a855f7'; ctx.font = '600 8px "JetBrains Mono"'; ctx.fillText('LIFE EXP.', lx, P.top - 6);
+      ctx.fillStyle = '#7c3aed'; ctx.font = '600 8px "JetBrains Mono"'; ctx.fillText('LIFE EXP.', lx, P.top - 6);
     }
 
     // Area fill
@@ -484,7 +499,7 @@
     const lD = Math.min(stepCount, data.length) - 1;
     ctx.lineTo(xS(data[lD].month), yS(0)); ctx.closePath();
     const aG = ctx.createLinearGradient(0, P.top, 0, h - P.bottom);
-    aG.addColorStop(0, 'rgba(56,189,248,0.12)'); aG.addColorStop(1, 'rgba(56,189,248,0.01)');
+    aG.addColorStop(0, 'rgba(30,64,175,0.12)'); aG.addColorStop(1, 'rgba(30,64,175,0.01)');
     ctx.fillStyle = aG; ctx.fill();
 
     // Nominal line
@@ -493,7 +508,7 @@
       const x = xS(data[i].month), y = yS(data[i].balance);
       i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
     }
-    ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 2.5; ctx.shadowColor = 'rgba(56,189,248,0.4)'; ctx.shadowBlur = 6;
+    ctx.strokeStyle = '#1e40af'; ctx.lineWidth = 2.5; ctx.shadowColor = 'rgba(30,64,175,0.3)'; ctx.shadowBlur = 4;
     ctx.stroke(); ctx.shadowBlur = 0;
 
     // Real balance line
@@ -502,7 +517,7 @@
       const x = xS(data[i].month), y = yS(data[i].realBalance);
       i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
     }
-    ctx.strokeStyle = '#06d6a0'; ctx.lineWidth = 1.5; ctx.setLineDash([4,3]); ctx.stroke(); ctx.setLineDash([]);
+    ctx.strokeStyle = '#059669'; ctx.lineWidth = 1.5; ctx.setLineDash([4,3]); ctx.stroke(); ctx.setLineDash([]);
 
     // Gold value line
     const maxGold = Math.max(...data.slice(0, Math.min(stepCount, data.length)).map(d => d.goldValue || 0), 1);
@@ -517,13 +532,13 @@
 
     // Legend
     const lX = w - P.right - 190, lY = P.top + 6;
-    ctx.fillStyle = 'rgba(15,23,42,0.85)'; ctx.strokeStyle = 'rgba(56,189,248,0.12)'; ctx.lineWidth = 1;
+    ctx.fillStyle = 'rgba(255,255,255,0.92)'; ctx.strokeStyle = 'rgba(15,23,42,0.1)'; ctx.lineWidth = 1;
     roundRect(ctx, lX, lY, 180, 62, 6); ctx.fill(); ctx.stroke();
     ctx.font = '9px "JetBrains Mono"'; ctx.textAlign = 'left';
     const legs = [
-      { color: '#38bdf8', dash: false, label: 'Nominal Balance' },
-      { color: '#06d6a0', dash: true, label: 'Real (inflation-adj)' },
-      { color: '#d4a843', dash: true, label: 'Gold Allocation Value' },
+      { color: '#1e40af', dash: false, label: 'Nominal Balance' },
+      { color: '#059669', dash: true, label: 'Real (inflation-adj)' },
+      { color: '#b8860b', dash: true, label: 'Gold Allocation Value' },
     ];
     legs.forEach((l, i) => {
       const ly = lY + 14 + i * 16;

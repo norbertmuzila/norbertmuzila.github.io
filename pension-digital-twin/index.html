@@ -92,14 +92,20 @@
               <span class="param-name">Current Age</span>
               <span class="param-value" id="val-age">30</span>
             </label>
-            <input type="range" class="param-slider" id="slider-age" min="18" max="65" value="30" step="1" />
+            <input type="range" class="param-slider" id="slider-age" min="18" max="100" value="30" step="1" />
           </div>
           <div class="param-group half">
             <label class="param-label">
               <span class="param-name">Retirement Age</span>
               <span class="param-value" id="val-retirement">60</span>
             </label>
-            <input type="range" class="param-slider" id="slider-retirement" min="50" max="75" value="60" step="1" />
+            <select class="param-select" id="select-retirement">
+              <option value="55">55 — Early Retirement</option>
+              <option value="60" selected>60 — Normal Retirement</option>
+              <option value="65">65 — Late Retirement</option>
+              <option value="custom">Custom (use slider)</option>
+            </select>
+            <input type="range" class="param-slider" id="slider-retirement" min="50" max="75" value="60" step="1" style="display:none;" />
           </div>
         </div>
         <div class="param-section-title">Currency & Inflation</div>
