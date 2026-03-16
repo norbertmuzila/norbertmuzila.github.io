@@ -228,21 +228,13 @@ body { font-family: var(--font-main); background: var(--bg-primary); color: var(
 .status-complete { color: var(--accent); }
 .status-danger { color: var(--accent-danger); }
 
-/* IPEC Badge */
-.ipec-badge {
+/* Challenge Picker Top Right */
+.challenge-picker.top-right {
   position: absolute; top: 12px; right: 52px;
   background: var(--glass-bg); backdrop-filter: blur(16px);
   border: 1px solid var(--glass-border); border-radius: var(--radius-sm);
   padding: 6px 12px; z-index: 10; display: flex; align-items: center; gap: 6px;
-  font-family: var(--font-mono); font-size: 0.7rem; transition: all var(--transition);
 }
-.ipec-badge.compliant { border-color: rgba(6,214,160,0.4); }
-.ipec-badge.compliant .ipec-status { color: var(--accent-2); }
-.ipec-badge.non-compliant { border-color: rgba(239,68,68,0.4); }
-.ipec-badge.non-compliant .ipec-status { color: var(--accent-danger); }
-.ipec-badge.warning { border-color: rgba(245,158,11,0.4); }
-.ipec-badge.warning .ipec-status { color: var(--accent-warn); }
-.ipec-status { color: var(--text-muted); font-weight: 600; }
 
 /* Settings Gear */
 .settings-gear {
