@@ -650,7 +650,10 @@
     $('status-inflation').textContent = '0%'; $('status-depletion').textContent = '—';
     $('status-funding-ratio').textContent = '—';
     setStatus('Idle', 'status-idle');
-    $('ipec-badge').className = 'ipec-badge'; $('ipec-status-text').textContent = 'IPEC: —';
+    if ($('ipec-badge')) {
+      $('ipec-badge').className = 'ipec-badge'; 
+      $('ipec-status-text').textContent = 'IPEC: —';
+    }
     drawGrid();
     logTerminal('Scenario reset.', 'info', 'log');
   }
@@ -691,6 +694,7 @@
   function updateIPECBadge(data, minFunding) {
     const badge = $('ipec-badge');
     const text = $('ipec-status-text');
+    if (!badge || !text) return;
     const avgFR = data.reduce((s, d) => s + d.fundingRatio, 0) / data.length;
     if (avgFR >= minFunding) { badge.className = 'ipec-badge compliant'; text.textContent = 'IPEC: Compliant'; }
     else if (avgFR >= minFunding * 0.7) { badge.className = 'ipec-badge warning'; text.textContent = 'IPEC: At Risk'; }

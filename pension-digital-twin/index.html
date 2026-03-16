@@ -255,10 +255,17 @@
         <div class="status-row"><span class="status-label">Yrs to Depletion:</span> <span id="status-depletion">—</span></div>
       </div>
 
-      <!-- IPEC Compliance Badge -->
-      <div class="ipec-badge" id="ipec-badge">
-        <span class="ipec-icon">IPEC</span>
-        <span class="ipec-status" id="ipec-status-text">IPEC: —</span>
+      <!-- Challenge Picker (Top Right) -->
+      <div class="challenge-picker top-right" id="challenge-picker-container">
+        <label class="challenge-label">Event:</label>
+        <select class="challenge-select" id="select-challenge">
+          <option value="hyperinflation">Hyperinflation Spike</option>
+          <option value="currency">Currency Devaluation</option>
+          <option value="drought">Drought / Crisis</option>
+          <option value="policy">IPEC Policy Change</option>
+          <option value="demographic">Demographic Shift</option>
+          <option value="gold_surge">Gold Price Surge</option>
+        </select>
       </div>
 
       <!-- Settings Gear -->
@@ -273,17 +280,6 @@
       <!-- Bottom Controls -->
       <div class="canvas-controls" id="canvas-controls">
         <span class="canvas-tip">Click on chart to add challenge events.</span>
-        <div class="challenge-picker">
-          <label class="challenge-label">Event:</label>
-          <select class="challenge-select" id="select-challenge">
-            <option value="hyperinflation">Hyperinflation Spike</option>
-            <option value="currency">Currency Devaluation</option>
-            <option value="drought">Drought / Crisis</option>
-            <option value="policy">IPEC Policy Change</option>
-            <option value="demographic">Demographic Shift</option>
-            <option value="gold_surge">Gold Price Surge</option>
-          </select>
-        </div>
       </div>
     </section>
   </main>
