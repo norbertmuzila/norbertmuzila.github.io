@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pension Fund Digital Twin — Zimbabwe | ZAPF Research</title>
+  <meta name="description" content="Interactive digital twin dashboard simulating Zimbabwe pension fund sustainability challenges — hyperinflation, IPEC compliance, asset allocation, Mosi oa Tunya Gold Index, and longevity risk modeling." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ===== HEADER ===== -->
+  <header id="header">
+    <div class="header-left">
+      <img class="header-logo" src="zapf-logo.jpg" alt="ZAPF Logo" />
+      <h1>Pension Fund Digital Twin</h1>
+      <span class="header-badge">ZAPF Research Competition</span>
+    </div>
+    <div class="header-center">
+      <button class="mode-btn active" id="btn-scenario" data-mode="scenario">Scenario Mode</button>
+      <button class="mode-btn" id="btn-live" data-mode="live">Pensioner View</button>
+      <button class="mode-btn" id="btn-rates" data-mode="rates">&#x1F4C8; Live Rates</button>
+    </div>
+    <div class="header-right">
+      <select class="preset-select" id="preset-select">
+        <option value="stable" selected>Stable Growth Baseline</option>
+        <option value="custom">Custom Scenario</option>
+        <option value="2008crisis">2008 Hyperinflation Crisis</option>
+        <option value="covid2020">COVID-19 Impact (2020)</option>
+        <option value="zig2024">ZiG Currency Transition (2024)</option>
+        <option value="nssa">NSSA Default Parameters</option>
+      </select>
+    </div>
+  </header>
+
+  <!-- ===== MAIN DASHBOARD ===== -->
+  <main id="dashboard">
+
+    <!-- LEFT PANEL -->
+    <section id="left-panel">
+      <div class="panel-header">
+        <h2>SCENARIO EDITOR</h2>
+        <div class="action-buttons">
+          <button class="action-btn run-btn" id="btn-run">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><polygon points="5,3 19,12 5,21"/></svg>
+            Run Simulation
+          </button>
+          <button class="action-btn stop-btn" id="btn-stop">Stop</button>
+          <button class="action-btn reset-btn" id="btn-reset">Reset</button>
+        </div>
+      </div>
+
+      <!-- Tabbed Editor -->
+      <div class="editor-tabs">
+        <button class="editor-tab active" data-tab="contributions">Contributions</button>
+        <button class="editor-tab" data-tab="allocation">Asset Allocation</button>
+        <button class="editor-tab" data-tab="risk">Risk & Longevity</button>
+      </div>
+
+      <!-- TAB 1: Contributions -->
+      <div class="editor-area tab-content active" id="tab-contributions">
+        <div class="param-section-title">Employer & Employee Contributions</div>
+        <div class="param-group">
+          <label class="param-label">
+            <span class="param-name">Employee Monthly (USD)</span>
+            <span class="param-value" id="val-employee-contrib">80</span>
+          </label>
+          <input type="range" class="param-slider" id="slider-employee-contrib" min="10" max="2000" value="80" step="5" />
+        </div>
+        <div class="param-group">
+          <label class="param-label">
+            <span class="param-name">Employer Monthly (USD)</span>
+            <span class="param-value" id="val-employer-contrib">120</span>
+          </label>
+          <input type="range" class="param-slider" id="slider-employer-contrib" min="0" max="1000" value="120" step="5" />
+        </div>
+        <div class="param-group">
+          <label class="param-label">
+            <span class="param-name">Monthly Payout (Post-Retirement)</span>
+            <span class="param-value" id="val-payout">300</span>
+          </label>
+          <input type="range" class="param-slider" id="slider-payout" min="50" max="2000" value="300" step="10" />
+        </div>
+        <div class="param-section-title">Demographics</div>
+        <div class="param-row">
+          <div class="param-group half">
+            <label class="param-label">
+              <span class="param-name">Current Age</span>
+              <span class="param-value" id="val-age">25</span>
+            </label>
+            <input type="range" class="param-slider" id="slider-age" min="18" max="100" value="25" step="1" />
+          </div>
+          <div class="param-group half">
+            <label class="param-label">
+              <span class="param-value" id="val-retirement">65</span>
+            </label>
+            <select class="param-select" id="select-retirement">
+              <option value="55">55 - Early Retirement</option>
+              <option value="60">60 - Normal Retirement</option>
+              <option value="65" selected>65 - Late Retirement</option>
+              <option value="custom">Custom (use slider)</option>
+            </select>
+            <input type="range" class="param-slider" id="slider-retirement" min="18" max="120" value="65" step="1" style="display:none;" />
+          </div>
+        </div>
+        <div class="param-section-title">Currency & Inflation</div>
+        <div class="param-group">
+          <label class="param-label">
+            <span class="param-name">Display Currency</span>
+          </label>
+          <select class="param-select" id="select-currency">
+            <option value="USD">USD (US Dollar)</option>
+            <option value="ZiG">ZiG (Zimbabwe Gold)</option>
+            <option value="MOT">Gold Index (Mosi oa Tunya)</option>
+          </select>
+        </div>
+        <div class="param-group">
+          <label class="param-label">
+            <span class="param-name">Annual Inflation Rate (%)</span>
+            <span class="param-value" id="val-inflation">5</span>
+          </label>
+          <input type="range" class="param-slider" id="slider-inflation" min="1" max="500" value="5" step="1" />
+        </div>
+      </div>
+
+      <!-- TAB 2: Asset Allocation -->
+      <div class="editor-area tab-content" id="tab-allocation">
+        <div class="param-section-title">Portfolio Allocation (%)</div>
+        <div class="allocation-summary" id="allocation-summary">Total: <span id="alloc-total">100</span>%</div>
+        <div class="param-group">
+          <label class="param-label">
+            <span class="param-name alloc-equities">Equities (ZSE & Regional)</span>
+            <span class="param-value" id="val-alloc-equities">50</span>
+          </label>
+          <input type="range" class="param-slider slider-equities" id="slider-alloc-equities" min="0" max="100" value="50" step="1" />
+          <span class="alloc-detail">Expected Return: 12% | Risk: High</span>
+        </div>
+        <div class="param-group">
+          <label class="param-label">
+            <span class="param-name alloc-bonds">Fixed Income & Bonds</span>
+            <span class="param-value" id="val-alloc-bonds">25</span>
+          </label>
+          <input type="range" class="param-slider slider-bonds" id="slider-alloc-bonds" min="0" max="100" value="25" step="1" />
+          <span class="alloc-detail">Expected Return: 6% | Risk: Low-Medium</span>
+        </div>
+        <div class="param-group">
+          <label class="param-label">
+            <span class="param-name alloc-realestate">Real Estate & Property</span>
+            <span class="param-value" id="val-alloc-realestate">15</span>
+          </label>
+          <input type="range" class="param-slider slider-realestate" id="slider-alloc-realestate" min="0" max="100" value="15" step="1" />
+          <span class="alloc-detail">Expected Return: 8% | Risk: Medium</span>
+        </div>
+        <div class="param-group">
+          <label class="param-label">
+            <span class="param-name alloc-money">Money Market & Cash</span>
+            <span class="param-value" id="val-alloc-money">5</span>
+          </label>
+          <input type="range" class="param-slider slider-money" id="slider-alloc-money" min="0" max="100" value="5" step="1" />
+          <span class="alloc-detail">Expected Return: 3% | Risk: Very Low</span>
+        </div>
+        <div class="param-group">
+          <label class="param-label">
+            <span class="param-name alloc-gold">Gold (Mosi oa Tunya Index)</span>
+            <span class="param-value" id="val-alloc-gold">5</span>
+          </label>
+          <input type="range" class="param-slider slider-gold" id="slider-alloc-gold" min="0" max="100" value="5" step="1" />
+          <span class="alloc-detail">Expected Return: 10% | Risk: Medium (Inflation Hedge)</span>
+        </div>
+        <div class="alloc-chart-wrap">
+          <canvas id="alloc-chart" width="200" height="200"></canvas>
+        </div>
+      </div>
+
+      <!-- TAB 3: Risk & Longevity -->
+      <div class="editor-area tab-content" id="tab-risk">
+        <div class="param-section-title">Longevity Risk</div>
+        <div class="param-group">
+          <label class="param-label">
+            <span class="param-name">Life Expectancy (Years)</span>
+            <span class="param-value" id="val-life-expectancy">80</span>
+          </label>
+          <input type="range" class="param-slider" id="slider-life-expectancy" min="60" max="100" value="80" step="1" />
+          <span class="alloc-detail">Zimbabwe avg: 62 | NSSA planning horizon: 75</span>
+        </div>
+        <div class="param-group">
+          <label class="param-label">
+            <span class="param-name">Longevity Uncertainty (±years)</span>
+            <span class="param-value" id="val-longevity-uncertainty">5</span>
+          </label>
+          <input type="range" class="param-slider" id="slider-longevity-uncertainty" min="0" max="20" value="5" step="1" />
+        </div>
+        <div class="param-section-title">IPEC Prudential Thresholds</div>
+        <div class="param-group">
+          <label class="param-label">
+            <span class="param-name">Min Funding Ratio (%)</span>
+            <span class="param-value" id="val-min-funding">100</span>
+          </label>
+          <input type="range" class="param-slider" id="slider-min-funding" min="50" max="150" value="100" step="5" />
+          <span class="alloc-detail">IPEC requires ≥100% for registered funds</span>
+        </div>
+        <div class="param-group">
+          <label class="param-label">
+            <span class="param-name">Target Replacement Ratio (%)</span>
+            <span class="param-value" id="val-replacement-ratio">60</span>
+          </label>
+          <input type="range" class="param-slider" id="slider-replacement-ratio" min="20" max="100" value="60" step="5" />
+          <span class="alloc-detail">IPEC recommendation: 60-75% of pre-retirement income</span>
+        </div>
+        <div class="param-section-title">Inflation Model</div>
+        <div class="param-group">
+          <select class="param-select" id="setting-inflation-model">
+            <option value="constant">Constant Rate</option>
+            <option value="volatile">Volatile (Zimbabwe-style)</option>
+            <option value="decreasing" selected>Gradually Decreasing</option>
+            <option value="historical">Historical Zimbabwe Pattern</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Drag Handle -->
+      <div class="drag-handle" id="drag-handle">
+        <div class="drag-handle-bar"></div>
+      </div>
+
+      <!-- Terminal / Analysis Output -->
+      <div class="terminal-section" id="terminal-section">
+        <div class="terminal-header">
+          <span>ANALYSIS OUTPUT</span>
+          <div class="terminal-tabs">
+            <button class="term-tab active" data-termtab="log">Log</button>
+            <button class="term-tab" data-termtab="ipec">IPEC</button>
+            <button class="term-tab" data-termtab="recommend">Strategy</button>
+          </div>
+        </div>
+        <div class="terminal-body term-content active" id="terminal-log">
+          <p class="terminal-line info">System initialized. Loaded <strong>Stable Growth Baseline</strong> scenario.</p>
+          <p class="terminal-line info">Click <strong>Run Simulation</strong> to begin projection.</p>
+        </div>
+        <div class="terminal-body term-content" id="terminal-ipec">
+          <p class="terminal-line info">Run simulation to generate IPEC compliance report.</p>
+        </div>
+        <div class="terminal-body term-content" id="terminal-recommend">
+          <p class="terminal-line info">Run simulation to generate strategy recommendations.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- RIGHT PANEL: Canvas -->
+    <section id="right-panel">
+      <!-- Status Overlay -->
+      <div class="status-overlay" id="status-overlay">
+        <div class="status-row"><span class="status-label">Status:</span> <span id="status-state">Idle</span></div>
+        <div class="status-row"><span class="status-label">Fund Balance:</span> <span id="status-balance">$0</span></div>
+        <div class="status-row"><span class="status-label">Monthly Payout:</span> <span id="status-payout">$0</span></div>
+        <div class="status-row"><span class="status-label">Inflation:</span> <span id="status-inflation">0%</span></div>
+        <div class="status-row"><span class="status-label">Funding Ratio:</span> <span id="status-funding-ratio">—</span></div>
+        <div class="status-row"><span class="status-label">Yrs to Depletion:</span> <span id="status-depletion">—</span></div>
+      </div>
+
+      <!-- IPEC Compliance Badge -->
+      <div class="ipec-badge" id="ipec-badge">
+        <span class="ipec-icon">IPEC</span>
+        <span class="ipec-status" id="ipec-status-text">IPEC: —</span>
+      </div>
+
+      <!-- Settings Gear -->
+      <button class="settings-gear" id="settings-gear" aria-label="Settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="22" height="22">
+          <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      </button>
+
+      <!-- Canvas -->
+      <canvas id="sim-canvas"></canvas>
+
+      <!-- Bottom Controls -->
+      <div class="canvas-controls" id="canvas-controls">
+        <span class="canvas-tip">Run simulation to view projection chart.</span>
+        <span class="canvas-ipec-label" id="canvas-ipec-status">IPEC: —</span>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===== PENSIONER VIEW MODAL ===== -->
+  <div class="modal-overlay" id="pensioner-overlay">
+    <div class="modal pensioner-modal" id="modal-pensioner">
+      <div class="modal-header">
+        <h3>Your Pension Summary — Simple View</h3>
+        <button class="modal-close" id="pensioner-close">&times;</button>
+      </div>
+      <div class="modal-body pensioner-body" id="pensioner-body">
+        <div class="pensioner-card green">
+          <div class="pensioner-card-title">Monthly Income at Retirement</div>
+          <div class="pensioner-card-value" id="p-monthly-income">—</div>
+          <div class="pensioner-card-sub">What you'll receive each month after you stop working</div>
+        </div>
+        <div class="pensioner-card blue">
+          <div class="pensioner-card-title">Total Savings at Retirement</div>
+          <div class="pensioner-card-value" id="p-total-savings">—</div>
+          <div class="pensioner-card-sub">Your total fund value when you retire</div>
+        </div>
+        <div class="pensioner-card orange">
+          <div class="pensioner-card-title">How Long Will It Last?</div>
+          <div class="pensioner-card-value" id="p-duration">—</div>
+          <div class="pensioner-card-sub">Years your savings can fund your retirement</div>
+        </div>
+        <div class="pensioner-card" id="p-health-card">
+          <div class="pensioner-card-title">Fund Health</div>
+          <div class="pensioner-card-value" id="p-health">—</div>
+          <div class="pensioner-card-sub" id="p-health-advice">Run a simulation to see your pension health</div>
+        </div>
+        <div id="pensioner-no-data" class="pensioner-no-data" style="display:none;">
+          <p>Run a simulation first to see your personalised pension summary.</p>
+          <button class="pensioner-run-btn" id="pensioner-run-sim">▶ Run Simulation Now</button>
+        </div>
+        <div class="pensioner-tips" id="pensioner-tips">
+          <h4>What You Can Do</h4>
+          <ul id="p-tips-list">
+            <li>Run a simulation first to get personalized advice</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== LIVE RATES OVERLAY ===== -->
+  <div class="modal-overlay" id="rates-overlay">
+    <div class="modal rates-modal" id="modal-rates">
+      <div class="modal-header rates-modal-header">
+        <div class="rates-header-left">
+          <h3>Live Market Rates &mdash; Zimbabwe</h3>
+          <span class="rates-updated" id="rates-updated">Fetching&hellip;</span>
+        </div>
+        <div class="rates-header-right">
+          <span class="rates-countdown" id="rates-countdown">&#x21BB; 5:00</span>
+          <button class="rates-refresh-btn" id="rates-refresh-btn">Refresh Now</button>
+          <button class="modal-close" id="rates-close">&times;</button>
+        </div>
+      </div>
+      <div class="modal-body rates-body">
+
+        <!-- Big live rate cards -->
+        <div class="rate-cards-row">
+          <div class="rate-card rate-card-zig">
+            <div class="rate-card-label">ZiG / USD</div>
+            <div class="rate-card-value" id="rc-zig">&#x2014;</div>
+            <div class="rate-card-meta" id="rc-zig-meta">Loading&hellip;</div>
+          </div>
+          <div class="rate-card rate-card-gold">
+            <div class="rate-card-label">Mosi oa Tunya Gold Coin (1 oz)</div>
+            <div class="rate-card-value" id="rc-gold">&#x2014;</div>
+            <div class="rate-card-meta" id="rc-gold-meta">Loading&hellip;</div>
+          </div>
+          <div class="rate-card rate-card-goldzig">
+            <div class="rate-card-label">Gold Coin in ZiG</div>
+            <div class="rate-card-value" id="rc-gold-zig">&#x2014;</div>
+            <div class="rate-card-meta">Mosi oa Tunya &#215; ZiG/USD rate</div>
+          </div>
+        </div>
+
+        <!-- IDBZ FX Table -->
+        <div class="rates-section-full">
+          <div class="rates-section-header">
+            <h4>IDBZ Treasury Exchange Rates</h4>
+            <span class="rates-source-tag" id="idbz-source-tag">&#x2014;</span>
+          </div>
+          <div id="idbz-rates-table"><p class="rates-loading">Loading&hellip;</p></div>
+        </div>
+
+        <!-- Trend sparkline charts -->
+        <div class="rates-charts-section-header">
+          <span class="rates-source-tag" id="history-source">Loading data&hellip;</span>
+        </div>
+        <div class="rates-charts-row">
+          <div class="rates-chart-box">
+            <div class="rates-chart-title">Mosi oa Tunya Gold Coin &mdash; USD Price History (Apr 2024&ndash;present)</div>
+            <canvas id="gold-sparkline"></canvas>
+          </div>
+          <div class="rates-chart-box">
+            <div class="rates-chart-title">ZiG / USD Rate &mdash; Since Currency Launch (Apr 2024&ndash;present)</div>
+            <canvas id="zig-sparkline"></canvas>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SETTINGS MODAL ===== -->
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal" id="modal-settings">
+      <div class="modal-header">
+        <h3>Simulator Configuration</h3>
+        <button class="modal-close" id="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-field">
+          <label>Projection Years</label>
+          <select id="setting-years">
+            <option value="20">20 Years</option>
+            <option value="30" selected>30 Years</option>
+            <option value="40">40 Years</option>
+            <option value="50">50 Years</option>
+          </select>
+        </div>
+        <div class="modal-field">
+          <label>Gold Price Basis (USD/oz) <span id="gold-live-badge" class="live-badge" style="display:none;">LIVE</span></label>
+          <select id="setting-gold-price">
+            <option value="2000">$2,000 (Conservative)</option>
+            <option value="2400" selected>$2,400 (Current Avg)</option>
+            <option value="3000">$3,000 (Bullish)</option>
+          </select>
+        </div>
+        <div class="modal-field">
+          <label>ZiG Exchange Rate (per USD) <span id="zig-live-badge" class="live-badge" style="display:none;">LIVE</span></label>
+          <select id="setting-zig-rate">
+            <option value="6">6 ZiG/USD (Official)</option>
+            <option value="13" selected>13 ZiG/USD (Market)</option>
+            <option value="25">25 ZiG/USD (Parallel)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="main.js"></script>
+</body>
+</html>
