@@ -393,15 +393,16 @@ body { font-family: var(--font-main); background: var(--bg-primary); color: var(
 .pensioner-dual-value.pensioner-warn { color: #fbbf24; }
 .pensioner-dual-sep { font-size: 1.2rem; color: var(--text-muted); align-self: center; padding-top: 18px; }
 
-/* IPEC badge */
-.ipec-badge {
+/* Pensioner view IPEC compliance badge (distinct from canvas .ipec-badge overlay) */
+.pensioner-ipec-badge {
   font-family: var(--font-mono); font-size: 0.69rem; font-weight: 800;
   padding: 3px 9px; border-radius: 4px; letter-spacing: 0.5px; white-space: nowrap;
+  position: static;
 }
-.ipec-badge.ipec-compliant {
+.pensioner-ipec-badge.ipec-compliant {
   background: rgba(52,211,153,0.15); color: #34d399; border: 1px solid rgba(52,211,153,0.35);
 }
-.ipec-badge.ipec-non-compliant {
+.pensioner-ipec-badge.ipec-non-compliant {
   background: rgba(248,113,113,0.15); color: #f87171; border: 1px solid rgba(248,113,113,0.35);
 }
 
@@ -796,8 +797,8 @@ body { font-family: var(--font-main); background: var(--bg-primary); color: var(
 :root[data-theme="light"] .pensioner-alerts-title { color: #dc2626; }
 :root[data-theme="light"] .alert-item { color: var(--text-primary); border-bottom-color: rgba(0,0,0,0.06); }
 :root[data-theme="light"] .pensioner-context-tag { color: #92680e; }
-:root[data-theme="light"] .ipec-badge.ipec-compliant { background: rgba(52,211,153,0.15); color: #047857; border-color: rgba(52,211,153,0.4); }
-:root[data-theme="light"] .ipec-badge.ipec-non-compliant { background: rgba(248,113,113,0.15); color: #dc2626; border-color: rgba(248,113,113,0.4); }
+:root[data-theme="light"] .pensioner-ipec-badge.ipec-compliant { background: rgba(52,211,153,0.15); color: #047857; border-color: rgba(52,211,153,0.4); }
+:root[data-theme="light"] .pensioner-ipec-badge.ipec-non-compliant { background: rgba(248,113,113,0.15); color: #dc2626; border-color: rgba(248,113,113,0.4); }
 :root[data-theme="light"] .pensioner-risk-badge.risk-low      { color: #047857; }
 :root[data-theme="light"] .pensioner-risk-badge.risk-moderate { color: #d97706; }
 :root[data-theme="light"] .pensioner-risk-badge.risk-high     { color: #dc2626; }

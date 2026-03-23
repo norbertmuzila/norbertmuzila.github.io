@@ -836,7 +836,7 @@
       const ipecBadge = $('p-ipec-badge');
       if (ipecBadge) {
         ipecBadge.textContent  = ipecMet ? '✓ COMPLIANT' : '✗ BELOW TARGET';
-        ipecBadge.className    = 'ipec-badge ' + (ipecMet ? 'ipec-compliant' : 'ipec-non-compliant');
+        ipecBadge.className    = 'pensioner-ipec-badge ' + (ipecMet ? 'ipec-compliant' : 'ipec-non-compliant');
       }
       const ipecBar = $('p-ipec-bar');
       if (ipecBar) {
