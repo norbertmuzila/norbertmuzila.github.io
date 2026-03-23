@@ -1909,13 +1909,18 @@
       "date": "2026-03-20",
       "zigUsd": 25.3126,
       "goldCoin": 4719.465
+    },
+    {
+      "date": "2026-03-23",
+      "zigUsd": 25.3025,
+      "goldCoin": 4335.43
     }
   ],
   "source": "RBZ daily rates (cached)",
-  "latestDate": "2026-03-20",
-  "latestZigUsd": 25.3126,
-  "latestGoldCoin": 4719.465,
+  "latestDate": "2026-03-23",
+  "latestZigUsd": 25.3025,
+  "latestGoldCoin": 4335.43,
   "fallback": false,
   "historicalBuildComplete": true,
-  "cachedAt": "2026-03-22T01:58:08.314Z"
+  "cachedAt": "2026-03-23T09:27:05.275Z"
 }

@@ -17,6 +17,10 @@
     <div class="header-left">
       <img class="header-logo" src="zapf-logo.jpg" alt="ZAPF Logo" />
       <h1>Pension Fund Digital Twin</h1>
+      <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle dark/light mode">
+        <svg id="theme-icon-moon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z"/></svg>
+        <svg id="theme-icon-sun" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="display:none"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="21" x2="12" y2="23" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="1" y1="12" x2="3" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="21" y1="12" x2="23" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
       <span class="header-badge">ZAPF Research Competition</span>
     </div>
     <div class="header-center">
@@ -287,41 +291,132 @@
   <!-- ===== PENSIONER VIEW MODAL ===== -->
   <div class="modal-overlay" id="pensioner-overlay">
     <div class="modal pensioner-modal" id="modal-pensioner">
-      <div class="modal-header">
-        <h3>Your Pension Summary — Simple View</h3>
+      <div class="modal-header pensioner-modal-header">
+        <div class="pensioner-header-left">
+          <h3>Your Pension Summary — Zimbabwe</h3>
+          <span class="pensioner-context-tag">IPEC &middot; NSSA &middot; ZAPF</span>
+        </div>
         <button class="modal-close" id="pensioner-close">&times;</button>
       </div>
       <div class="modal-body pensioner-body" id="pensioner-body">
-        <div class="pensioner-card green">
-          <div class="pensioner-card-title">Monthly Income at Retirement</div>
-          <div class="pensioner-card-value" id="p-monthly-income">—</div>
-          <div class="pensioner-card-sub">What you'll receive each month after you stop working</div>
+
+        <!-- Row 1: Income + Total Savings -->
+        <div class="pensioner-row">
+          <div class="pensioner-card green">
+            <div class="pensioner-card-title">Monthly Income at Retirement</div>
+            <div class="pensioner-card-value" id="p-monthly-income">—</div>
+            <div class="pensioner-card-sub">Monthly benefit you will receive after retiring</div>
+          </div>
+          <div class="pensioner-card blue">
+            <div class="pensioner-card-title">Total Savings at Retirement</div>
+            <div class="pensioner-card-value" id="p-total-savings">—</div>
+            <div class="pensioner-card-sub">Nominal fund value on your retirement date</div>
+          </div>
         </div>
-        <div class="pensioner-card blue">
-          <div class="pensioner-card-title">Total Savings at Retirement</div>
-          <div class="pensioner-card-value" id="p-total-savings">—</div>
-          <div class="pensioner-card-sub">Your total fund value when you retire</div>
+
+        <!-- Row 2: Duration + Fund Health -->
+        <div class="pensioner-row">
+          <div class="pensioner-card orange">
+            <div class="pensioner-card-title">How Long Will It Last?</div>
+            <div class="pensioner-card-value" id="p-duration">—</div>
+            <div class="pensioner-card-sub">Years your savings can fund retirement</div>
+          </div>
+          <div class="pensioner-card" id="p-health-card">
+            <div class="pensioner-card-title">Fund Health</div>
+            <div class="pensioner-card-value" id="p-health">—</div>
+            <div class="pensioner-card-sub" id="p-health-advice">Run a simulation to see fund health</div>
+          </div>
         </div>
-        <div class="pensioner-card orange">
-          <div class="pensioner-card-title">How Long Will It Last?</div>
-          <div class="pensioner-card-value" id="p-duration">—</div>
-          <div class="pensioner-card-sub">Years your savings can fund your retirement</div>
+
+        <!-- Inflation Erosion Panel -->
+        <div class="pensioner-panel pensioner-erosion-panel">
+          <div class="pensioner-panel-title">INFLATION EROSION &mdash; ZiG PURCHASING POWER LOSS</div>
+          <div class="pensioner-dual-row">
+            <div class="pensioner-dual-item">
+              <div class="pensioner-dual-label">Nominal at Retirement</div>
+              <div class="pensioner-dual-value" id="p-nominal-balance">—</div>
+            </div>
+            <div class="pensioner-dual-sep">&#8594;</div>
+            <div class="pensioner-dual-item">
+              <div class="pensioner-dual-label">Real Value (today&#39;s ZiG)</div>
+              <div class="pensioner-dual-value pensioner-red" id="p-real-balance">—</div>
+            </div>
+            <div class="pensioner-dual-item">
+              <div class="pensioner-dual-label">Purchasing Power Lost</div>
+              <div class="pensioner-dual-value pensioner-warn" id="p-erosion-pct">—</div>
+            </div>
+          </div>
+          <div class="pensioner-panel-note" id="p-erosion-note">Based on current inflation scenario</div>
         </div>
-        <div class="pensioner-card" id="p-health-card">
-          <div class="pensioner-card-title">Fund Health</div>
-          <div class="pensioner-card-value" id="p-health">—</div>
-          <div class="pensioner-card-sub" id="p-health-advice">Run a simulation to see your pension health</div>
+
+        <!-- IPEC Replacement Ratio Panel -->
+        <div class="pensioner-panel">
+          <div class="pensioner-panel-header">
+            <div class="pensioner-panel-title">IPEC REPLACEMENT RATIO</div>
+            <span class="ipec-badge" id="p-ipec-badge">—</span>
+          </div>
+          <div class="pensioner-ratio-row">
+            <span class="pensioner-ratio-value" id="p-replacement-ratio">—</span>
+            <span class="pensioner-ratio-target">IPEC target: 60&ndash;75% of pre-retirement income</span>
+          </div>
+          <div class="pensioner-progress-bar-bg">
+            <div class="pensioner-progress-bar" id="p-ipec-bar" style="width:0%"></div>
+            <div class="pensioner-progress-target ipec-target-60"></div>
+          </div>
+          <div class="pensioner-panel-note" id="p-ipec-note">Loading IPEC compliance check&hellip;</div>
         </div>
-        <div id="pensioner-no-data" class="pensioner-no-data" style="display:none;">
-          <p>Run a simulation first to see your personalised pension summary.</p>
-          <button class="pensioner-run-btn" id="pensioner-run-sim">▶ Run Simulation Now</button>
+
+        <!-- Funding Ratio Panel -->
+        <div class="pensioner-panel">
+          <div class="pensioner-panel-header">
+            <div class="pensioner-panel-title">FUNDING RATIO AT RETIREMENT</div>
+          </div>
+          <div class="pensioner-ratio-row">
+            <span class="pensioner-ratio-value" id="p-funding-ratio">—</span>
+            <span class="pensioner-ratio-target">Minimum required: 100% (IPEC Regulation 14)</span>
+          </div>
+          <div class="pensioner-progress-bar-bg">
+            <div class="pensioner-progress-bar" id="p-funding-bar" style="width:0%"></div>
+            <div class="pensioner-progress-target" style="left:50%"></div>
+          </div>
         </div>
-        <div class="pensioner-tips" id="pensioner-tips">
-          <h4>What You Can Do</h4>
-          <ul id="p-tips-list">
-            <li>Run a simulation first to get personalized advice</li>
+
+        <!-- ZiG Risk + Gold Hedge Row -->
+        <div class="pensioner-row">
+          <div class="pensioner-panel pensioner-panel-half">
+            <div class="pensioner-panel-title">ZiG CURRENCY RISK</div>
+            <div class="pensioner-risk-badge" id="p-zig-risk-badge">—</div>
+            <div class="pensioner-panel-note" id="p-zig-risk-note">Loading currency risk assessment&hellip;</div>
+          </div>
+          <div class="pensioner-panel pensioner-panel-half">
+            <div class="pensioner-panel-title">MOSI OA TUNYA GOLD HEDGE</div>
+            <div class="pensioner-gold-value" id="p-gold-pct">—</div>
+            <div class="pensioner-panel-note" id="p-gold-note">Gold coin allocation protects against ZiG devaluation</div>
+          </div>
+        </div>
+
+        <!-- Zimbabwe Challenge Alerts -->
+        <div class="pensioner-alerts" id="pensioner-alerts">
+          <div class="pensioner-alerts-title">&#9888; ZIMBABWE PENSION CHALLENGES &mdash; YOUR SCENARIO</div>
+          <ul id="p-alerts-list">
+            <li class="alert-item alert-info">Loading scenario analysis&hellip;</li>
           </ul>
         </div>
+
+        <!-- No-data CTA -->
+        <div id="pensioner-no-data" class="pensioner-no-data" style="display:none;">
+          <p>Run a simulation to personalise your Zimbabwe pension summary.</p>
+          <button class="pensioner-run-btn" id="pensioner-run-sim">&#9654; Run Simulation Now</button>
+        </div>
+
+        <!-- Zimbabwe-specific tips -->
+        <div class="pensioner-tips" id="pensioner-tips">
+          <h4>What You Should Do &mdash; Zimbabwe Pension Context</h4>
+          <ul id="p-tips-list">
+            <li>Run a simulation first to get personalised Zimbabwe pension advice</li>
+          </ul>
+        </div>
+
       </div>
     </div>
   </div>

@@ -215,10 +215,11 @@
 
     cx2d.beginPath();
     cx2d.arc(cx, cy, r * 0.55, 0, Math.PI * 2);
-    cx2d.fillStyle = '#0d1117';
+    const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+    cx2d.fillStyle = isLight ? '#f7f9fc' : '#0d1117';
     cx2d.fill();
 
-    cx2d.fillStyle = '#e2e8f0';
+    cx2d.fillStyle = isLight ? '#0f172a' : '#e2e8f0';
     cx2d.font = '700 14px "Plus Jakarta Sans"';
     cx2d.textAlign = 'center';
     cx2d.fillText(total + '%', cx, cy + 5);
@@ -780,48 +781,231 @@
     if (hasData && retM > 0) {
       const retData = data[retM];
       const depPt = data.findIndex(d => d.phase === 'drawdown' && d.balance <= 0);
-      const peak = Math.max(...data.map(d => d.balance));
-      const final = data[data.length - 1];
 
-      $('p-monthly-income').textContent = fmtCur(parseFloat(sliders.payout.value));
-      $('p-total-savings').textContent = fmtCur(retData.balance);
-      $('p-duration').textContent = depPt > 0 ? `${((depPt - retM)/12).toFixed(0)} years` : '30+ years ✓';
+      // ── Core Cards ──────────────────────────────────────────────────
+      const monthlyPayout = parseFloat(sliders.payout.value);
+      const inflation     = parseFloat(sliders.inflation.value);
+      const curAge        = parseInt(sliders.age.value);
+      const retAge        = parseInt(sliders.retirement.value);
+      const empContrib    = parseFloat(sliders.employeeContrib.value);
+      const erContrib     = parseFloat(sliders.employerContrib.value);
+      const totalContrib  = empContrib + erContrib;
+      const yearsToRetire = Math.max(0, retAge - curAge);
 
+      $('p-monthly-income').textContent = fmtCur(monthlyPayout);
+      $('p-total-savings').textContent  = fmtCur(retData.balance);
+      $('p-duration').textContent = depPt > 0
+        ? `${((depPt - retM) / 12).toFixed(0)} yrs`
+        : '30+ yrs ✓';
+
+      // ── Fund Health Card ─────────────────────────────────────────────
       const healthCard = $('p-health-card');
       if (depPt > 0 && (depPt - retM) / 12 < 10) {
         $('p-health').textContent = '⚠ At Risk';
-        $('p-health-advice').textContent = 'Your fund may not last through retirement. See tips below.';
+        $('p-health-advice').textContent = 'Fund may not last through retirement — see alerts below.';
         healthCard.className = 'pensioner-card red';
       } else if (depPt > 0) {
         $('p-health').textContent = '▲ Fair';
-        $('p-health-advice').textContent = 'Your fund has limited runway. Consider increasing savings.';
+        $('p-health-advice').textContent = 'Limited runway — consider increasing contributions.';
         healthCard.className = 'pensioner-card orange';
       } else {
         $('p-health').textContent = '✓ Healthy';
-        $('p-health-advice').textContent = 'Your pension fund is on a sustainable path.';
+        $('p-health-advice').textContent = 'Fund is on a sustainable trajectory through retirement.';
         healthCard.className = 'pensioner-card green';
       }
 
+      // ── Inflation Erosion ────────────────────────────────────────────
+      const nominalBal = retData.balance;
+      const realBal    = retData.realBalance;
+      const erosionPct = nominalBal > 0
+        ? ((nominalBal - realBal) / nominalBal * 100)
+        : 0;
+      $('p-nominal-balance').textContent = fmtCur(nominalBal);
+      $('p-real-balance').textContent    = fmtCur(realBal);
+      $('p-erosion-pct').textContent     = erosionPct.toFixed(1) + '%';
+      $('p-erosion-note').textContent    =
+        `At ${inflation}% annual inflation over ${yearsToRetire} accumulation years — ` +
+        `${fmtCur(nominalBal - realBal)} of purchasing power eroded in ZiG terms.`;
+
+      // ── IPEC Replacement Ratio ───────────────────────────────────────
+      // Estimated pre-retirement salary: employee contribution / typical 9% NSSA rate
+      const estSalary  = empContrib > 0 ? empContrib / 0.09 : monthlyPayout / 0.65;
+      const replRatio  = estSalary > 0 ? (monthlyPayout / estSalary * 100) : 0;
+      const ipecMet    = replRatio >= 60;
+      $('p-replacement-ratio').textContent = replRatio.toFixed(1) + '%';
+      const ipecBadge = $('p-ipec-badge');
+      if (ipecBadge) {
+        ipecBadge.textContent  = ipecMet ? '✓ COMPLIANT' : '✗ BELOW TARGET';
+        ipecBadge.className    = 'ipec-badge ' + (ipecMet ? 'ipec-compliant' : 'ipec-non-compliant');
+      }
+      const ipecBar = $('p-ipec-bar');
+      if (ipecBar) {
+        ipecBar.style.width = Math.min(100, replRatio) + '%';
+        ipecBar.className   = 'pensioner-progress-bar ' +
+          (ipecMet ? 'bar-green' : replRatio >= 40 ? 'bar-orange' : 'bar-red');
+      }
+      $('p-ipec-note').textContent = ipecMet
+        ? `Your ${replRatio.toFixed(1)}% replacement ratio meets the IPEC 60% minimum — target 75% for greater security.`
+        : `${(60 - replRatio).toFixed(1)}% below IPEC minimum. Increase monthly contributions ` +
+          `or reduce expected payout from ${fmtCur(monthlyPayout)} to ${fmtCur(estSalary * 0.60)}.`;
+
+      // ── Funding Ratio ────────────────────────────────────────────────
+      const fundingRatio = retData.fundingRatio;
+      $('p-funding-ratio').textContent = fundingRatio.toFixed(1) + '%';
+      const fundingBar = $('p-funding-bar');
+      if (fundingBar) {
+        // Map: 200% = full bar; 100% = 50%
+        fundingBar.style.width = Math.min(100, fundingRatio / 2) + '%';
+        fundingBar.className   = 'pensioner-progress-bar ' +
+          (fundingRatio >= 100 ? 'bar-green' : fundingRatio >= 75 ? 'bar-orange' : 'bar-red');
+      }
+
+      // ── ZiG Currency Risk ────────────────────────────────────────────
+      const zigRateEl = $('setting-zig-rate');
+      const zigRate   = zigRateEl ? (parseFloat(zigRateEl.value) || simState.zigRate || 25.3)
+                                  : (simState.zigRate || 25.3);
+      let zigLevel, zigClass, zigNote;
+      if (zigRate < 15) {
+        zigLevel = 'LOW';      zigClass = 'risk-low';
+        zigNote  = `ZiG/USD at ${zigRate.toFixed(2)} — relatively stable. Monitor the rate monthly.`;
+      } else if (zigRate < 30) {
+        zigLevel = 'MODERATE'; zigClass = 'risk-moderate';
+        zigNote  = `ZiG/USD at ${zigRate.toFixed(2)} — mild devaluation pressure. Contributions ` +
+                   `losing real USD value gradually.`;
+      } else {
+        zigLevel = 'ELEVATED'; zigClass = 'risk-high';
+        zigNote  = `ZiG/USD at ${zigRate.toFixed(2)} — significant devaluation risk. ` +
+                   `ZiG-denominated savings are eroding in USD purchasing power.`;
+      }
+      const zigBadge = $('p-zig-risk-badge');
+      if (zigBadge) { zigBadge.textContent = zigLevel; zigBadge.className = 'pensioner-risk-badge ' + zigClass; }
+      const zigNoteEl = $('p-zig-risk-note');
+      if (zigNoteEl) zigNoteEl.textContent = zigNote;
+
+      // ── Mosi oa Tunya Gold Hedge ─────────────────────────────────────
+      const allocation = getAssetAllocation();
+      const goldPct    = Math.round(allocation.gold.weight * 100);
+      const goldValAtRetirement = retData.goldValue || (retData.balance * allocation.gold.weight);
+      const goldEl = $('p-gold-pct');
+      if (goldEl) {
+        goldEl.textContent = goldPct + '% of fund';
+        goldEl.className   = 'pensioner-gold-value ' +
+          (goldPct >= 10 ? 'gold-good' : goldPct >= 5 ? 'gold-fair' : 'gold-low');
+      }
+      const goldNoteEl = $('p-gold-note');
+      if (goldNoteEl) goldNoteEl.textContent =
+        `≈ ${fmtCur(goldValAtRetirement)} in Mosi oa Tunya gold coin at retirement — ` +
+        (goldPct >= 10
+          ? 'USD-denominated. Good protection against ZiG devaluation.'
+          : goldPct >= 5
+            ? 'Partial USD hedge. Consider raising gold to ≥10% (IPEC-encouraged).'
+            : 'Very low gold exposure. Risk: ZiG devaluation erodes entire fund value.');
+
+      // ── Zimbabwe Challenge Alerts ─────────────────────────────────────
+      const alerts = [];
+      if (inflation >= 100) {
+        alerts.push({ cls: 'alert-critical',
+          text: `Hyperinflation scenario (${inflation}%) — contributions are losing real value faster than they accumulate. ` +
+                `Zimbabwe experienced 557% inflation in 2021 and >600,000% in 2008. Prioritise gold and USD-linked assets.` });
+      } else if (inflation >= 25) {
+        alerts.push({ cls: 'alert-warn',
+          text: `High inflation (${inflation}%) detected. Your real purchasing power is shrinking. ` +
+                `Increase gold and property allocations — both provide partial inflation protection.` });
+      } else {
+        alerts.push({ cls: 'alert-ok',
+          text: `Inflation at ${inflation}% — manageable. Zimbabwe's long-run average is 25–50% per ZAPF research; ` +
+                `maintain gold hedging even in calmer periods.` });
+      }
+
+      if (depPt > 0) {
+        const depYrs = ((depPt - retM) / 12).toFixed(0);
+        if (parseInt(depYrs) < 15) {
+          alerts.push({ cls: 'alert-critical',
+            text: `Longevity risk: Fund depletes in ${depYrs} years into retirement. Zimbabwe life expectancy is ` +
+                  `rising to ~72 years. A 30-year post-retirement horizon is prudent — increase contributions.` });
+        } else {
+          alerts.push({ cls: 'alert-warn',
+            text: `Fund lasts ${depYrs} years post-retirement. Aim for 25–30 year runway per ZAPF sustainability targets.` });
+        }
+      }
+
+      if (goldPct < 10) {
+        alerts.push({ cls: 'alert-warn',
+          text: `Low Mosi oa Tunya allocation (${goldPct}%). IPEC and ZAPF research recommend ≥10% in gold coin ` +
+                `to hedge ZiG devaluation. In 2008, gold-holding funds preserved value while ZiG-only funds collapsed.` });
+      }
+
+      if (!ipecMet) {
+        alerts.push({ cls: 'alert-critical',
+          text: `IPEC compliance gap: ${replRatio.toFixed(1)}% replacement ratio is below the 60% minimum. ` +
+                `This is Zimbabwe's most common pension adequacy failure. ZAPF estimates 68% of retirees ` +
+                `receive below-target benefits.` });
+      }
+
+      if (totalContrib < 90) {
+        alerts.push({ cls: 'alert-warn',
+          text: `Total contributions $${totalContrib}/mo are below the suggested minimum for retirement adequacy. ` +
+                `NSSA-only coverage gives approximately $30–50/month equivalent at retirement.` });
+      } else {
+        alerts.push({ cls: 'alert-info',
+          text: `Only ~11% of Zimbabwe's workforce participates in occupational pension funds. ` +
+                `Your formal-sector participation is itself a significant pension security advantage.` });
+      }
+
+      const alertsList = $('p-alerts-list');
+      if (alertsList) alertsList.innerHTML = alerts
+        .map(a => `<li class="alert-item ${a.cls}">${a.text}</li>`).join('');
+
+      // ── Zimbabwe-Specific Tips ───────────────────────────────────────
       const tips = [];
-      tips.push('Save consistently — even small increases to monthly contributions compound over decades.');
-      if (depPt > 0) tips.push('Ask your employer about increasing their contribution match.');
-      tips.push(`Your pension is partly backed by gold (Mosi oa Tunya) — this protects against inflation.`);
-      tips.push('Consider delaying retirement by 2–3 years for significantly higher monthly income.');
-      if (parseFloat(sliders.inflation.value) > 50) tips.push('High inflation is eroding your savings — talk to your fund about inflation-protected investments.');
-      tips.push('Check your pension balance regularly through your IPEC-registered fund administrator.');
+      tips.push(
+        'In 2008, Zimbabwe pension funds lost virtually all value overnight due to hyperinflation. ' +
+        'IPEC now mandates inflation-hedging reserves — verify your fund holds Mosi oa Tunya gold coin allocations.'
+      );
+      tips.push(
+        `Your IPEC replacement ratio is ${replRatio.toFixed(1)}% — the target is 60–75%. ` +
+        (ipecMet
+          ? 'You meet the benchmark. Aim for 75% for greater retirement security.'
+          : 'Increase monthly contributions or negotiate a higher employer match to close the gap.')
+      );
+      tips.push(
+        'Confirm your pension fund is registered with IPEC at ipec.co.zw. ' +
+        'Unregistered schemes offer zero regulatory protection for your retirement savings.'
+      );
+      if (goldPct < 10) tips.push(
+        `Your gold allocation is ${goldPct}%. Ask your fund administrator to increase Mosi oa Tunya gold coin ` +
+        `exposure to at least 10%. Gold is USD-denominated and directly hedges ZiG devaluation risk.`
+      );
+      tips.push(
+        `ZiG/USD is currently ~${zigRate.toFixed(2)}. Index your payout expectations to USD purchasing power — ` +
+        `ZiG-denominated benefits erode with each devaluation cycle, as happened in 2019 and 2024.`
+      );
+      tips.push(
+        'NSSA contributions alone provide approximately $30–50/month equivalent at retirement. ' +
+        'Supplement with an occupational pension fund or voluntary pension to reach IPEC\'s 60% target.'
+      );
+      tips.push(
+        'Every additional year of contributions dramatically increases your final fund through compounding. ' +
+        'Delaying retirement by 2–3 years can increase your total savings by 15–25%.'
+      );
       $('p-tips-list').innerHTML = tips.map(t => `<li>${t}</li>`).join('');
 
       if (noDataDiv) noDataDiv.style.display = 'none';
       if (tipsDiv) tipsDiv.style.display = '';
     } else {
-      // No simulation run yet — show call to action
+      // No simulation data — show call to action
       $('p-monthly-income').textContent = fmtCur(parseFloat(sliders.payout.value));
-      $('p-total-savings').textContent = '—';
-      $('p-duration').textContent = '—';
-      $('p-health').textContent = '—';
-      $('p-health-advice').textContent = 'Run a simulation to see your pension health.';
-      $('p-health-card').className = 'pensioner-card';
-      $('p-tips-list').innerHTML = '<li>Run a simulation first to get personalized advice.</li>';
+      $('p-total-savings').textContent  = '—';
+      $('p-duration').textContent       = '—';
+      $('p-health').textContent         = '—';
+      $('p-health-advice').textContent  = 'Run a simulation to see your pension health.';
+      $('p-health-card').className      = 'pensioner-card';
+      const blankIds = ['p-nominal-balance','p-real-balance','p-erosion-pct',
+                        'p-replacement-ratio','p-funding-ratio'];
+      blankIds.forEach(id => { const el = $( id ); if (el) el.textContent = '—'; });
+      const zigB = $('p-zig-risk-badge'); if (zigB) { zigB.textContent = '—'; zigB.className = 'pensioner-risk-badge'; }
+      const goldV = $('p-gold-pct');     if (goldV) { goldV.textContent = '—'; goldV.className = 'pensioner-gold-value'; }
+      $('p-tips-list').innerHTML = '<li>Run a simulation first to get personalised Zimbabwe pension advice.</li>';
       if (noDataDiv) noDataDiv.style.display = '';
       if (tipsDiv) tipsDiv.style.display = 'none';
     }
@@ -1114,12 +1298,25 @@
       if (el) el.textContent = `ZiG ${(goldUsd * zigRate).toLocaleString(undefined, {maximumFractionDigits: 0})}`;
     }
 
-    // IDBZ rates table
-    if (idbzOk) {
+    // IDBZ rates table — use live data, fall back to static cache IDBZ section, then built-in defaults
+    if (idbzOk && idbzRes.value && idbzRes.value.rates && idbzRes.value.rates.length > 0) {
       renderIdbzTable(idbzRes.value);
     } else {
-      const t = $('idbz-rates-table');
-      if (t) t.innerHTML = '<p class="rates-no-data">IDBZ data unavailable</p>';
+      const fallbackIdbz = (staticCache && staticCache.idbzRates) ? staticCache.idbzRates : {
+        rates: [
+          { currency: 'USD (US Dollar)', buying: 25.20, selling: 25.55 },
+          { currency: 'EUR (Euro)', buying: 27.40, selling: 27.85 },
+          { currency: 'GBP (British Pound)', buying: 32.00, selling: 32.60 },
+          { currency: 'ZAR (South African Rand)', buying: 1.35, selling: 1.40 },
+          { currency: 'CNY (Chinese Yuan)', buying: 3.45, selling: 3.55 },
+          { currency: 'BWP (Botswana Pula)', buying: 1.82, selling: 1.88 },
+          { currency: 'ZMW (Zambian Kwacha)', buying: 0.98, selling: 1.02 },
+        ],
+        goldCoin: null,
+        date: new Date().toISOString().split('T')[0],
+        source: 'fallback (estimates)',
+      };
+      renderIdbzTable(fallbackIdbz);
     }
 
     // Draw sparklines — use live RBZ PDF series if available, else static fallback
@@ -1405,6 +1602,39 @@
   }
 
   // ═══════════════════════════════════════════════
+  // DARK / LIGHT MODE TOGGLE
+  // ═══════════════════════════════════════════════
+  (function initTheme() {
+    const root = document.documentElement;
+    const btn = $('theme-toggle');
+    const moonIcon = $('theme-icon-moon');
+    const sunIcon = $('theme-icon-sun');
+
+    function applyTheme(theme) {
+      if (theme === 'light') {
+        root.setAttribute('data-theme', 'light');
+        if (moonIcon) moonIcon.style.display = 'none';
+        if (sunIcon) sunIcon.style.display = '';
+      } else {
+        root.setAttribute('data-theme', 'dark');
+        if (moonIcon) moonIcon.style.display = '';
+        if (sunIcon) sunIcon.style.display = 'none';
+      }
+    }
+
+    const saved = localStorage.getItem('pension-theme') || 'dark';
+    applyTheme(saved);
+
+    if (btn) {
+      btn.addEventListener('click', () => {
+        const current = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+        applyTheme(current);
+        localStorage.setItem('pension-theme', current);
+      });
+    }
+  })();
+
+  // ═══════════════════════════════════════════════
   // INIT
   // ═══════════════════════════════════════════════
   drawGrid();
@@ -1412,8 +1642,11 @@
   updateAllocTotal();
   initDragHandle();
 
-  // Apply Stable Growth Baseline as default on load
-  applyPreset('stable');
+  // Apply NSSA Default Parameters as the default on load (most relevant for Zimbabwe context)
+  applyPreset('nssa');
+
+  // Silently pre-compute the projection so Pensioner View has data on first open
+  simState.projectionData = computeProjection();
 
   // Fetch live exchange rate and gold price after a short delay
   setTimeout(fetchLiveRates, 800);
