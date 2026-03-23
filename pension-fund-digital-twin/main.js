@@ -153,6 +153,15 @@
     }
   });
 
+  // Dynamic projection years: always lifeExpectancy - currentAge (capped 20–80)
+  function updateProjectionYears() {
+    const lifeExp = parseInt(sliders.lifeExpectancy.value) || 75;
+    const curAge  = parseInt(sliders.age.value) || 30;
+    simState.projectionYears = Math.max(20, Math.min(80, lifeExp - curAge));
+  }
+  sliders.age.addEventListener('input', updateProjectionYears);
+  sliders.lifeExpectancy.addEventListener('input', updateProjectionYears);
+
   // Allocation total tracking
   const allocSliders = ['allocEquities', 'allocBonds', 'allocRealestate', 'allocMoney', 'allocGold'];
   // Retirement age dropdown
@@ -167,6 +176,7 @@
         sliders.retirement.value = v;
         vals.retirement.textContent = v;
       }
+      updateProjectionYears();
     });
   }
 
@@ -470,11 +480,11 @@
     ctx.strokeStyle = 'rgba(148,163,184,0.35)'; ctx.lineWidth = 1.5;
     ctx.beginPath(); ctx.moveTo(P.left, P.top); ctx.lineTo(P.left, h - P.bottom); ctx.lineTo(w - P.right, h - P.bottom); ctx.stroke();
 
-    ctx.fillStyle = '#e2e8f0'; ctx.font = '11px "JetBrains Mono"'; ctx.textAlign = 'center';
+    ctx.fillStyle = '#e2e8f0'; ctx.font = '700 11px "JetBrains Mono"'; ctx.textAlign = 'center';
     ctx.fillText('Years →', w/2, h - P.bottom + 38);
     ctx.save(); ctx.translate(16, h/2); ctx.rotate(-Math.PI/2); ctx.fillText('Fund Balance →', 0, 0); ctx.restore();
-    ctx.fillStyle = '#ffffff'; ctx.font = '600 13px "Plus Jakarta Sans"'; ctx.textAlign = 'center';
-    ctx.fillText('Pension Fund Projection — Zimbabwe', w/2, 28);
+    ctx.fillStyle = '#ffffff'; ctx.font = '700 14px "Plus Jakarta Sans"'; ctx.textAlign = 'center';
+    ctx.fillText('Pension Fund Projection', w/2, 28);
   }
 
   function drawProjection(data, stepCount) {
@@ -487,13 +497,13 @@
     const xS = m => P.left + (m / totalM) * cW;
     const yS = b => P.top + cH - (b / maxBal) * cH;
 
-    ctx.fillStyle = '#e2e8f0'; ctx.font = '10px "JetBrains Mono"'; ctx.textAlign = 'center';
+    ctx.fillStyle = '#e2e8f0'; ctx.font = '700 10px "JetBrains Mono"'; ctx.textAlign = 'center';
     const yrs = totalM/12, yStp = yrs <= 20 ? 2 : yrs <= 40 ? 5 : 10;
     for (let y = 0; y <= yrs; y += yStp) { ctx.fillText(`${y}y`, xS(y*12), h - P.bottom + 16); }
 
     const bStp = getBalanceStep(maxBal);
     for (let b = 0; b <= maxBal; b += bStp) {
-      ctx.fillStyle = '#e2e8f0'; ctx.font = '10px "JetBrains Mono"'; ctx.textAlign = 'right';
+      ctx.fillStyle = '#e2e8f0'; ctx.font = '700 10px "JetBrains Mono"'; ctx.textAlign = 'right';
       ctx.fillText(formatCompact(b), P.left - 8, yS(b) + 3);
     }
 
@@ -502,8 +512,8 @@
       const rx = xS(retM);
       ctx.strokeStyle = 'rgba(251,191,36,0.5)'; ctx.lineWidth = 1.5; ctx.setLineDash([5,3]);
       ctx.beginPath(); ctx.moveTo(rx, P.top); ctx.lineTo(rx, h - P.bottom); ctx.stroke(); ctx.setLineDash([]);
-      ctx.fillStyle = '#fbbf24'; ctx.font = '600 10px "JetBrains Mono"'; ctx.textAlign = 'center';
-      ctx.fillText('RETIREMENT', rx, P.top - 6);
+      ctx.fillStyle = '#fbbf24'; ctx.font = '700 10px "JetBrains Mono"'; ctx.textAlign = 'center';
+      ctx.fillText('RETIREMENT', rx, P.top - 4);
     }
 
     const lifeExp = parseInt(sliders.lifeExpectancy.value);
@@ -518,7 +528,7 @@
       const lx = xS(lifeMonth);
       ctx.strokeStyle = 'rgba(167,139,250,0.6)'; ctx.lineWidth = 1; ctx.setLineDash([3,3]);
       ctx.beginPath(); ctx.moveTo(lx, P.top); ctx.lineTo(lx, h - P.bottom); ctx.stroke(); ctx.setLineDash([]);
-      ctx.fillStyle = '#a78bfa'; ctx.font = '600 9px "JetBrains Mono"'; ctx.fillText('LIFE EXP.', lx, P.top - 6);
+      ctx.fillStyle = '#a78bfa'; ctx.font = '700 9px "JetBrains Mono"'; ctx.fillText('LIFE EXP.', lx, P.top - 4);
     }
 
     ctx.beginPath(); ctx.moveTo(xS(0), yS(0));
@@ -1208,18 +1218,10 @@
       _fetchJson(`${API_BASE}/rates/rbz-history`),
     ]);
 
-    // Await cache first (fast, <200ms) — render it immediately so cards are
-    // populated before the live API timeout fires.
+    // Await static cache for sparkline historical data only (not rate cards)
     const staticCache = await staticCachePromise;
-    if (staticCache && staticCache.latestZigUsd && staticCache.latestGoldCoin) {
-      const zigEl = $('rc-zig'); if (zigEl) zigEl.textContent = `${staticCache.latestZigUsd.toFixed(4)} ZiG`;
-      const zigMeta = $('rc-zig-meta'); if (zigMeta) { zigMeta.textContent = `RBZ PDF (${staticCache.latestDate} cached)`; zigMeta.className = 'rate-card-meta'; }
-      const goldEl = $('rc-gold'); if (goldEl) goldEl.textContent = `$${Number(staticCache.latestGoldCoin).toLocaleString()}`;
-      const goldMeta = $('rc-gold-meta'); if (goldMeta) { goldMeta.textContent = `RBZ PDF (${staticCache.latestDate} cached)`; goldMeta.className = 'rate-card-meta'; }
-      if (updatedEl) updatedEl.textContent = `Cached: ${staticCache.latestDate} \u2014 checking live\u2026`;
-    }
 
-    // Now await live API results (may take up to 12s or fail entirely)
+    // Await live API results (may take up to 12s or fail entirely)
     const [zigRes, goldRes, idbzRes, histRes] = await livePromise;
 
     // Prefer live API history; fall back to static cache if live failed
@@ -1240,8 +1242,8 @@
       if (el) el.textContent = `${zigRate.toFixed(4)} ZiG`;
       const meta = $('rc-zig-meta');
       if (meta) {
-        meta.textContent = usingCache ? `RBZ PDF (${rbzHistory.latestDate} cached)` : `RBZ PDF (${rbzHistory.latestDate})`;
-        meta.className = usingCache ? 'rate-card-meta' : 'rate-card-meta live';
+        meta.textContent = `RBZ PDF (${rbzHistory.latestDate})`;
+        meta.className = 'rate-card-meta live';
       }
     } else if (zigRes.status === 'fulfilled') {
       // HTML scrape as fallback when PDF history is unavailable / still building
@@ -1275,8 +1277,8 @@
       if (el) el.textContent = `$${Number(goldUsd).toLocaleString()}`;
       const meta = $('rc-gold-meta');
       if (meta) {
-        meta.textContent = usingCache ? `RBZ PDF / MOTC (${rbzHistory.latestDate} cached)` : `RBZ PDF / MOTC (${rbzHistory.latestDate})`;
-        meta.className = usingCache ? 'rate-card-meta' : 'rate-card-meta live';
+        meta.textContent = `RBZ PDF / MOTC (${rbzHistory.latestDate})`;
+        meta.className = 'rate-card-meta live';
       }
     } else {
       // Fallback: IOBZ/IDBZ scrape
@@ -1345,11 +1347,8 @@
         const srcEl = $('history-source');
         if (srcEl) {
           const ptCount = rbzHistory.points.length;
-          const srcLabel = usingCache
-            ? `source: ${rbzHistory.source} (${ptCount} pts, cached)`
-            : `source: ${rbzHistory.source} (${ptCount} daily pts)`;
-          srcEl.textContent = srcLabel;
-          srcEl.className = usingCache ? 'rates-source-tag stale' : 'rates-source-tag live';
+            srcEl.textContent = `source: ${rbzHistory.source} (${ptCount} daily pts)`;
+          srcEl.className   = 'rates-source-tag live';
         }
       } else {
         drawSparkline('gold-sparkline', GOLD_DATA.historicalPrices, '#d4a843', 'date', 'usd', '$', '');
@@ -1374,24 +1373,14 @@
     if (liveApiFailed && _ratesRetryCount < _RATES_MAX_RETRIES) {
       const delay = _RATES_RETRY_DELAYS[_ratesRetryCount] || 30000;
       _ratesRetryCount++;
-      if (updatedEl) {
-        if (usingCache) {
-          updatedEl.textContent = `Cached: ${rbzHistory.latestDate} \u2014 connecting to live API\u2026`;
-        } else {
-          updatedEl.textContent = `Connecting\u2026 (retry ${_ratesRetryCount}/${_RATES_MAX_RETRIES})`;
-        }
-      }
+      if (updatedEl) updatedEl.textContent = `Connecting\u2026 (retry ${_ratesRetryCount}/${_RATES_MAX_RETRIES})`;
       setTimeout(loadRatesData, delay);
     } else {
       _ratesRetryCount = 0;
       if (updatedEl) {
-        if (allFailed) {
-          updatedEl.textContent = 'Live data unavailable \u2014 using defaults';
-        } else if (usingCache) {
-          updatedEl.textContent = `Cached: ${rbzHistory.latestDate} \u2014 live API unavailable`;
-        } else {
-          updatedEl.textContent = `Updated: ${new Date().toLocaleTimeString()}`;
-        }
+        updatedEl.textContent = allFailed
+          ? 'Live data unavailable \u2014 using defaults'
+          : `Updated: ${new Date().toLocaleTimeString()}`;
       }
     }
   }
@@ -1652,11 +1641,43 @@
   updateAllocTotal();
   initDragHandle();
 
+  // ── Draggable Status Overlay ───────────────────────────────────────────────
+  (function initDragStatus() {
+    const overlay = $('status-overlay');
+    const panel   = $('right-panel');
+    if (!overlay || !panel) return;
+    let dragging = false, ox = 0, oy = 0;
+    overlay.style.cursor = 'move';
+    function onStart(cx, cy) {
+      dragging = true;
+      const r = overlay.getBoundingClientRect();
+      ox = cx - r.left; oy = cy - r.top;
+    }
+    function onMove(cx, cy) {
+      if (!dragging) return;
+      const pr = panel.getBoundingClientRect();
+      const ow = overlay.offsetWidth, oh = overlay.offsetHeight;
+      const nx = Math.max(0, Math.min(cx - pr.left - ox, pr.width  - ow));
+      const ny = Math.max(0, Math.min(cy - pr.top  - oy, pr.height - oh));
+      overlay.style.left = nx + 'px';
+      overlay.style.top  = ny + 'px';
+    }
+    overlay.addEventListener('mousedown', e => { onStart(e.clientX, e.clientY); e.preventDefault(); });
+    document.addEventListener('mousemove', e => onMove(e.clientX, e.clientY));
+    document.addEventListener('mouseup',   () => { dragging = false; });
+    overlay.addEventListener('touchstart', e => { onStart(e.touches[0].clientX, e.touches[0].clientY); e.preventDefault(); }, { passive: false });
+    document.addEventListener('touchmove',  e => { if (dragging) { onMove(e.touches[0].clientX, e.touches[0].clientY); e.preventDefault(); } }, { passive: false });
+    document.addEventListener('touchend',   () => { dragging = false; });
+  })();
+
   // Apply NSSA Default Parameters as the default on load (most relevant for Zimbabwe context)
   applyPreset('nssa');
   // Sync the visible preset dropdown to reflect the applied preset
   const _presetSel = $('preset-select');
   if (_presetSel) _presetSel.value = 'nssa';
+
+  // Compute dynamic projection years from lifeExpectancy - currentAge
+  updateProjectionYears();
 
   // Silently pre-compute the projection so Pensioner View has data on first open
   simState.projectionData = computeProjection();

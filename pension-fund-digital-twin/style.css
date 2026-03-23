@@ -244,10 +244,10 @@ body { font-family: var(--font-main); background: var(--bg-primary); color: var(
   background: rgba(13, 17, 23, 0.95); backdrop-filter: blur(16px);
   border: 1px solid rgba(255, 255, 255, 0.18); border-radius: var(--radius);
   padding: 10px 16px; z-index: 10; min-width: 210px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5); cursor: move;
 }
-.status-row { font-family: var(--font-mono); font-size: 0.76rem; color: var(--text-primary); line-height: 1.9; }
-.status-label { color: #cbd5e1; font-weight: 600; }
+.status-row { font-family: var(--font-mono); font-size: 0.76rem; font-weight: 700; color: var(--text-primary); line-height: 1.9; }
+.status-label { color: #cbd5e1; font-weight: 700; }
 #status-state { font-weight: 700; }
 .status-idle { color: #cbd5e1; }
 .status-running { color: #34d399; }
@@ -256,7 +256,7 @@ body { font-family: var(--font-main); background: var(--bg-primary); color: var(
 
 /* IPEC Badge */
 .ipec-badge {
-  position: absolute; top: 12px; right: 52px;
+  position: absolute; top: 4px; right: 52px;
   background: rgba(13, 17, 23, 0.95); backdrop-filter: blur(16px);
   border: 1px solid rgba(255, 255, 255, 0.18); border-radius: var(--radius-sm);
   padding: 6px 12px; z-index: 10; display: flex; align-items: center; gap: 6px;
@@ -273,7 +273,7 @@ body { font-family: var(--font-main); background: var(--bg-primary); color: var(
 
 /* Settings Gear */
 .settings-gear {
-  position: absolute; top: 12px; right: 12px; width: 36px; height: 36px;
+  position: absolute; top: 4px; right: 12px; width: 36px; height: 36px;
   display: flex; align-items: center; justify-content: center;
   background: rgba(13, 17, 23, 0.95); backdrop-filter: blur(16px);
   border: 1px solid rgba(255, 255, 255, 0.18); border-radius: var(--radius-sm);
