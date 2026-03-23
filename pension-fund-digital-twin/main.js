@@ -1005,6 +1005,16 @@
       blankIds.forEach(id => { const el = $( id ); if (el) el.textContent = '—'; });
       const zigB = $('p-zig-risk-badge'); if (zigB) { zigB.textContent = '—'; zigB.className = 'pensioner-risk-badge'; }
       const goldV = $('p-gold-pct');     if (goldV) { goldV.textContent = '—'; goldV.className = 'pensioner-gold-value'; }
+      // Reset IPEC badge, bars, notes, and alerts
+      const ipecBadge0 = $('p-ipec-badge');
+      if (ipecBadge0) { ipecBadge0.textContent = '—'; ipecBadge0.className = 'pensioner-ipec-badge'; }
+      const ipecBar0 = $('p-ipec-bar');     if (ipecBar0) { ipecBar0.style.width = '0%'; ipecBar0.className = 'pensioner-progress-bar'; }
+      const fundBar0 = $('p-funding-bar');  if (fundBar0) { fundBar0.style.width = '0%'; fundBar0.className = 'pensioner-progress-bar'; }
+      ['p-ipec-note','p-erosion-note','p-zig-risk-note','p-gold-note'].forEach(id => {
+        const el = $(id); if (el) el.textContent = '—';
+      });
+      const alertsList0 = $('p-alerts-list');
+      if (alertsList0) alertsList0.innerHTML = '<li class="alert-item alert-info">Run a simulation first to see Zimbabwe-specific risk alerts.</li>';
       $('p-tips-list').innerHTML = '<li>Run a simulation first to get personalised Zimbabwe pension advice.</li>';
       if (noDataDiv) noDataDiv.style.display = '';
       if (tipsDiv) tipsDiv.style.display = 'none';
@@ -1644,6 +1654,9 @@
 
   // Apply NSSA Default Parameters as the default on load (most relevant for Zimbabwe context)
   applyPreset('nssa');
+  // Sync the visible preset dropdown to reflect the applied preset
+  const _presetSel = $('preset-select');
+  if (_presetSel) _presetSel.value = 'nssa';
 
   // Silently pre-compute the projection so Pensioner View has data on first open
   simState.projectionData = computeProjection();
