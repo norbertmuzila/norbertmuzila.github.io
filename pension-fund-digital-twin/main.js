@@ -1207,7 +1207,7 @@
     // On GitHub Pages, start static cache fetch immediately — it resolves in <200ms
     // and gives the user instant data even when the live API is cold.
     const staticCachePromise = isGitHubPages
-      ? _fetchJson('/rates-cache.json', 5000).catch(() => null)
+      ? _fetchJson('rates-cache.json', 5000).catch(() => null)
       : Promise.resolve(null);
 
     // Live API fetches run in parallel
