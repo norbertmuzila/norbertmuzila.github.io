@@ -521,6 +521,37 @@
     </div>
   </div>
 
+  <!-- ===== ZAPF AI CHATBOT ===== -->
+  <button id="zapf-ai-fab" class="zapf-ai-fab" aria-label="Open ZAPF AI Chat">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="24" height="24">
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+    </svg>
+  </button>
+
+  <div id="zapf-ai-window" class="zapf-ai-window">
+    <div class="zapf-ai-header">
+      <div class="zapf-ai-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+        ZAPF AI
+      </div>
+      <button id="zapf-ai-close" class="zapf-ai-close">&times;</button>
+    </div>
+    <div id="zapf-ai-messages" class="zapf-ai-messages">
+      <div class="zapf-message ai">
+        <div class="zapf-bubble">Hello! I'm ZAPF AI, your Pension Fund Digital Twin assistant. How can I help you today?</div>
+      </div>
+    </div>
+    <div class="zapf-ai-input-area">
+      <textarea id="zapf-ai-input" placeholder="Ask about Zimbabwe pensions..." rows="1"></textarea>
+      <button id="zapf-ai-send" aria-label="Send message">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+          <line x1="22" y1="2" x2="11" y2="13"></line>
+          <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+        </svg>
+      </button>
+    </div>
+  </div>
+
   <script src="main.js"></script>
 </body>
 </html>

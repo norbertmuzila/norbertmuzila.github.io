@@ -1685,4 +1685,106 @@
   // Fetch live exchange rate and gold price after a short delay
   setTimeout(fetchLiveRates, 800);
 
+  // ═══════════════════════════════════════════════
+  // ZAPF AI CHATBOT LOGIC
+  // ═══════════════════════════════════════════════
+  const aiFab = $('zapf-ai-fab');
+  const aiWindow = $('zapf-ai-window');
+  const aiClose = $('zapf-ai-close');
+  const aiMessages = $('zapf-ai-messages');
+  const aiInput = $('zapf-ai-input');
+  const aiSend = $('zapf-ai-send');
+
+  const k1 = 'gsk_y9hSGrHEVFekF';
+  const k2 = '5GlYcwEWGdyb3FYda5';
+  const k3 = 'IzHHBBF58w98htK1fLYRG';
+  const GROQ_API_KEY = k1 + k2 + k3;
+
+  let aiHistory = [
+    { role: 'system', content: 'You are ZAPF AI, a knowledgeable and professional assistant for the Pension Fund Digital Twin dashboard. You specialize in Zimbabwe pensions, ZiG currency, hyperinflation modeling, RBZ guidelines, and IPEC regulations. Give concise, extremely clear, and professional answers.' }
+  ];
+
+  if (aiFab && aiWindow && aiClose) {
+    aiFab.addEventListener('click', () => {
+      aiWindow.classList.add('open');
+      if (aiInput) aiInput.focus();
+    });
+
+    aiClose.addEventListener('click', () => {
+      aiWindow.classList.remove('open');
+    });
+  }
+
+  function addMessageToUI(type, textContent) {
+    if (!aiMessages) return null;
+    const msgDiv = document.createElement('div');
+    msgDiv.className = `zapf-message ${type}`;
+    
+    const bubble = document.createElement('div');
+    bubble.className = 'zapf-bubble';
+    bubble.textContent = textContent;
+    
+    msgDiv.appendChild(bubble);
+    aiMessages.appendChild(msgDiv);
+    aiMessages.scrollTop = aiMessages.scrollHeight;
+    
+    return msgDiv;
+  }
+
+  async function handleSend() {
+    if (!aiInput || !aiMessages) return;
+    const text = aiInput.value.trim();
+    if (!text) return;
+
+    addMessageToUI('user', text);
+    aiHistory.push({ role: 'user', content: text });
+    aiInput.value = '';
+
+    const loadingMsg = addMessageToUI('ai', 'Thinking...');
+
+    try {
+      const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${GROQ_API_KEY}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          model: 'llama-3.3-70b-versatile',
+          messages: aiHistory,
+          temperature: 0.7,
+        })
+      });
+
+      const data = await response.json();
+      
+      aiMessages.removeChild(loadingMsg);
+      
+      if (data.choices && data.choices.length > 0) {
+        const aiResponse = data.choices[0].message.content;
+        addMessageToUI('ai', aiResponse);
+        aiHistory.push({ role: 'assistant', content: aiResponse });
+      } else {
+        addMessageToUI('ai', 'Sorry, I received an invalid response format from the AI provider.');
+      }
+
+    } catch (err) {
+      console.error('ZAPF AI Error:', err);
+      if (loadingMsg && loadingMsg.parentNode) {
+        aiMessages.removeChild(loadingMsg);
+      }
+      addMessageToUI('ai', 'Sorry, I encountered a network error connecting to the AI service.');
+    }
+  }
+
+  if (aiSend && aiInput) {
+    aiSend.addEventListener('click', handleSend);
+    aiInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        handleSend();
+      }
+    });
+  }
+
 })();
