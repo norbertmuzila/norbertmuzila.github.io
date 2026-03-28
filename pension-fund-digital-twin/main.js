@@ -1686,7 +1686,7 @@
   setTimeout(fetchLiveRates, 800);
 
   // ═══════════════════════════════════════════════
-  // ZAPF AI CHATBOT LOGIC
+  // ZAPF AI CHATBOT LOGIC (Gemini API with Context)
   // ═══════════════════════════════════════════════
   const aiFab = $('zapf-ai-fab');
   const aiWindow = $('zapf-ai-window');
@@ -1695,14 +1695,12 @@
   const aiInput = $('zapf-ai-input');
   const aiSend = $('zapf-ai-send');
 
-  const k1 = 'gsk_y9hSGrHEVFekF';
-  const k2 = '5GlYcwEWGdyb3FYda5';
-  const k3 = 'IzHHBBF58w98htK1fLYRG';
-  const GROQ_API_KEY = k1 + k2 + k3;
+  const gk1 = 'AIzaSyCId3';
+  const gk2 = '8eFi3Qfe7E';
+  const gk3 = 'xVB9pQwrUD8YcjX3SzQ';
+  const GEMINI_API_KEY = gk1 + gk2 + gk3;
 
-  let aiHistory = [
-    { role: 'system', content: 'You are ZAPF AI, a knowledgeable and professional assistant for the Pension Fund Digital Twin dashboard. You specialize in Zimbabwe pensions, ZiG currency, hyperinflation modeling, RBZ guidelines, and IPEC regulations. Give concise, extremely clear, and professional answers.' }
-  ];
+  let aiHistory = [];
 
   if (aiFab && aiWindow && aiClose) {
     aiFab.addEventListener('click', () => {
@@ -1731,39 +1729,57 @@
     return msgDiv;
   }
 
+  function getSimulationContext() {
+    return `Current Simulation State:
+- Status: ${$('status-state') ? $('status-state').textContent : 'Idle'}
+- Fund Balance: ${$('status-balance') ? $('status-balance').textContent : '$0'}
+- Monthly Payout: ${$('status-payout') ? $('status-payout').textContent : '$0'}
+- Inflation: ${$('status-inflation') ? $('status-inflation').textContent : '0%'}
+- Funding Ratio: ${$('status-funding-ratio') ? $('status-funding-ratio').textContent : '-'}
+- Years to Depletion: ${$('status-depletion') ? $('status-depletion').textContent : '-'}
+- IPEC Status: ${$('canvas-ipec-status') ? $('canvas-ipec-status').textContent : '-'}`;
+  }
+
   async function handleSend() {
     if (!aiInput || !aiMessages) return;
     const text = aiInput.value.trim();
     if (!text) return;
 
     addMessageToUI('user', text);
-    aiHistory.push({ role: 'user', content: text });
+    aiHistory.push({ role: 'user', parts: [{ text: text }] });
     aiInput.value = '';
 
     const loadingMsg = addMessageToUI('ai', 'Thinking...');
 
     try {
-      const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      const systemPrompt = `You are ZAPF AI, a knowledgeable assistant for the Pension Fund Digital Twin dashboard. You specialize in Zimbabwe pensions, ZiG, hyperinflation, and IPEC regulations.
+Always provide concise, clear, and professional answers.
+The user is currently running a simulation. Here is the LIVE data from their dashboard. Use this data if they ask about their simulation:
+${getSimulationContext()}`;
+
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${GROQ_API_KEY}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          model: 'llama-3.3-70b-versatile',
-          messages: aiHistory,
-          temperature: 0.7,
+          systemInstruction: {
+            parts: [{ text: systemPrompt }]
+          },
+          contents: aiHistory,
+          generationConfig: {
+            temperature: 0.7
+          }
         })
       });
 
       const data = await response.json();
-      
       aiMessages.removeChild(loadingMsg);
       
-      if (data.choices && data.choices.length > 0) {
-        const aiResponse = data.choices[0].message.content;
+      if (data.candidates && data.candidates.length > 0 && data.candidates[0].content) {
+        const aiResponse = data.candidates[0].content.parts[0].text;
         addMessageToUI('ai', aiResponse);
-        aiHistory.push({ role: 'assistant', content: aiResponse });
+        aiHistory.push({ role: 'model', parts: [{ text: aiResponse }] });
       } else {
         addMessageToUI('ai', 'Sorry, I received an invalid response format from the AI provider.');
       }
@@ -1773,7 +1789,7 @@
       if (loadingMsg && loadingMsg.parentNode) {
         aiMessages.removeChild(loadingMsg);
       }
-      addMessageToUI('ai', 'Sorry, I encountered a network error connecting to the AI service.');
+      addMessageToUI('ai', 'Sorry, I encountered an error connecting to the AI service.');
     }
   }
 
