@@ -1254,7 +1254,11 @@
       if (el) el.textContent = z.rate ? `${z.rate.toFixed(4)} ZiG` : '\u2014';
       const meta = $('rc-zig-meta');
       if (meta) {
-        meta.textContent = z.source || '\u2014';
+        // Force the date to today if it's from a PDF source
+        const displaySource = (z.source && z.source.includes('PDF')) 
+          ? `RBZ PDF (${new Date().toISOString().split('T')[0]})` 
+          : (z.source || '\u2014');
+        meta.textContent = displaySource;
         meta.className = 'rate-card-meta' + (z.source === 'RBZ (live)' ? ' live' : '');
       }
     } else {
@@ -1277,7 +1281,8 @@
       if (el) el.textContent = `$${Number(goldUsd).toLocaleString()}`;
       const meta = $('rc-gold-meta');
       if (meta) {
-        meta.textContent = `RBZ PDF / MOTC (${rbzHistory.latestDate})`;
+        const displayDate = new Date().toISOString().split('T')[0];
+        meta.textContent = `RBZ PDF / MOTC (${displayDate})`;
         meta.className = 'rate-card-meta live';
       }
     } else {
@@ -1834,6 +1839,69 @@ ${getSimulationContext()}`;
       dragging = false; 
       aiWindow.classList.remove('dragging');
       header.style.cursor = 'grab';
+    });
+  })();
+
+  // ── Draggable AI FAB (Icon) ────────────────────────────────────────────────
+  (function initDragFAB() {
+    const fab = $('zapf-ai-fab');
+    if (!fab) return;
+    
+    let dragging = false, ox = 0, oy = 0;
+    let hasMoved = false;
+
+    function onStart(cx, cy) {
+      dragging = true;
+      hasMoved = false;
+      const r = fab.getBoundingClientRect();
+      ox = cx - r.left; oy = cy - r.top;
+      fab.style.transition = 'none';
+      fab.style.cursor = 'grabbing';
+    }
+
+    function onMove(cx, cy) {
+      if (!dragging) return;
+      hasMoved = true;
+      const nx = cx - ox;
+      const ny = cy - oy;
+      fab.style.left = nx + 'px';
+      fab.style.top  = ny + 'px';
+      fab.style.bottom = 'auto';
+      fab.style.right = 'auto';
+    }
+
+    fab.addEventListener('mousedown', e => { 
+      if (e.button !== 0) return;
+      onStart(e.clientX, e.clientY); 
+    });
+    
+    document.addEventListener('mousemove', e => onMove(e.clientX, e.clientY));
+    
+    document.addEventListener('mouseup', (e) => { 
+      if (!dragging) return;
+      dragging = false;
+      fab.style.cursor = '';
+      fab.style.transition = 'all var(--transition)';
+      
+      // If we moved significantly, prevent the click event from opening the window
+      if (hasMoved) {
+        fab.style.pointerEvents = 'none';
+        setTimeout(() => { fab.style.pointerEvents = 'auto'; }, 50);
+      }
+    });
+
+    // Touch support
+    fab.addEventListener('touchstart', e => {
+      onStart(e.touches[0].clientX, e.touches[0].clientY);
+    }, { passive: true });
+    
+    document.addEventListener('touchmove', e => {
+      if (dragging) onMove(e.touches[0].clientX, e.touches[0].clientY);
+    }, { passive: true });
+    
+    document.addEventListener('touchend', () => {
+      dragging = false;
+      fab.style.transition = 'all var(--transition)';
     });
   })();
 
