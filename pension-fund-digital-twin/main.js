@@ -1695,7 +1695,7 @@
   const aiInput = $('zapf-ai-input');
   const aiSend = $('zapf-ai-send');
 
-  const API_KEY = 'AIzaSyCId38eFi3Qfe7ExVB9pQwrUD8YcjX3SzQ';
+  const API_KEY = 'AIzaSyAzW-X-lZPo0KqG4FUapuQUtdKVEGnrKlg';
 
   let aiHistory = [];
 
@@ -1755,7 +1755,7 @@ Always provide concise, clear, and professional answers.
 The user is currently running a simulation. Here is the LIVE data from their dashboard. Use this data if they ask about their simulation:
 ${getSimulationContext()}`;
 
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${API_KEY}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -1775,6 +1775,8 @@ ${getSimulationContext()}`;
         addMessageToUI('ai', aiResponse);
         // Add Assistant message to history
         aiHistory.push({ role: 'model', parts: [{ text: aiResponse }] });
+      } else if (data.error && data.error.message) {
+        addMessageToUI('ai', `API Error [${data.error.code}]: ${data.error.message}`);
       } else {
         addMessageToUI('ai', 'Sorry, I received an invalid response format from the AI provider.');
       }
