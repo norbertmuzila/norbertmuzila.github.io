@@ -1757,7 +1757,7 @@ Always provide concise, clear, and professional answers.
 The user is currently running a simulation. Here is the LIVE data from their dashboard. Use this data if they ask about their simulation:
 ${getSimulationContext()}`;
 
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
