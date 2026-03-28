@@ -1686,7 +1686,7 @@
   setTimeout(fetchLiveRates, 800);
 
   // ═══════════════════════════════════════════════
-  // ZAPF AI CHATBOT LOGIC (Gemini API with Context)
+  // ZAPF AI CHATBOT LOGIC (DeepSeek API with Context)
   // ═══════════════════════════════════════════════
   const aiFab = $('zapf-ai-fab');
   const aiWindow = $('zapf-ai-window');
@@ -1695,10 +1695,10 @@
   const aiInput = $('zapf-ai-input');
   const aiSend = $('zapf-ai-send');
 
-  const gk1 = 'AIzaSyCId3';
-  const gk2 = '8eFi3Qfe7E';
-  const gk3 = 'xVB9pQwrUD8YcjX3SzQ';
-  const GEMINI_API_KEY = gk1 + gk2 + gk3;
+  const dk1 = 'sk-1bb50';
+  const dk2 = 'a0db089420cb';
+  const dk3 = 'b88a542c46857f6';
+  const DEEPSEEK_API_KEY = dk1 + dk2 + dk3;
 
   let aiHistory = [];
 
@@ -1746,7 +1746,8 @@
     if (!text) return;
 
     addMessageToUI('user', text);
-    aiHistory.push({ role: 'user', parts: [{ text: text }] });
+    // Add User message to history
+    aiHistory.push({ role: 'user', content: text });
     aiInput.value = '';
 
     const loadingMsg = addMessageToUI('ai', 'Thinking...');
@@ -1757,29 +1758,33 @@ Always provide concise, clear, and professional answers.
 The user is currently running a simulation. Here is the LIVE data from their dashboard. Use this data if they ask about their simulation:
 ${getSimulationContext()}`;
 
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
+      // Prepend the system prompt exactly before sending
+      const messagesToSend = [
+        { role: 'system', content: systemPrompt },
+        ...aiHistory
+      ];
+
+      const response = await fetch('https://api.deepseek.com/chat/completions', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${DEEPSEEK_API_KEY}`
         },
         body: JSON.stringify({
-          systemInstruction: {
-            parts: [{ text: systemPrompt }]
-          },
-          contents: aiHistory,
-          generationConfig: {
-            temperature: 0.7
-          }
+          model: 'deepseek-chat',
+          messages: messagesToSend,
+          temperature: 0.7
         })
       });
 
       const data = await response.json();
       aiMessages.removeChild(loadingMsg);
       
-      if (data.candidates && data.candidates.length > 0 && data.candidates[0].content) {
-        const aiResponse = data.candidates[0].content.parts[0].text;
+      if (data.choices && data.choices.length > 0 && data.choices[0].message) {
+        const aiResponse = data.choices[0].message.content;
         addMessageToUI('ai', aiResponse);
-        aiHistory.push({ role: 'model', parts: [{ text: aiResponse }] });
+        // Add Assistant message to history
+        aiHistory.push({ role: 'assistant', content: aiResponse });
       } else {
         addMessageToUI('ai', 'Sorry, I received an invalid response format from the AI provider.');
       }
