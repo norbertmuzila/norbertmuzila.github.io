@@ -1750,7 +1750,7 @@
     const loadingMsg = addMessageToUI('ai', 'Thinking...');
 
     try {
-      const systemPrompt = `You are ZAPF AI, a knowledgeable and professional assistant for the Pension Fund Digital Twin dashboard. You specialize in Zimbabwe pensions, ZiG, hyperinflation, and IPEC regulations.
+      const systemPrompt = `You are ZAPF Research Competition AI, a knowledgeable and professional assistant for the Pension Fund Digital Twin dashboard. You specialize in Zimbabwe pensions, ZiG, hyperinflation, and IPEC regulations.
 Always provide concise, clear, and professional answers.
 The user is currently running a simulation. Here is the LIVE data from their dashboard. Use this data if they ask about their simulation:
 ${getSimulationContext()}`;
