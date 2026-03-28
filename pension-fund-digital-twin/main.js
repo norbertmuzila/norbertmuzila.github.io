@@ -1686,7 +1686,7 @@
   setTimeout(fetchLiveRates, 800);
 
   // ═══════════════════════════════════════════════
-  // ZAPF AI CHATBOT LOGIC (DeepSeek API with Context)
+  // ZAPF AI CHATBOT LOGIC (Gemini API with Context)
   // ═══════════════════════════════════════════════
   const aiFab = $('zapf-ai-fab');
   const aiWindow = $('zapf-ai-window');
@@ -1695,10 +1695,7 @@
   const aiInput = $('zapf-ai-input');
   const aiSend = $('zapf-ai-send');
 
-  const dk1 = 'sk-1bb50';
-  const dk2 = 'a0db089420cb';
-  const dk3 = 'b88a542c46857f6';
-  const DEEPSEEK_API_KEY = dk1 + dk2 + dk3;
+  const API_KEY = 'AIzaSyCId38eFi3Qfe7ExVB9pQwrUD8YcjX3SzQ';
 
   let aiHistory = [];
 
@@ -1747,44 +1744,37 @@
 
     addMessageToUI('user', text);
     // Add User message to history
-    aiHistory.push({ role: 'user', content: text });
+    aiHistory.push({ role: 'user', parts: [{ text: text }] });
     aiInput.value = '';
 
     const loadingMsg = addMessageToUI('ai', 'Thinking...');
 
     try {
-      const systemPrompt = `You are ZAPF AI, a knowledgeable assistant for the Pension Fund Digital Twin dashboard. You specialize in Zimbabwe pensions, ZiG, hyperinflation, and IPEC regulations.
+      const systemPrompt = `You are ZAPF AI, a knowledgeable and professional assistant for the Pension Fund Digital Twin dashboard. You specialize in Zimbabwe pensions, ZiG, hyperinflation, and IPEC regulations.
 Always provide concise, clear, and professional answers.
 The user is currently running a simulation. Here is the LIVE data from their dashboard. Use this data if they ask about their simulation:
 ${getSimulationContext()}`;
 
-      // Prepend the system prompt exactly before sending
-      const messagesToSend = [
-        { role: 'system', content: systemPrompt },
-        ...aiHistory
-      ];
-
-      const response = await fetch('https://api.deepseek.com/chat/completions', {
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${DEEPSEEK_API_KEY}`
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          model: 'deepseek-chat',
-          messages: messagesToSend,
-          temperature: 0.7
+          systemInstruction: { parts: [{ text: systemPrompt }] },
+          contents: aiHistory,
+          generationConfig: { temperature: 0.7 }
         })
       });
 
       const data = await response.json();
       aiMessages.removeChild(loadingMsg);
       
-      if (data.choices && data.choices.length > 0 && data.choices[0].message) {
-        const aiResponse = data.choices[0].message.content;
+      if (data.candidates && data.candidates.length > 0 && data.candidates[0].content) {
+        const aiResponse = data.candidates[0].content.parts[0].text;
         addMessageToUI('ai', aiResponse);
         // Add Assistant message to history
-        aiHistory.push({ role: 'assistant', content: aiResponse });
+        aiHistory.push({ role: 'model', parts: [{ text: aiResponse }] });
       } else {
         addMessageToUI('ai', 'Sorry, I received an invalid response format from the AI provider.');
       }
