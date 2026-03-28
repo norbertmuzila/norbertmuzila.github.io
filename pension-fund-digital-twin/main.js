@@ -1521,7 +1521,7 @@
         if (h && !h.fallback && h.latestZigUsd) {
           pdfZigRate = h.latestZigUsd;
           pdfGoldRate = h.latestGoldCoin;
-          pdfDate = h.latestDate;
+          pdfDate = new Date().toISOString().split('T')[0];
         }
       }
 
@@ -1670,11 +1670,11 @@
     document.addEventListener('touchend',   () => { dragging = false; });
   })();
 
-  // Apply NSSA Default Parameters as the default on load (most relevant for Zimbabwe context)
-  applyPreset('nssa');
+  // Apply Stable Growth Baseline Parameters as the default on load
+  applyPreset('stable');
   // Sync the visible preset dropdown to reflect the applied preset
   const _presetSel = $('preset-select');
-  if (_presetSel) _presetSel.value = 'nssa';
+  if (_presetSel) _presetSel.value = 'stable';
 
   // Compute dynamic projection years from lifeExpectancy - currentAge
   updateProjectionYears();
@@ -1799,5 +1799,43 @@ ${getSimulationContext()}`;
       }
     });
   }
+
+  // ── Draggable ZAPF AI Window ────────────────────────────────────────────────
+  (function initDragAI() {
+    const aiWindow = $('zapf-ai-window');
+    const header   = aiWindow ? aiWindow.querySelector('.zapf-ai-header') : null;
+    if (!aiWindow || !header) return;
+    
+    let dragging = false, ox = 0, oy = 0;
+    header.style.cursor = 'grab';
+
+    function onStart(cx, cy) {
+      if (cx > header.getBoundingClientRect().right - 30) return; // Don't drag if clicking close button
+      dragging = true;
+      aiWindow.classList.add('dragging');
+      header.style.cursor = 'grabbing';
+      const r = aiWindow.getBoundingClientRect();
+      ox = cx - r.left; oy = cy - r.top;
+    }
+
+    function onMove(cx, cy) {
+      if (!dragging) return;
+      const nx = cx - ox;
+      const ny = cy - oy;
+      aiWindow.style.left = nx + 'px';
+      aiWindow.style.top  = ny + 'px';
+      aiWindow.style.bottom = 'auto';
+      aiWindow.style.right = 'auto';
+    }
+
+    header.addEventListener('mousedown', e => { onStart(e.clientX, e.clientY); });
+    document.addEventListener('mousemove', e => onMove(e.clientX, e.clientY));
+    document.addEventListener('mouseup',   () => { 
+      dragging = false; 
+      aiWindow.classList.remove('dragging');
+      header.style.cursor = 'grab';
+    });
+  })();
+
 
 })();

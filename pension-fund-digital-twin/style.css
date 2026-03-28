@@ -908,6 +908,9 @@ body { font-family: var(--font-main); background: var(--bg-primary); color: var(
   transform: translateY(20px) scale(0.95);
   transition: all var(--transition);
 }
+.zapf-ai-window.dragging {
+  transition: none;
+}
 .zapf-ai-window.open {
   opacity: 1;
   pointer-events: auto;
@@ -922,6 +925,10 @@ body { font-family: var(--font-main); background: var(--bg-primary); color: var(
   background: rgba(13,17,23,0.8);
   border-bottom: 1px solid var(--border-color);
   border-radius: var(--radius) var(--radius) 0 0;
+  cursor: grab;
+}
+.zapf-ai-header:active {
+  cursor: grabbing;
 }
 .zapf-ai-title {
   display: flex;
