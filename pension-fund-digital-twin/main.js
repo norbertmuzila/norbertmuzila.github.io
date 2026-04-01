@@ -760,7 +760,7 @@
     if (depPt > 0) {
       addTermLine(term, '', 'info');
       addTermLine(term, 'CRITICAL: FUND DEPLETION RISK', 'error');
-      addTermLine(term, `   Solution 1: Reduce monthly payout from $${payout} to $${Math.round(payout * 0.6)}`, 'info');
+      addTermLine(term, `   Solution 1: Increase total monthly contributions (Employee/Employer)`, 'info');
       addTermLine(term, `   Solution 2: Extend working years (delay retirement by 3-5 years)`, 'info');
       addTermLine(term, `   Solution 3: Implement annuity-based drawdown (IPEC Directive 2/2020)`, 'info');
       addTermLine(term, `   Solution 4: Increase gold allocation as inflation hedge`, 'gold');
@@ -856,8 +856,7 @@
       }
       $('p-ipec-note').textContent = ipecMet
         ? `Your ${replRatio.toFixed(1)}% replacement ratio meets the IPEC 60% minimum — target 75% for greater security.`
-        : `${(60 - replRatio).toFixed(1)}% below IPEC minimum. Increase monthly contributions ` +
-          `or reduce expected payout from ${fmtCur(monthlyPayout)} to ${fmtCur(estSalary * 0.60)}.`;
+        : `${(60 - replRatio).toFixed(1)}% below IPEC minimum. Increase monthly contributions to improve your final payout.`;
 
       // ── Funding Ratio ────────────────────────────────────────────────
       const fundingRatio = retData.fundingRatio;
