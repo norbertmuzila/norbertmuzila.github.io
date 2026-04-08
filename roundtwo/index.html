@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>ESA Member States — Space Agency Atlas</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f5f0;color:#1a1a1a;line-height:1.6}
+  header{background:#0b3d91;color:#fff;padding:2rem 2rem 1.5rem;border-bottom:4px solid #fc3d21}
+  header h1{font-size:1.6rem;font-weight:600;letter-spacing:-.02em}
+  header p{font-size:.9rem;opacity:.8;margin-top:.25rem}
+  .badge{display:inline-block;background:#fc3d21;color:#fff;font-size:.72rem;font-weight:600;padding:2px 8px;border-radius:20px;margin-left:.6rem;vertical-align:middle;letter-spacing:.04em}
+  main{max-width:1200px;margin:0 auto;padding:2rem 1.5rem}
+  h2{font-size:1.1rem;font-weight:600;margin-bottom:.75rem;color:#0b3d91}
+  #map{height:480px;border-radius:8px;border:1px solid #ddd;margin-bottom:2.5rem;z-index:0}
+  .table-wrap{overflow-x:auto;border-radius:8px;border:1px solid #ddd;background:#fff}
+  table{width:100%;border-collapse:collapse;font-size:.84rem}
+  thead tr{background:#0b3d91;color:#fff}
+  thead th{padding:.65rem 1rem;text-align:left;font-weight:500;white-space:nowrap}
+  tbody tr:nth-child(even){background:#f9f9f6}
+  tbody tr:hover{background:#eef3ff}
+  td{padding:.6rem 1rem;border-bottom:1px solid #eee;vertical-align:top}
+  td.coords{font-family:monospace;font-size:.78rem;color:#555;white-space:nowrap}
+  td.country{font-weight:500}
+  footer{text-align:center;padding:1.5rem;font-size:.78rem;color:#888;border-top:1px solid #ddd;margin-top:2rem}
+  .leaflet-popup-content{font-size:.84rem;line-height:1.5}
+  .leaflet-popup-content strong{color:#0b3d91}
+  @media(max-width:600px){header{padding:1.25rem 1rem}main{padding:1rem}}
+</style>
+</head>
+<body>
+<header>
+  <h1>European Space Agency — Member States Atlas <span class="badge">22 MEMBERS</span></h1>
+  <p>Space agency headquarters across ESA member states · Real-time interactive map</p>
+</header>
+<main>
+  <h2>Interactive Map</h2>
+  <div id="map"></div>
+  <h2>Data Table — All 22 ESA Member State Space Agencies</h2>
+  <div class="table-wrap">
+    <table id="agency-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Agency</th>
+          <th>Country</th>
+          <th>City</th>
+          <th>Address</th>
+          <th>Latitude</th>
+          <th>Longitude</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</main>
+<footer>Data compiled from official ESA &amp; national space agency sources · Built with Leaflet.js &amp; OpenStreetMap</footer>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+const agencies = [
+  {
+    country:"Austria", agency:"Austrian Space Applications Programme (FFG/ALR)",
+    city:"Vienna", address:"Sensengasse 1, 1090 Vienna",
+    lat:48.2208, lng:16.3594
+  },
+  {
+    country:"Belgium", agency:"Belgian Science Policy Office (BELSPO)",
+    city:"Brussels", address:"Rue de la Science 8, 1000 Brussels",
+    lat:50.8406, lng:4.3685
+  },
+  {
+    country:"Czech Republic", agency:"Czech Space Office (CSO)",
+    city:"Prague", address:"Národní 3, 110 00 Prague",
+    lat:50.0818, lng:14.4194
+  },
+  {
+    country:"Denmark", agency:"Danish Agency for Science & Higher Education (DAFSHE)",
+    city:"Copenhagen", address:"Bredgade 40, 1260 Copenhagen",
+    lat:55.6839, lng:12.5890
+  },
+  {
+    country:"Estonia", agency:"Enterprise Estonia — Space Unit",
+    city:"Tallinn", address:"Lasnamäe 2, 11412 Tallinn",
+    lat:59.4225, lng:24.8126
+  },
+  {
+    country:"Finland", agency:"Finnish Meteorological Institute — Space Research",
+    city:"Helsinki", address:"Erik Palménin aukio 1, 00560 Helsinki",
+    lat:60.2040, lng:25.0095
+  },
+  {
+    country:"France", agency:"Centre National d'Études Spatiales (CNES)",
+    city:"Paris", address:"2 Place Maurice Quentin, 75001 Paris",
+    lat:48.8612, lng:2.3471
+  },
+  {
+    country:"Germany", agency:"German Aerospace Center (DLR)",
+    city:"Cologne", address:"Linder Höhe, 51147 Cologne",
+    lat:50.8647, lng:7.1282
+  },
+  {
+    country:"Greece", agency:"Hellenic Space Center (HSC)",
+    city:"Athens", address:"Vas. Sofias 11, 10671 Athens",
+    lat:37.9756, lng:23.7407
+  },
+  {
+    country:"Hungary", agency:"Hungarian Space Office (HSO)",
+    city:"Budapest", address:"Hold u. 2, 1054 Budapest",
+    lat:47.5060, lng:19.0549
+  },
+  {
+    country:"Ireland", agency:"Enterprise Ireland — Space Division",
+    city:"Dublin", address:"23–28 Merrion Row, Dublin 2",
+    lat:53.3366, lng:-6.2525
+  },
+  {
+    country:"Italy", agency:"Italian Space Agency (ASI)",
+    city:"Rome", address:"Via del Politecnico s.n.c., 00133 Rome",
+    lat:41.8438, lng:12.6234
+  },
+  {
+    country:"Luxembourg", agency:"Luxembourg Space Agency (LSA)",
+    city:"Luxembourg City", address:"19-21 Boulevard Royal, 2449 Luxembourg",
+    lat:49.6117, lng:6.1319
+  },
+  {
+    country:"Netherlands", agency:"Netherlands Space Office (NSO)",
+    city:"The Hague", address:"Koningskade 44, 2596 AA The Hague",
+    lat:52.0847, lng:4.2942
+  },
+  {
+    country:"Norway", agency:"Norwegian Space Agency (NOSA)",
+    city:"Oslo", address:"Drammensveien 165, 0277 Oslo",
+    lat:59.9125, lng:10.6975
+  },
+  {
+    country:"Poland", agency:"Polish Space Agency (POLSA)",
+    city:"Warsaw", address:"ul. Trzy Krzyże 3/5, 00-507 Warsaw",
+    lat:52.2269, lng:21.0233
+  },
+  {
+    country:"Portugal", agency:"Portuguese Space Agency (PT Space)",
+    city:"Lisbon", address:"Av. Dr. Mário Moutinho, 1400-138 Lisbon",
+    lat:38.6951, lng:-9.2039
+  },
+  {
+    country:"Romania", agency:"Romanian Space Agency (ROSA)",
+    city:"Bucharest", address:"21–25 Mendeleev St, 010362 Bucharest",
+    lat:44.4472, lng:26.0970
+  },
+  {
+    country:"Spain", agency:"Centre for the Development of Industrial Technology / AEE (CDTI)",
+    city:"Madrid", address:"Calle del Poeta Joan Maragall 2, 28020 Madrid",
+    lat:40.4394, lng:-3.6918
+  },
+  {
+    country:"Sweden", agency:"Swedish National Space Agency (SNSA)",
+    city:"Solna", address:"Solna Strandväg 86, 171 54 Solna",
+    lat:59.3652, lng:18.0028
+  },
+  {
+    country:"Switzerland", agency:"Swiss Space Office (SSO) — SERI",
+    city:"Bern", address:"Einsteinstrasse 2, 3003 Bern",
+    lat:46.9437, lng:7.4441
+  },
+  {
+    country:"United Kingdom", agency:"UK Space Agency (UKSA)",
+    city:"Swindon", address:"Polaris House, North Star Avenue, Swindon SN2 1SZ",
+    lat:51.5646, lng:-1.7860
+  }
+];
+
+// Render table
+const tbody = document.querySelector('#agency-table tbody');
+agencies.forEach((a,i) => {
+  const tr = document.createElement('tr');
+  tr.innerHTML = `<td>${i+1}</td><td>${a.agency}</td><td class="country">${a.country}</td><td>${a.city}</td><td>${a.address}</td><td class="coords">${a.lat.toFixed(4)}</td><td class="coords">${a.lng.toFixed(4)}</td>`;
+  tbody.appendChild(tr);
+});
+
+// Map
+const map = L.map('map').setView([52.0, 10.0], 4);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+  maxZoom:18,
+  attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(map);
+
+const icon = L.divIcon({
+  className:'',
+  html:`<svg xmlns="http://www.w3.org/2000/svg" width="28" height="36" viewBox="0 0 28 36"><path d="M14 0C6.27 0 0 6.27 0 14c0 9.63 14 22 14 22s14-12.37 14-22C28 6.27 21.73 0 14 0z" fill="#0b3d91" stroke="#fff" stroke-width="1.5"/><circle cx="14" cy="14" r="5" fill="#fc3d21"/></svg>`,
+  iconSize:[28,36], iconAnchor:[14,36], popupAnchor:[0,-36]
+});
+
+agencies.forEach(a => {
+  L.marker([a.lat, a.lng], {icon})
+    .addTo(map)
+    .bindPopup(`<strong>${a.agency}</strong><br>${a.address}<br><small style="color:#666">${a.lat.toFixed(4)}, ${a.lng.toFixed(4)}</small>`);
+});
+</script>
+</body>
+</html>
