@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Adversarial Peer Review — Space Science</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,600&family=Source+Serif+4:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=JetBrains+Mono:wght@300;400;500&display=swap');
+
+  :root {
+    --bg: #faf6f0;
+    --bg-warm: #f5ede2;
+    --bg-card: #ffffff;
+    --bg-dark: #1a1612;
+    --ink: #2c2520;
+    --ink-light: #6b5e52;
+    --ink-faint: #a89888;
+    --accent: #c0392b;
+    --accent-warm: #e74c3c;
+    --accent-blue: #2c6fbb;
+    --accent-green: #27864e;
+    --accent-amber: #d4850a;
+    --border: #e0d5c8;
+    --border-dark: #c4b5a4;
+    --shadow: rgba(44,37,32,0.08);
+    --shadow-lg: rgba(44,37,32,0.14);
+    --severity-high: #c0392b;
+    --severity-med: #d4850a;
+    --severity-low: #2c6fbb;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Source Serif 4', Georgia, serif;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* Subtle paper texture */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ─── HEADER ─── */
+  .masthead {
+    position: relative; z-index: 10;
+    background: var(--bg-dark);
+    color: #f5ede2;
+    padding: 0;
+  }
+
+  .masthead-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 32px 40px 28px;
+  }
+
+  .masthead-rule {
+    height: 4px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-warm), var(--accent-amber));
+  }
+
+  .masthead-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 6px;
+  }
+
+  .journal-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: #a89888;
+  }
+
+  .masthead-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border: 1px solid rgba(192,57,43,0.5);
+    border-radius: 3px;
+    color: var(--accent-warm);
+    background: rgba(192,57,43,0.08);
+  }
+
+  .masthead h1 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 800;
+    font-size: clamp(28px, 4vw, 42px);
+    line-height: 1.15;
+    margin: 8px 0 10px;
+    letter-spacing: -0.5px;
+  }
+
+  .masthead-sub {
+    font-family: 'Source Serif 4', serif;
+    font-size: 15px;
+    color: #a89888;
+    font-style: italic;
+    max-width: 640px;
+  }
+
+  /* ─── MAIN LAYOUT ─── */
+  .main {
+    position: relative; z-index: 10;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 36px 40px 60px;
+  }
+
+  /* ─── INPUT SECTION ─── */
+  .input-section {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 36px 40px;
+    box-shadow: 0 2px 20px var(--shadow);
+    margin-bottom: 36px;
+  }
+
+  .input-section h2 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 20px;
+    margin-bottom: 4px;
+    color: var(--ink);
+  }
+
+  .input-hint {
+    font-size: 13px;
+    color: var(--ink-light);
+    margin-bottom: 20px;
+    font-style: italic;
+  }
+
+  .abstract-textarea {
+    width: 100%;
+    min-height: 200px;
+    padding: 20px 24px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-family: 'Source Serif 4', serif;
+    font-size: 14px;
+    line-height: 1.75;
+    color: var(--ink);
+    background: var(--bg);
+    resize: vertical;
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+
+  .abstract-textarea:focus {
+    outline: none;
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 0 3px rgba(44,111,187,0.1);
+  }
+
+  .abstract-textarea::placeholder {
+    color: var(--ink-faint);
+    font-style: italic;
+  }
+
+  .controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 20px;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .control-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .control-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--ink-light);
+  }
+
+  .rigor-select {
+    padding: 8px 16px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-family: 'Source Serif 4', serif;
+    font-size: 13px;
+    color: var(--ink);
+    background: var(--bg);
+    cursor: pointer;
+  }
+
+  .rigor-select:focus { outline: none; border-color: var(--accent-blue); }
+
+  .btn-review {
+    padding: 12px 36px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    letter-spacing: 0.5px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-review:hover:not(:disabled) {
+    background: #a93226;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(192,57,43,0.25);
+  }
+
+  .btn-review:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .btn-review .spinner {
+    display: inline-block;
+    width: 16px; height: 16px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    vertical-align: middle;
+    margin-right: 8px;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .sample-btn {
+    padding: 8px 16px;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--ink-light);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .sample-btn:hover {
+    border-color: var(--accent-blue);
+    color: var(--accent-blue);
+    background: rgba(44,111,187,0.04);
+  }
+
+  /* ─── PROGRESS ─── */
+  .progress-bar {
+    display: none;
+    margin-top: 20px;
+  }
+
+  .progress-bar.active { display: block; }
+
+  .progress-track {
+    height: 3px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent-amber));
+    border-radius: 2px;
+    width: 0%;
+    transition: width 0.5s ease;
+  }
+
+  .progress-steps {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    gap: 8px;
+  }
+
+  .progress-step {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    transition: color 0.3s;
+  }
+
+  .progress-step.active { color: var(--accent); font-weight: 500; }
+  .progress-step.done { color: var(--accent-green); }
+
+  /* ─── RESULTS ─── */
+  .results {
+    display: none;
+    animation: fadeUp 0.6s ease;
+  }
+
+  .results.visible { display: block; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Verdict Banner */
+  .verdict-banner {
+    background: var(--bg-dark);
+    color: #f5ede2;
+    border-radius: 8px;
+    padding: 32px 40px;
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+
+  .verdict-left h3 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #a89888;
+    margin-bottom: 6px;
+  }
+
+  .verdict-decision {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .verdict-decision.reject { color: var(--accent-warm); }
+  .verdict-decision.major { color: var(--accent-amber); }
+  .verdict-decision.minor { color: #e2b93d; }
+  .verdict-decision.accept { color: var(--accent-green); }
+
+  .verdict-summary {
+    font-size: 14px;
+    color: #a89888;
+    margin-top: 8px;
+    max-width: 500px;
+    line-height: 1.6;
+  }
+
+  .verdict-scores {
+    display: flex;
+    gap: 24px;
+    flex-shrink: 0;
+  }
+
+  .score-circle {
+    text-align: center;
+  }
+
+  .score-ring {
+    width: 72px; height: 72px;
+    position: relative;
+  }
+
+  .score-ring svg { width: 72px; height: 72px; transform: rotate(-90deg); }
+  .score-ring-bg { fill: none; stroke: rgba(255,255,255,0.1); stroke-width: 4; }
+  .score-ring-fg {
+    fill: none; stroke-width: 4; stroke-linecap: round;
+    stroke-dasharray: 188.5; stroke-dashoffset: 188.5;
+    transition: stroke-dashoffset 1s ease 0.3s;
+  }
+
+  .score-num {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    font-family: 'Playfair Display', serif;
+    font-size: 20px; font-weight: 700;
+    color: #f5ede2;
+  }
+
+  .score-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #a89888;
+    margin-top: 6px;
+  }
+
+  /* Weakness Cards */
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    margin: 32px 0 16px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-count {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    background: var(--accent);
+    color: #fff;
+    padding: 2px 10px;
+    border-radius: 12px;
+    letter-spacing: 1px;
+  }
+
+  .weakness-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--severity-med);
+    border-radius: 6px;
+    padding: 24px 28px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 12px var(--shadow);
+    transition: box-shadow 0.3s;
+  }
+
+  .weakness-card:hover {
+    box-shadow: 0 4px 24px var(--shadow-lg);
+  }
+
+  .weakness-card.high { border-left-color: var(--severity-high); }
+  .weakness-card.medium { border-left-color: var(--severity-med); }
+  .weakness-card.low { border-left-color: var(--severity-low); }
+
+  .weakness-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .weakness-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    font-weight: 600;
+    flex: 1;
+  }
+
+  .severity-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 3px;
+    font-weight: 500;
+    flex-shrink: 0;
+  }
+
+  .severity-badge.high { background: rgba(192,57,43,0.1); color: var(--severity-high); border: 1px solid rgba(192,57,43,0.2); }
+  .severity-badge.medium { background: rgba(212,133,10,0.1); color: var(--severity-med); border: 1px solid rgba(212,133,10,0.2); }
+  .severity-badge.low { background: rgba(44,111,187,0.1); color: var(--severity-low); border: 1px solid rgba(44,111,187,0.2); }
+
+  .weakness-category {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 8px;
+  }
+
+  .weakness-body {
+    font-size: 14px;
+    line-height: 1.75;
+    color: var(--ink);
+    margin-bottom: 14px;
+  }
+
+  .weakness-suggestion {
+    background: rgba(39,134,78,0.05);
+    border: 1px solid rgba(39,134,78,0.15);
+    border-radius: 5px;
+    padding: 14px 18px;
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--accent-green);
+  }
+
+  .suggestion-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent-green);
+    margin-bottom: 4px;
+    font-weight: 500;
+  }
+
+  /* Strengths */
+  .strength-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent-green);
+    border-radius: 6px;
+    padding: 18px 24px;
+    margin-bottom: 12px;
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  .strength-title {
+    font-family: 'Playfair Display', serif;
+    font-weight: 600;
+    font-size: 15px;
+    margin-bottom: 4px;
+    color: var(--accent-green);
+  }
+
+  /* Reviewer Response Document */
+  .response-doc {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 40px 48px;
+    margin-top: 32px;
+    box-shadow: 0 2px 20px var(--shadow);
+    position: relative;
+  }
+
+  .response-doc::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-amber), var(--accent-blue));
+    border-radius: 8px 8px 0 0;
+  }
+
+  .doc-header {
+    text-align: center;
+    padding-bottom: 24px;
+    border-bottom: 2px double var(--border-dark);
+    margin-bottom: 24px;
+  }
+
+  .doc-header h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .doc-header .doc-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--ink-faint);
+    letter-spacing: 1px;
+  }
+
+  .doc-section {
+    margin-bottom: 22px;
+  }
+
+  .doc-section h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--ink);
+  }
+
+  .doc-section p, .doc-section li {
+    font-size: 13.5px;
+    line-height: 1.8;
+    color: var(--ink);
+  }
+
+  .doc-section ol, .doc-section ul {
+    padding-left: 24px;
+    margin-top: 6px;
+  }
+
+  .doc-section li { margin-bottom: 6px; }
+
+  .doc-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 28px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+  }
+
+  .btn-secondary {
+    padding: 10px 24px;
+    background: transparent;
+    border: 1px solid var(--border-dark);
+    border-radius: 4px;
+    font-family: 'Source Serif 4', serif;
+    font-size: 13px;
+    color: var(--ink);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--accent-blue);
+    color: var(--accent-blue);
+    background: rgba(44,111,187,0.04);
+  }
+
+  /* Error */
+  .error-box {
+    display: none;
+    background: rgba(192,57,43,0.06);
+    border: 1px solid rgba(192,57,43,0.2);
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin-top: 16px;
+    font-size: 13px;
+    color: var(--accent);
+  }
+
+  .error-box.visible { display: block; }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .masthead-inner, .main { padding-left: 20px; padding-right: 20px; }
+    .input-section { padding: 24px; }
+    .verdict-banner { padding: 24px; flex-direction: column; }
+    .response-doc { padding: 24px; }
+    .controls { flex-direction: column; align-items: stretch; }
+    .verdict-scores { justify-content: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ─── MASTHEAD ─── -->
+<header class="masthead">
+  <div class="masthead-rule"></div>
+  <div class="masthead-inner">
+    <div class="masthead-top">
+      <div class="journal-name">Adversarial Review System</div>
+      <div class="masthead-badge">AI-Powered</div>
+    </div>
+    <h1>Space Science<br>Peer Review Engine</h1>
+    <p class="masthead-sub">Submit any published space science abstract. The AI reviewer will identify weaknesses, suggest improvements, and generate a formal reviewer response document.</p>
+  </div>
+</header>
+
+<!-- ─── MAIN ─── -->
+<div class="main">
+
+  <!-- INPUT -->
+  <div class="input-section">
+    <h2>Submit Abstract for Review</h2>
+    <p class="input-hint">Paste a space science abstract below — astrophysics, planetary science, cosmology, heliophysics, or related fields.</p>
+
+    <textarea class="abstract-textarea" id="abstractInput" placeholder="Paste your space science abstract here...&#10;&#10;Example: &quot;We present observations of gravitational waves from the merger of two neutron stars using data from LIGO and Virgo detectors...&quot;"></textarea>
+
+    <div class="controls">
+      <div class="control-group">
+        <div class="control-label">Rigor Level</div>
+        <select class="rigor-select" id="rigorSelect">
+          <option value="standard">Standard Review</option>
+          <option value="strict" selected>Strict (Conference)</option>
+          <option value="adversarial">Adversarial (Top Journal)</option>
+        </select>
+      </div>
+      <div class="control-group">
+        <button class="sample-btn" onclick="loadSample()">Load Sample Abstract</button>
+        <button class="btn-review" id="reviewBtn" onclick="runReview()">Run Adversarial Review</button>
+      </div>
+    </div>
+
+    <div class="progress-bar" id="progressBar">
+      <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="progress-steps">
+        <div class="progress-step" id="step1">Parsing Abstract</div>
+        <div class="progress-step" id="step2">Finding Weaknesses</div>
+        <div class="progress-step" id="step3">Scoring Quality</div>
+        <div class="progress-step" id="step4">Drafting Response</div>
+      </div>
+    </div>
+
+    <div class="error-box" id="errorBox"></div>
+  </div>
+
+  <!-- RESULTS -->
+  <div class="results" id="results">
+
+    <!-- Verdict -->
+    <div class="verdict-banner" id="verdictBanner"></div>
+
+    <!-- Strengths -->
+    <div id="strengthsSection"></div>
+
+    <!-- Weaknesses -->
+    <div id="weaknessesSection"></div>
+
+    <!-- Formal Reviewer Response Document -->
+    <div id="responseDocSection"></div>
+
+  </div>
+</div>
+
+<script>
+// ─── SAMPLE ABSTRACTS ───
+const SAMPLES = [
+  `We report the detection of phosphine (PH₃) in the atmosphere of Venus at 20 ppb abundance using James Clerk Maxwell Telescope and Atacama Large Millimeter Array observations. The presence of phosphine is unexplained by known photochemical or geochemical processes on Venus. On Earth, phosphine is associated with anaerobic biological processes. We explore whether phosphine could originate from unknown photochemistry, volcanic activity, lightning, or meteoritic input, and find that none of these abiotic mechanisms can account for the observed abundance. We suggest that phosphine may indicate the presence of life in the Venusian cloud deck, where temperatures and pressures are compatible with Earth-like biochemistry. Our detection has a statistical significance of approximately 5σ after accounting for spectral baseline uncertainties. These findings warrant further observational campaigns and in-situ atmospheric sampling missions.`,
+
+  `Using data from the Transiting Exoplanet Survey Satellite (TESS) and ground-based radial velocity follow-up from HARPS, we confirm the discovery of a super-Earth orbiting within the habitable zone of the M-dwarf star TOI-700. The planet, TOI-700 d, has a radius of 1.19 ± 0.11 R⊕ and receives 86% of Earth's insolation. Our 3D climate simulations using the ROCKE-3D general circulation model suggest that the planet could maintain surface liquid water under a range of atmospheric compositions. We estimate a mass upper limit of 2.1 M⊕ from radial velocity data, yielding a bulk density consistent with a rocky composition. Future observations with JWST will be critical for atmospheric characterization and assessing habitability.`,
+
+  `We present an analysis of the anomalous acceleration observed in the trajectories of Pioneer 10 and Pioneer 11 spacecraft. Using newly recovered telemetry data spanning 1980–2002 and an improved thermal radiation model, we demonstrate that anisotropic thermal emission from the spacecraft's radioisotope thermoelectric generators and instrument compartment can account for approximately 80% of the previously reported anomalous acceleration of (8.74 ± 1.33) × 10⁻¹⁰ m/s². The remaining residual is consistent with zero within our uncertainty bounds. We conclude that the Pioneer anomaly does not require new physics and is fully explained by conventional thermal recoil forces. Our finite-element thermal model has been validated against independent analyses and reproduces the time-dependent behavior of the anomaly.`
+];
+
+function loadSample() {
+  const idx = Math.floor(Math.random() * SAMPLES.length);
+  document.getElementById('abstractInput').value = SAMPLES[idx];
+}
+
+// ─── PROGRESS ANIMATION ───
+function setProgress(pct, stepIdx) {
+  document.getElementById('progressFill').style.width = pct + '%';
+  for (let i = 1; i <= 4; i++) {
+    const el = document.getElementById('step' + i);
+    el.classList.remove('active', 'done');
+    if (i < stepIdx) el.classList.add('done');
+    else if (i === stepIdx) el.classList.add('active');
+  }
+}
+
+// ─── MAIN REVIEW FUNCTION ───
+async function runReview() {
+  const abstract = document.getElementById('abstractInput').value.trim();
+  if (!abstract) {
+    showError('Please paste an abstract before running the review.');
+    return;
+  }
+  if (abstract.length < 100) {
+    showError('The abstract seems too short. Please paste a complete abstract (at least a few sentences).');
+    return;
+  }
+
+  const btn = document.getElementById('reviewBtn');
+  const bar = document.getElementById('progressBar');
+  const results = document.getElementById('results');
+  const rigor = document.getElementById('rigorSelect').value;
+
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>Reviewing…';
+  bar.classList.add('active');
+  results.classList.remove('visible');
+  hideError();
+
+  try {
+    // Step 1: Parse
+    setProgress(10, 1);
+    await delay(600);
+
+    // Step 2: Find weaknesses
+    setProgress(30, 2);
+
+    const reviewData = await callReviewAPI(abstract, rigor);
+
+    // Step 3: Score
+    setProgress(70, 3);
+    await delay(400);
+
+    // Step 4: Generate response doc
+    setProgress(90, 4);
+    await delay(300);
+
+    // Render
+    renderResults(reviewData);
+    setProgress(100, 4);
+
+    await delay(300);
+    results.classList.add('visible');
+    results.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  } catch (err) {
+    showError('Review failed: ' + err.message + '. Please try again.');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = 'Run Adversarial Review';
+    setTimeout(() => bar.classList.remove('active'), 800);
+  }
+}
+
+// ─── CALL ANTHROPIC API ───
+async function callReviewAPI(abstract, rigor) {
+  const rigorPrompt = {
+    standard: 'You are a fair but thorough peer reviewer. Identify genuine issues but be balanced.',
+    strict: 'You are a strict reviewer for a top conference like AGU or AAS. Be rigorous and demanding.',
+    adversarial: 'You are an adversarial reviewer for Nature, Science, or ApJ. Be maximally critical. Find every possible flaw.'
+  };
+
+  const systemPrompt = `${rigorPrompt[rigor]}
+
+You are reviewing a space science abstract. You must produce a structured adversarial peer review.
+
+Respond ONLY with a valid JSON object (no markdown, no backticks, no preamble). The JSON must have this exact structure:
+
+{
+  "decision": "reject" | "major_revisions" | "minor_revisions" | "accept",
+  "decision_rationale": "One sentence explaining the decision",
+  "overall_score": <number 1-10>,
+  "novelty_score": <number 1-10>,
+  "rigor_score": <number 1-10>,
+  "clarity_score": <number 1-10>,
+  "strengths": [
+    { "title": "...", "description": "..." }
+  ],
+  "weaknesses": [
+    {
+      "title": "Short title of the weakness",
+      "severity": "high" | "medium" | "low",
+      "category": "Methodology" | "Statistical Analysis" | "Claims vs Evidence" | "Missing Controls" | "Reproducibility" | "Scope" | "Novelty" | "Presentation",
+      "description": "Detailed explanation of the weakness (2-4 sentences)",
+      "suggestion": "Specific actionable suggestion to address this weakness"
+    }
+  ],
+  "reviewer_response": {
+    "summary_paragraph": "A formal 3-4 sentence summary assessment of the work",
+    "detailed_comments": ["Comment 1 as full sentence", "Comment 2", "..."],
+    "questions_for_authors": ["Question 1?", "Question 2?", "..."],
+    "recommendation_paragraph": "A formal 2-3 sentence recommendation with conditions"
+  }
+}
+
+Requirements:
+- Include at least 4 weaknesses, ideally 5-6
+- At least 1 must be "high" severity
+- Include at least 2 strengths
+- Scores should be integers from 1-10
+- All text should be scholarly, specific, and reference the abstract content directly
+- Questions should be probing and specific
+- Be substantive, not generic`;
+
+  const response = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 4000,
+      system: systemPrompt,
+      messages: [
+        { role: 'user', content: `Please review the following space science abstract:\n\n${abstract}` }
+      ]
+    })
+  });
+
+  if (!response.ok) {
+    const errText = await response.text();
+    throw new Error(`API returned ${response.status}`);
+  }
+
+  const data = await response.json();
+  const text = data.content.map(c => c.text || '').join('');
+  const clean = text.replace(/```json|```/g, '').trim();
+
+  try {
+    return JSON.parse(clean);
+  } catch (e) {
+    // Try to extract JSON from the response
+    const match = clean.match(/\{[\s\S]*\}/);
+    if (match) return JSON.parse(match[0]);
+    throw new Error('Could not parse AI response as JSON');
+  }
+}
+
+// ─── RENDER RESULTS ───
+function renderResults(data) {
+  // Verdict banner
+  const decisionLabels = {
+    reject: 'Reject',
+    major_revisions: 'Major Revisions Required',
+    minor_revisions: 'Minor Revisions Required',
+    accept: 'Accept'
+  };
+  const decisionClass = data.decision.includes('reject') ? 'reject' :
+    data.decision.includes('major') ? 'major' :
+    data.decision.includes('minor') ? 'minor' : 'accept';
+
+  const scoreColor = (s) => s >= 7 ? '#27864e' : s >= 5 ? '#d4850a' : '#c0392b';
+
+  document.getElementById('verdictBanner').innerHTML = `
+    <div class="verdict-left">
+      <h3>Editorial Decision</h3>
+      <div class="verdict-decision ${decisionClass}">${decisionLabels[data.decision] || data.decision}</div>
+      <p class="verdict-summary">${data.decision_rationale || ''}</p>
+    </div>
+    <div class="verdict-scores">
+      ${renderScoreRing(data.overall_score, 'Overall', scoreColor(data.overall_score))}
+      ${renderScoreRing(data.novelty_score, 'Novelty', scoreColor(data.novelty_score))}
+      ${renderScoreRing(data.rigor_score, 'Rigor', scoreColor(data.rigor_score))}
+      ${renderScoreRing(data.clarity_score, 'Clarity', scoreColor(data.clarity_score))}
+    </div>
+  `;
+
+  // Animate score rings after a tick
+  setTimeout(() => {
+    document.querySelectorAll('.score-ring-fg').forEach(el => {
+      const pct = parseFloat(el.dataset.pct);
+      el.style.strokeDashoffset = 188.5 * (1 - pct / 10);
+    });
+  }, 100);
+
+  // Strengths
+  const ss = data.strengths || [];
+  let strengthsHTML = '';
+  if (ss.length) {
+    strengthsHTML = `<div class="section-title">Identified Strengths <span class="section-count" style="background:var(--accent-green)">${ss.length}</span></div>`;
+    ss.forEach(s => {
+      strengthsHTML += `<div class="strength-card"><div class="strength-title">${esc(s.title)}</div><p>${esc(s.description)}</p></div>`;
+    });
+  }
+  document.getElementById('strengthsSection').innerHTML = strengthsHTML;
+
+  // Weaknesses
+  const ws = data.weaknesses || [];
+  let weakHTML = `<div class="section-title">Identified Weaknesses <span class="section-count">${ws.length}</span></div>`;
+  ws.forEach(w => {
+    const sev = w.severity || 'medium';
+    weakHTML += `
+      <div class="weakness-card ${sev}">
+        <div class="weakness-category">${esc(w.category || 'General')}</div>
+        <div class="weakness-header">
+          <div class="weakness-title">${esc(w.title)}</div>
+          <div class="severity-badge ${sev}">${sev} severity</div>
+        </div>
+        <div class="weakness-body">${esc(w.description)}</div>
+        <div class="weakness-suggestion">
+          <div class="suggestion-label">Suggested Improvement</div>
+          ${esc(w.suggestion)}
+        </div>
+      </div>
+    `;
+  });
+  document.getElementById('weaknessesSection').innerHTML = weakHTML;
+
+  // Reviewer Response Document
+  const rr = data.reviewer_response || {};
+  const today = new Date().toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' });
+
+  let docHTML = `
+    <div class="section-title">Formal Reviewer Response</div>
+    <div class="response-doc">
+      <div class="doc-header">
+        <h3>Confidential Reviewer Report</h3>
+        <div class="doc-meta">Generated ${today} · Adversarial Review System</div>
+      </div>
+
+      <div class="doc-section">
+        <h4>Summary Assessment</h4>
+        <p>${esc(rr.summary_paragraph || '')}</p>
+      </div>
+
+      <div class="doc-section">
+        <h4>Detailed Comments</h4>
+        <ol>${(rr.detailed_comments || []).map(c => `<li>${esc(c)}</li>`).join('')}</ol>
+      </div>
+
+      <div class="doc-section">
+        <h4>Questions for Authors</h4>
+        <ol>${(rr.questions_for_authors || []).map(q => `<li>${esc(q)}</li>`).join('')}</ol>
+      </div>
+
+      <div class="doc-section">
+        <h4>Recommendation</h4>
+        <p>${esc(rr.recommendation_paragraph || '')}</p>
+      </div>
+
+      <div class="doc-actions">
+        <button class="btn-secondary" onclick="copyDocument()">Copy as Text</button>
+        <button class="btn-secondary" onclick="downloadDocument()">Download .txt</button>
+      </div>
+    </div>
+  `;
+  document.getElementById('responseDocSection').innerHTML = docHTML;
+}
+
+function renderScoreRing(score, label, color) {
+  return `
+    <div class="score-circle">
+      <div class="score-ring">
+        <svg viewBox="0 0 80 80">
+          <circle class="score-ring-bg" cx="40" cy="40" r="30"/>
+          <circle class="score-ring-fg" cx="40" cy="40" r="30" stroke="${color}" data-pct="${score}"/>
+        </svg>
+        <div class="score-num">${score}</div>
+      </div>
+      <div class="score-label">${label}</div>
+    </div>
+  `;
+}
+
+function esc(s) {
+  const d = document.createElement('div');
+  d.textContent = s || '';
+  return d.innerHTML;
+}
+
+// ─── COPY / DOWNLOAD ───
+function getDocText() {
+  const doc = document.querySelector('.response-doc');
+  if (!doc) return '';
+  return doc.innerText;
+}
+
+function copyDocument() {
+  navigator.clipboard.writeText(getDocText()).then(() => {
+    const btn = event.target;
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = 'Copy as Text', 1500);
+  });
+}
+
+function downloadDocument() {
+  const blob = new Blob([getDocText()], { type: 'text/plain' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'reviewer_response.txt';
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+// ─── UTILS ───
+function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+function showError(msg) {
+  const el = document.getElementById('errorBox');
+  el.textContent = msg;
+  el.classList.add('visible');
+}
+
+function hideError() {
+  document.getElementById('errorBox').classList.remove('visible');
+}
+</script>
+</body>
+</html>
