@@ -685,6 +685,15 @@
         </select>
       </div>
       <div class="control-group">
+        <div style="flex: 1; display: flex; gap: 12px; align-items: flex-end;">
+          <div style="flex: 1;">
+            <div class="control-label">Anthropic API Key</div>
+            <input type="password" id="apiKeyInput" placeholder="sk-ant-..." style="width: 100%; padding: 10px 12px; font-family: 'JetBrains Mono', monospace; font-size: 12px; border: 1px solid var(--border); border-radius: 4px; background: var(--bg-card); color: var(--ink);" />
+          </div>
+          <button class="sample-btn" style="white-space: nowrap;" onclick="toggleApiKeyDisplay()">👁</button>
+        </div>
+      </div>
+      <div class="control-group">
         <button class="sample-btn" onclick="loadSample()">Load Sample Abstract</button>
         <button class="btn-review" id="reviewBtn" onclick="runReview()">Run Adversarial Review</button>
       </div>
@@ -722,6 +731,25 @@
 </div>
 
 <script>
+// ─── API KEY MANAGEMENT ───
+function loadApiKey() {
+  const saved = localStorage.getItem('anthropic_api_key');
+  if (saved) document.getElementById('apiKeyInput').value = saved;
+}
+
+function saveApiKey() {
+  const key = document.getElementById('apiKeyInput').value.trim();
+  if (key) localStorage.setItem('anthropic_api_key', key);
+  return key;
+}
+
+function toggleApiKeyDisplay() {
+  const input = document.getElementById('apiKeyInput');
+  input.type = input.type === 'password' ? 'text' : 'password';
+}
+
+window.addEventListener('DOMContentLoaded', loadApiKey);
+
 // ─── SAMPLE ABSTRACTS ───
 const SAMPLES = [
   `We report the detection of phosphine (PH₃) in the atmosphere of Venus at 20 ppb abundance using James Clerk Maxwell Telescope and Atacama Large Millimeter Array observations. The presence of phosphine is unexplained by known photochemical or geochemical processes on Venus. On Earth, phosphine is associated with anaerobic biological processes. We explore whether phosphine could originate from unknown photochemistry, volcanic activity, lightning, or meteoritic input, and find that none of these abiotic mechanisms can account for the observed abundance. We suggest that phosphine may indicate the presence of life in the Venusian cloud deck, where temperatures and pressures are compatible with Earth-like biochemistry. Our detection has a statistical significance of approximately 5σ after accounting for spectral baseline uncertainties. These findings warrant further observational campaigns and in-situ atmospheric sampling missions.`,
@@ -749,6 +777,12 @@ function setProgress(pct, stepIdx) {
 
 // ─── MAIN REVIEW FUNCTION ───
 async function runReview() {
+  const apiKey = saveApiKey();
+  if (!apiKey) {
+    showError('Please enter your Anthropic API key. Get one at console.anthropic.com');
+    return;
+  }
+  
   const abstract = document.getElementById('abstractInput').value.trim();
   if (!abstract) {
     showError('Please paste an abstract before running the review.');
@@ -778,7 +812,7 @@ async function runReview() {
     // Step 2: Find weaknesses
     setProgress(30, 2);
 
-    const reviewData = await callReviewAPI(abstract, rigor);
+    const reviewData = await callReviewAPI(abstract, rigor, apiKey);
 
     // Step 3: Score
     setProgress(70, 3);
@@ -806,7 +840,7 @@ async function runReview() {
 }
 
 // ─── CALL ANTHROPIC API ───
-async function callReviewAPI(abstract, rigor) {
+async function callReviewAPI(abstract, rigor, apiKey) {
   const rigorPrompt = {
     standard: 'You are a fair but thorough peer reviewer. Identify genuine issues but be balanced.',
     strict: 'You are a strict reviewer for a top conference like AGU or AAS. Be rigorous and demanding.',
@@ -857,7 +891,11 @@ Requirements:
 
   const response = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 
+      'Content-Type': 'application/json',
+      'x-api-key': apiKey,
+      'anthropic-version': '2023-06-01'
+    },
     body: JSON.stringify({
       model: 'claude-sonnet-4-20250514',
       max_tokens: 4000,
