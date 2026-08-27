@@ -606,16 +606,15 @@
         }
 
         .org-logo {
-            width: 40px;
-            height: 40px;
+            width: 44px;
+            height: 44px;
             object-fit: contain;
-            filter: brightness(0) invert(1) opacity(0.7);
+            border-radius: 8px;
             transition: var(--transition-smooth);
         }
 
         .timeline-item:hover .org-logo {
-            filter: none;
-            opacity: 1;
+            transform: scale(1.1);
         }
 
         .about-text {
@@ -792,12 +791,38 @@
             max-height: 100px;
             margin-bottom: 1rem;
             object-fit: contain;
-            filter: grayscale(100%) opacity(0.8);
+            cursor: pointer;
             transition: var(--transition-smooth);
         }
-        
-        .cert-card:hover .cert-img {
-            filter: grayscale(0%) opacity(1);
+
+        .cert-img:hover {
+            transform: scale(1.05);
+        }
+
+        .cert-lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0,0,0,0.92);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .cert-lightbox.show {
+            display: flex;
+        }
+
+        .cert-lightbox img {
+            max-width: 90vw;
+            max-height: 90vh;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 0 60px rgba(201, 168, 76, 0.3);
         }
 
         .cert-name {
@@ -835,15 +860,39 @@
             align-items: center;
             justify-content: center;
             font-size: 1.25rem;
-            color: var(--text-90);
             transition: var(--transition-smooth);
         }
 
         .social-btn:hover {
-            background: var(--primary);
-            color: var(--bg);
             transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(201, 168, 76, 0.2);
+            border-color: transparent;
+        }
+
+        .social-btn.linkedin {
+            color: #0A66C2;
+        }
+        .social-btn.linkedin:hover {
+            background: #0A66C2;
+            color: white;
+            box-shadow: 0 10px 20px rgba(10, 102, 194, 0.3);
+        }
+
+        .social-btn.github {
+            color: #f0f0f0;
+        }
+        .social-btn.github:hover {
+            background: #333;
+            color: white;
+            box-shadow: 0 10px 20px rgba(255,255,255,0.1);
+        }
+
+        .social-btn.email {
+            color: #EA4335;
+        }
+        .social-btn.email:hover {
+            background: #EA4335;
+            color: white;
+            box-shadow: 0 10px 20px rgba(234, 67, 53, 0.3);
         }
 
         footer {
@@ -851,6 +900,30 @@
             padding-top: 2rem;
             color: var(--text-40);
             font-size: 0.85rem;
+        }
+
+        .cv-download-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.9rem 2rem;
+            background: var(--primary);
+            color: var(--bg);
+            border-radius: 8px;
+            font-family: var(--font-sans);
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            transition: var(--transition-smooth);
+            margin-top: 2rem;
+        }
+
+        .cv-download-btn:hover {
+            background: #b8963e;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(201, 168, 76, 0.35);
+            color: var(--bg);
         }
     </style>
 </head>
@@ -866,8 +939,8 @@
             <i class="fas fa-bars"></i>
         </button>
         <ul class="nav-links uppercase tracking-wide">
-            <li><a href="#projects">Projects</a></li>
             <li><a href="#about">About Me</a></li>
+            <li><a href="#projects">Projects</a></li>
             <li><a href="#cv">My CV</a></li>
             <li><a href="#contact">Contact</a></li>
         </ul>
@@ -882,6 +955,72 @@
             <p class="hero-subtitle uppercase tracking-wide">Space Systems Engineering</p>
             <div class="typing-container">
                 <span id="typing-text"></span><span class="cursor"></span>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="container">
+        <h2 class="section-title reveal">About Me</h2>
+        
+        <div class="about-grid reveal">
+            <div class="about-img-container">
+                <div class="orbit-container">
+                    <img src="avatar.jpg" alt="Norbert Muzila" class="about-image">
+                    <div class="orbit-ring">
+                        <div class="orbit-planet">
+                            <i class="fas fa-satellite"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="about-content">
+                <p class="about-text">
+                    Passionate about Space Systems Engineering and the development of intelligent autonomous space systems that integrate geospatial AI, remote sensing, robotics, and data-driven technologies across landers, CubeSats, rovers, and drones for planetary exploration, Earth observation, and societal impact.
+                </p>
+                
+                <div class="stats-row">
+                    <div class="stat-item">
+                        <span class="stat-label">Languages</span>
+                        <span class="stat-val">English, French, Shona</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Location</span>
+                        <span class="stat-val">Illkirch-Graffenstaden, France</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Focus</span>
+                        <span class="stat-val">Space Systems Engineering, Mission Operations, Software Engineering & Data Analytics (EO & GeoAI)</span>
+                    </div>
+                </div>
+
+                <div class="skills-grid">
+                    <div class="skill-card">
+                        <h4 class="skill-title">Programming</h4>
+                        <div class="skill-list">Python, JavaScript, C++, SQL, MATLAB, R</div>
+                    </div>
+                    <div class="skill-card">
+                        <h4 class="skill-title">AI & ML</h4>
+                        <div class="skill-list">TensorFlow, PyTorch, Scikit-learn, Deep Learning, NLP</div>
+                    </div>
+                    <div class="skill-card">
+                        <h4 class="skill-title">Space Systems</h4>
+                        <div class="skill-list">Orbital Mechanics, MBSE, SatComms, Mission Planning, Astrodynamics</div>
+                    </div>
+                    <div class="skill-card">
+                        <h4 class="skill-title">Geospatial</h4>
+                        <div class="skill-list">QGIS, Google Earth Engine, Remote Sensing, Leaflet.js</div>
+                    </div>
+                    <div class="skill-card">
+                        <h4 class="skill-title">Data</h4>
+                        <div class="skill-list">Power BI, Jupyter, Pandas, ETL Pipelines, Elastic Search</div>
+                    </div>
+                    <div class="skill-card">
+                        <h4 class="skill-title">DevOps</h4>
+                        <div class="skill-list">Docker, CI/CD, Git, Linux</div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -1055,72 +1194,6 @@
         </div>
     </section>
 
-    <!-- About Section -->
-    <section id="about" class="container">
-        <h2 class="section-title reveal">About Me</h2>
-        
-        <div class="about-grid reveal">
-            <div class="about-img-container">
-                <div class="orbit-container">
-                    <img src="avatar.jpg" alt="Norbert Muzila" class="about-image">
-                    <div class="orbit-ring">
-                        <div class="orbit-planet">
-                            <i class="fas fa-satellite"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="about-content">
-                <p class="about-text">
-                    Passionate about Space Systems Engineering and the development of intelligent autonomous space systems that integrate geospatial AI, remote sensing, robotics, and data-driven technologies across landers, CubeSats, rovers, and drones for planetary exploration, Earth observation, and societal impact.
-                </p>
-                
-                <div class="stats-row">
-                    <div class="stat-item">
-                        <span class="stat-label">Languages</span>
-                        <span class="stat-val">English, French, Shona</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-label">Location</span>
-                        <span class="stat-val">Illkirch-Graffenstaden, France</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-label">Focus</span>
-                        <span class="stat-val">Space Engineering & AI</span>
-                    </div>
-                </div>
-
-                <div class="skills-grid">
-                    <div class="skill-card">
-                        <h4 class="skill-title">Programming</h4>
-                        <div class="skill-list">Python, JavaScript, C++, SQL, MATLAB, R</div>
-                    </div>
-                    <div class="skill-card">
-                        <h4 class="skill-title">AI & ML</h4>
-                        <div class="skill-list">TensorFlow, PyTorch, Scikit-learn, Deep Learning, NLP</div>
-                    </div>
-                    <div class="skill-card">
-                        <h4 class="skill-title">Space Systems</h4>
-                        <div class="skill-list">Orbital Mechanics, MBSE, SatComms, Mission Planning, Astrodynamics</div>
-                    </div>
-                    <div class="skill-card">
-                        <h4 class="skill-title">Geospatial</h4>
-                        <div class="skill-list">QGIS, Google Earth Engine, Remote Sensing, Leaflet.js</div>
-                    </div>
-                    <div class="skill-card">
-                        <h4 class="skill-title">Data</h4>
-                        <div class="skill-list">Power BI, Jupyter, Pandas, ETL Pipelines, Elastic Search</div>
-                    </div>
-                    <div class="skill-card">
-                        <h4 class="skill-title">DevOps</h4>
-                        <div class="skill-list">Docker, CI/CD, Git, Linux</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- CV Section -->
     <section id="cv" class="container">
         <h2 class="section-title reveal">My CV</h2>
@@ -1139,16 +1212,9 @@
                     <div class="timeline-item">
                         <div class="timeline-logo"><img src="images/logo-uz.png" alt="University of Zimbabwe" class="org-logo"></div>
                         <span class="timeline-date">2020 – 2024</span>
-                        <h4 class="timeline-title">BSc (Hons) Software Engineering</h4>
-                        <div class="timeline-org">University of Zimbabwe</div>
-                        <p class="timeline-desc">Comprehensive foundation in software engineering principles, system design, algorithms, and full-stack development methodologies.</p>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="timeline-logo"><img src="images/logo-uz.png" alt="University of Zimbabwe" class="org-logo"></div>
-                        <span class="timeline-date">2020 – 2024</span>
                         <h4 class="timeline-title">BSc (Hons) Data Science & Systems</h4>
                         <div class="timeline-org">University of Zimbabwe</div>
-                        <p class="timeline-desc">Graduated with Honours. Foundation in Python, statistical modelling, predictive analytics, ML, and software development.</p>
+                        <p class="timeline-desc">Strong foundation in Data Science, Artificial Intelligence, Machine Learning, statistical modelling, predictive analytics, software development and software engineering principles, system design, algorithms, and full-stack development methodologies.</p>
                     </div>
                 </div>
             </div>
@@ -1164,10 +1230,10 @@
                         <p class="timeline-desc">Led technical strategy and digital transformation by designing a secure, cloud-based document database with granular access governance. Programmed a centralised intelligence platform integrated with Discord, creating a self-organising digital ecosystem for cross-functional teams. Directed engineering pipelines and optimised high-availability infrastructure to process, analyse, and translate complex satellite data into AI-driven public climate media.</p>
                     </div>
                     <div class="timeline-item">
-                        <div class="timeline-logo"><img src="images/lunex-logo.png" alt="LunexEuroMoonMars" class="org-logo"></div>
+                        <div class="timeline-logo"><img src="images/lunex-logo.png" alt="LUNEX EuroMoonMars" class="org-logo"></div>
                         <span class="timeline-date">April 2026 – Present</span>
                         <h4 class="timeline-title">AI & Earth Observation Research and Innovation Intern</h4>
-                        <div class="timeline-org">LunexEuroMoonMars</div>
+                        <div class="timeline-org">LUNEX EuroMoonMars</div>
                         <p class="timeline-desc">Earth Observation and 3U CubeSat Development Lead for the AI/SW Subsystem. Developing a Multi-Task AI Framework for Integrated Urban Monitoring using fused Copernicus Earth Observation (EO) satellite imagery and near real-time IoT sensor networks across global smart cities.</p>
                     </div>
                     <div class="timeline-item">
@@ -1205,6 +1271,7 @@
         <h3 class="certs-title serif reveal">Certifications</h3>
         <div class="certs-grid reveal">
             <div class="cert-card">
+                <img src="isu-certificate.jpg" alt="ISU Executive Space Course Certificate" class="cert-img" onclick="openCertLightbox(this.src)">
                 <div class="cert-name">Executive Space Course</div>
                 <div class="tag" style="margin-top: 10px;">ISU (Oct 2025)</div>
             </div>
@@ -1213,16 +1280,21 @@
                 <div class="tag" style="margin-top: 10px;">ZCHPC (Aug 2025)</div>
             </div>
             <div class="cert-card">
-                <img src="aws-cert.png" alt="AWS Certified Cloud Practitioner" class="cert-img" onerror="this.style.display='none'">
+                <img src="aws-cert.png" alt="AWS Certified Cloud Practitioner" class="cert-img" onclick="openCertLightbox(this.src)">
                 <div class="cert-name">AWS Cloud Practitioner</div>
             </div>
             <div class="cert-card">
-                <img src="google-data-cert.png" alt="Google Advanced Data Analytics" class="cert-img" onerror="this.style.display='none'">
+                <img src="google-data-cert.png" alt="Google Advanced Data Analytics" class="cert-img" onclick="openCertLightbox(this.src)">
                 <div class="cert-name">Google Advanced Data Analytics</div>
             </div>
             <div class="cert-card">
                 <div class="cert-name">Cisco Cybersecurity Essentials</div>
             </div>
+        </div>
+        <div style="text-align: center; margin-top: 3rem;" class="reveal">
+            <a href="Norbert_Muzila_CV.pdf" download class="cv-download-btn">
+                <i class="fas fa-download"></i> Download My CV
+            </a>
         </div>
     </section>
 
@@ -1232,17 +1304,14 @@
         <p class="contact-subtitle">I'm always open to discussing new opportunities, collaborations, and interesting projects.</p>
         
         <div class="social-links">
-            <a href="mailto:norbertmuzila@gmail.com" class="social-btn" aria-label="Email">
+            <a href="mailto:norbertmuzila600@gmail.com" class="social-btn email" aria-label="Email">
                 <i class="fas fa-envelope"></i>
             </a>
-            <a href="https://www.linkedin.com/in/norbert-muzila" target="_blank" class="social-btn" aria-label="LinkedIn">
+            <a href="https://www.linkedin.com/in/norbert-muzila-646330235/" target="_blank" class="social-btn linkedin" aria-label="LinkedIn">
                 <i class="fab fa-linkedin-in"></i>
             </a>
-            <a href="https://github.com/norbertmuzila" target="_blank" class="social-btn" aria-label="GitHub">
+            <a href="https://github.com/norbertmuzila" target="_blank" class="social-btn github" aria-label="GitHub">
                 <i class="fab fa-github"></i>
-            </a>
-            <a href="https://www.kaggle.com/norbertmuzila" target="_blank" class="social-btn" aria-label="Kaggle">
-                <i class="fab fa-kaggle"></i>
             </a>
         </div>
 
@@ -1433,6 +1502,18 @@
                 element.classList.add('expanded');
             }
         }
+
+        function openCertLightbox(src) {
+            document.getElementById('certLightboxImg').src = src;
+            document.getElementById('certLightbox').classList.add('show');
+        }
+
+        function closeCertLightbox() {
+            document.getElementById('certLightbox').classList.remove('show');
+        }
     </script>
+    <div class="cert-lightbox" id="certLightbox" onclick="closeCertLightbox()">
+        <img id="certLightboxImg" src="" alt="Certificate">
+    </div>
 </body>
 </html>
