@@ -541,13 +541,81 @@
             }
         }
 
+        .orbit-container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            margin: 0 auto;
+        }
+
         .about-image {
-            width: 100%;
-            aspect-ratio: 3/4;
+            width: 280px;
+            height: 280px;
+            border-radius: 50%;
             object-fit: cover;
-            border-radius: 8px;
-            border: 1px solid var(--card-border);
-            box-shadow: -10px 10px 0 rgba(201, 168, 76, 0.2);
+            border: 3px solid var(--primary);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 30px rgba(201, 168, 76, 0.15);
+        }
+
+        .orbit-ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 320px;
+            height: 320px;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            border: 1px dashed rgba(201, 168, 76, 0.25);
+            animation: orbit-spin 12s linear infinite;
+        }
+
+        .orbit-planet {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 28px;
+            height: 28px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: var(--bg);
+            box-shadow: 0 0 15px rgba(201, 168, 76, 0.6);
+            animation: orbit-counter-spin 12s linear infinite;
+        }
+
+        @keyframes orbit-spin {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        @keyframes orbit-counter-spin {
+            0% { transform: translateX(-50%) rotate(0deg); }
+            100% { transform: translateX(-50%) rotate(-360deg); }
+        }
+
+        .timeline-logo {
+            margin-bottom: 0.75rem;
+        }
+
+        .org-logo {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+            filter: brightness(0) invert(1) opacity(0.7);
+            transition: var(--transition-smooth);
+        }
+
+        .timeline-item:hover .org-logo {
+            filter: none;
+            opacity: 1;
         }
 
         .about-text {
@@ -846,7 +914,7 @@
                     </div>
                     <div class="browser-url">norbertmuzila.github.io/ground_station...</div>
                     <div class="browser-body">
-                        [Command Deck UI Loading...]
+                        <div style="padding: 15px; background: linear-gradient(135deg, #0a1628 0%, #1a2744 100%); height: 100%; display: flex; align-items: center; justify-content: center; color: var(--text-60); font-size: 0.85rem;"><i class="fas fa-satellite-dish" style="font-size: 2rem; color: var(--primary); margin-right: 10px;"></i> Live Mission Telemetry</div>
                     </div>
                 </div>
             </div>
@@ -873,7 +941,7 @@
                     </div>
                     <div class="browser-url">norbertmuzila.github.io/pension-fund...</div>
                     <div class="browser-body">
-                        [Dashboard Data Viz...]
+                        <div style="padding: 15px; background: linear-gradient(135deg, #0a1628 0%, #1a2744 100%); height: 100%; display: flex; align-items: center; justify-content: center; color: var(--text-60); font-size: 0.85rem;"><i class="fas fa-chart-line" style="font-size: 2rem; color: var(--primary); margin-right: 10px;"></i> Interactive Financial Dashboard</div>
                     </div>
                 </div>
             </div>
@@ -899,7 +967,7 @@
                     </div>
                     <div class="browser-url">norbertmuzila.github.io/umbrella...</div>
                     <div class="browser-body">
-                        [Seismic Waves Viz...]
+                        <div style="padding: 15px; background: linear-gradient(135deg, #0a1628 0%, #1a2744 100%); height: 100%; display: flex; align-items: center; justify-content: center; color: var(--text-60); font-size: 0.85rem;"><i class="fas fa-wave-square" style="font-size: 2rem; color: var(--primary); margin-right: 10px;"></i> Seismic Wave Analysis</div>
                     </div>
                 </div>
             </div>
@@ -993,7 +1061,14 @@
         
         <div class="about-grid reveal">
             <div class="about-img-container">
-                <img src="avatar.jpg" alt="Norbert Muzila" class="about-image" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiMzMzMiLz48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZmlsbD0iI2ZmZiIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+QXZhdGFyPC90ZXh0Pjwvc3ZnPg=='">
+                <div class="orbit-container">
+                    <img src="avatar.jpg" alt="Norbert Muzila" class="about-image">
+                    <div class="orbit-ring">
+                        <div class="orbit-planet">
+                            <i class="fas fa-satellite"></i>
+                        </div>
+                    </div>
+                </div>
             </div>
             
             <div class="about-content">
@@ -1055,12 +1130,21 @@
                 <h3>Education</h3>
                 <div class="timeline">
                     <div class="timeline-item">
+                        <div class="timeline-logo"><img src="images/logo-isu.png" alt="ISU" class="org-logo"></div>
                         <span class="timeline-date">2025 – 2026</span>
-                        <h4 class="timeline-title">MSS Space Engineering & Applications</h4>
+                        <h4 class="timeline-title">Master of Space Studies (MSS26) — Space Engineering & Applications</h4>
                         <div class="timeline-org">International Space University (ISU), France</div>
                         <p class="timeline-desc">Coursework: Space Systems Engineering, Astrodynamics, Satellite Communications, Orbital Mechanics, Mission Planning, MBSE, Remote Sensing.</p>
                     </div>
                     <div class="timeline-item">
+                        <div class="timeline-logo"><img src="images/logo-uz.png" alt="University of Zimbabwe" class="org-logo"></div>
+                        <span class="timeline-date">2020 – 2024</span>
+                        <h4 class="timeline-title">BSc (Hons) Software Engineering</h4>
+                        <div class="timeline-org">University of Zimbabwe</div>
+                        <p class="timeline-desc">Comprehensive foundation in software engineering principles, system design, algorithms, and full-stack development methodologies.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-logo"><img src="images/logo-uz.png" alt="University of Zimbabwe" class="org-logo"></div>
                         <span class="timeline-date">2020 – 2024</span>
                         <h4 class="timeline-title">BSc (Hons) Data Science & Systems</h4>
                         <div class="timeline-org">University of Zimbabwe</div>
@@ -1073,28 +1157,46 @@
                 <h3>Experience</h3>
                 <div class="timeline">
                     <div class="timeline-item">
+                        <div class="timeline-logo"><img src="images/space4climate-logo.png" alt="Space4Climate" class="org-logo"></div>
+                        <span class="timeline-date">July 2026 – Present</span>
+                        <h4 class="timeline-title">Volunteer Chief Technology Officer</h4>
+                        <div class="timeline-org">Space4Climate</div>
+                        <p class="timeline-desc">Led technical strategy and digital transformation by designing a secure, cloud-based document database with granular access governance. Programmed a centralised intelligence platform integrated with Discord, creating a self-organising digital ecosystem for cross-functional teams. Directed engineering pipelines and optimised high-availability infrastructure to process, analyse, and translate complex satellite data into AI-driven public climate media.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-logo"><img src="images/lunex-logo.png" alt="LunexEuroMoonMars" class="org-logo"></div>
+                        <span class="timeline-date">April 2026 – Present</span>
+                        <h4 class="timeline-title">AI & Earth Observation Research and Innovation Intern</h4>
+                        <div class="timeline-org">LunexEuroMoonMars</div>
+                        <p class="timeline-desc">Earth Observation and 3U CubeSat Development Lead for the AI/SW Subsystem. Developing a Multi-Task AI Framework for Integrated Urban Monitoring using fused Copernicus Earth Observation (EO) satellite imagery and near real-time IoT sensor networks across global smart cities.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-logo"><img src="sgac-logo.png" alt="SGAC" class="org-logo"></div>
                         <span class="timeline-date">2026</span>
-                        <h4 class="timeline-title">SGAC Organising Team Member</h4>
+                        <h4 class="timeline-title">SGAC Organising Team Member — Volunteer</h4>
                         <div class="timeline-org">Space Generation Advisory Council</div>
-                        <p class="timeline-desc">Organising team member for SG[FRANCE 2026]. Responsible for engaging with local sponsors, developing partnerships, and executing sponsor agreements.</p>
+                        <p class="timeline-desc">Organising team member for SG[FRANCE 2026]. Successfully engaged with numerous high-profile corporate sponsors and negotiated partnerships securing over €8,000 in event logistics sponsorship from major industry companies, under the supervision of SGAC's Business Development Officer and Executive Director.</p>
                     </div>
                     <div class="timeline-item">
+                        <div class="timeline-logo"><img src="nasa-logo.svg" alt="NASA" class="org-logo"></div>
                         <span class="timeline-date">2025 – Present</span>
-                        <h4 class="timeline-title">NASA Open Science Working Groups</h4>
+                        <h4 class="timeline-title">NASA Open Science Working Groups — Voluntary</h4>
                         <div class="timeline-org">NASA</div>
-                        <p class="timeline-desc">Active contributor to NASA Open Science Data Repository within two specialized working groups.</p>
+                        <p class="timeline-desc">Active contributor to the NASA Open Science Data Repository within two specialised working groups: Artificial Intelligence & Machine Learning (AI/ML) and Hardware.</p>
                     </div>
                     <div class="timeline-item">
-                        <span class="timeline-date">2024</span>
-                        <h4 class="timeline-title">Data Science Intern</h4>
-                        <div class="timeline-org">ZCHPC, Zimbabwe</div>
-                        <p class="timeline-desc">Processed large-scale datasets and designed Python ETL pipelines for analytics. Applied ML optimization techniques for high-performance computing.</p>
+                        <div class="timeline-logo"><img src="images/logo-zchpc.png" alt="ZCHPC" class="org-logo"></div>
+                        <span class="timeline-date">2024 – 2025</span>
+                        <h4 class="timeline-title">Data Science Resident Researcher</h4>
+                        <div class="timeline-org">Zimbabwe Centre for High Performance Computing (ZCHPC)</div>
+                        <p class="timeline-desc">Processed large-scale datasets and designed Python ETL pipelines for analytics. Conducted statistical and time-series analysis on monitoring datasets. Applied ML optimisation techniques for high-performance computing environments. Awarded Certificate of Competence in AI and Big Data Analytics.</p>
                     </div>
                     <div class="timeline-item">
+                        <div class="timeline-logo"><img src="images/logo-stewardbank.png" alt="Steward Bank" class="org-logo"></div>
                         <span class="timeline-date">2023 – 2024</span>
-                        <h4 class="timeline-title">Software Developer</h4>
+                        <h4 class="timeline-title">Strategic & Digital Transformation and DevOps Internship</h4>
                         <div class="timeline-org">Steward Bank, Zimbabwe</div>
-                        <p class="timeline-desc">Leveraged ML for churn prediction. Built performance tools, automated CI/CD pipelines using Docker, and designed Power BI dashboards. Improved dev efficiency by 70%.</p>
+                        <p class="timeline-desc">Leveraged Machine Learning and Deep Neural Networks for complex data analysis and customer churn prediction. Built performance analysis tools and automated CI/CD pipelines using Docker. Designed interactive Python/Jupyter and Power BI dashboards for executive reporting. Improved development efficiency by 70% by analysing logs via Elastic Search and visualising real-time error messages in Kibana.</p>
                     </div>
                 </div>
             </div>
