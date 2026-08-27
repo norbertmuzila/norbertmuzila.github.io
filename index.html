@@ -668,8 +668,20 @@
 
         .skills-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 1.5rem;
+        }
+
+        @media (max-width: 900px) {
+            .skills-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
         .skill-card {
@@ -1025,20 +1037,20 @@
 
             <div class="skills-grid">
                 <div class="skill-card">
-                    <h4 class="skill-title">Programming</h4>
-                    <div class="skill-list">Python, JavaScript, C++, SQL, MATLAB, R</div>
+                    <h4 class="skill-title">Space Systems</h4>
+                    <div class="skill-list">Orbital Mechanics, MBSE, SatComms, Mission Planning, Astrodynamics</div>
+                </div>
+                <div class="skill-card">
+                    <h4 class="skill-title">Geospatial Intelligence & EO</h4>
+                    <div class="skill-list">QGIS, Google Earth Engine, Remote Sensing, Leaflet.js</div>
                 </div>
                 <div class="skill-card">
                     <h4 class="skill-title">AI & ML</h4>
                     <div class="skill-list">TensorFlow, PyTorch, Scikit-learn, Deep Learning, NLP</div>
                 </div>
                 <div class="skill-card">
-                    <h4 class="skill-title">Space Systems</h4>
-                    <div class="skill-list">Orbital Mechanics, MBSE, SatComms, Mission Planning, Astrodynamics</div>
-                </div>
-                <div class="skill-card">
-                    <h4 class="skill-title">Geospatial</h4>
-                    <div class="skill-list">QGIS, Google Earth Engine, Remote Sensing, Leaflet.js</div>
+                    <h4 class="skill-title">Programming</h4>
+                    <div class="skill-list">Python, JavaScript, C++, SQL, MATLAB, R</div>
                 </div>
                 <div class="skill-card">
                     <h4 class="skill-title">Data</h4>
@@ -1054,7 +1066,6 @@
 
     <!-- Projects Section -->
     <section id="projects" class="container">
-        <span class="section-label uppercase tracking-wide reveal">Selected Work · 09</span>
         <h2 class="section-title reveal">Projects</h2>
 
         <div class="featured-projects">
