@@ -103,14 +103,22 @@
             position: fixed;
             top: 0;
             width: 100%;
-            padding: 24px 5%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            padding: 24px 0;
             z-index: 100;
             background: linear-gradient(to bottom, rgba(4, 5, 12, 0.9) 0%, transparent 100%);
             backdrop-filter: blur(8px);
             animation: slideDown 1s ease-out forwards;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            position: relative;
         }
 
         @keyframes slideDown {
@@ -156,8 +164,8 @@
         @media (max-width: 768px) {
             .nav-links {
                 display: none;
-                position: absolute;
-                top: 100%;
+                position: fixed;
+                top: 72px;
                 left: 0;
                 width: 100%;
                 background: rgba(4, 5, 12, 0.95);
@@ -177,21 +185,28 @@
 
         /* Hero */
         #hero {
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
             align-items: center;
-            padding-top: 80px;
+            padding-top: 120px;
+            padding-bottom: 60px;
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            align-items: center;
+            gap: 3rem;
+            width: 100%;
         }
 
         .hero-content {
             position: relative;
             z-index: 2;
-            max-width: 1200px;
-            padding-left: 2%;
         }
 
         .hero-name {
-            font-size: clamp(4rem, 10vw, 8rem);
+            font-size: clamp(3.5rem, 8vw, 7.5rem);
             line-height: 1;
             margin-bottom: 1rem;
         }
@@ -233,29 +248,35 @@
             50% { opacity: 0; }
         }
 
-        .hero-avatar {
-            position: absolute;
-            right: -5%;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 50vw;
-            max-width: 600px;
-            height: 80vh;
-            background-image: url('avatar.jpg');
-            background-size: cover;
-            background-position: center;
-            opacity: 0.25;
-            mask-image: linear-gradient(to right, transparent, black 40%, black 80%, transparent);
-            -webkit-mask-image: linear-gradient(to right, transparent, black 40%, black 80%, transparent);
-            z-index: 1;
+        .hero-orbit-wrap {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            z-index: 2;
         }
 
-        @media (max-width: 768px) {
-            .hero-avatar {
-                width: 100%;
-                right: 0;
-                mask-image: linear-gradient(to top, transparent, black 50%, black 80%, transparent);
-                -webkit-mask-image: linear-gradient(to top, transparent, black 50%, black 80%, transparent);
+        @media (max-width: 900px) {
+            .hero-grid {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+                padding-top: 20px;
+            }
+            .hero-orbit-wrap {
+                order: -1;
+                margin-bottom: 1rem;
+            }
+            .orbit-container {
+                width: 250px;
+                height: 250px;
+            }
+            .about-image {
+                width: 220px;
+                height: 220px;
+            }
+            .orbit-ring {
+                width: 260px;
+                height: 260px;
             }
         }
 
@@ -531,16 +552,8 @@
         }
 
         /* About Section */
-        .about-grid {
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 4rem;
-        }
-
-        @media (max-width: 768px) {
-            .about-grid {
-                grid-template-columns: 1fr;
-            }
+        .about-content {
+            width: 100%;
         }
 
         .orbit-container {
@@ -948,37 +961,32 @@
 
     <!-- Navigation -->
     <nav>
-        <a href="#hero" class="logo">NM</a>
-        <button class="hamburger" aria-label="Toggle Menu">
-            <i class="fas fa-bars"></i>
-        </button>
-        <ul class="nav-links uppercase tracking-wide">
-            <li><a href="#about">About Me</a></li>
-            <li><a href="#projects">Projects</a></li>
-            <li><a href="#cv">My CV</a></li>
-            <li><a href="#contact">Contact</a></li>
-        </ul>
+        <div class="nav-container">
+            <a href="#hero" class="logo">NM</a>
+            <button class="hamburger" aria-label="Toggle Menu">
+                <i class="fas fa-bars"></i>
+            </button>
+            <ul class="nav-links uppercase tracking-wide">
+                <li><a href="#about">About Me</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#cv">My CV</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
     </nav>
 
     <!-- Hero Section -->
-    <section id="hero">
-        <div class="hero-avatar"></div>
-        <div class="container hero-content">
-            <h1 class="hero-name serif">Norbert<br>Muzila</h1>
-            <div class="hero-line"></div>
-            <p class="hero-subtitle uppercase tracking-wide">Space Systems Engineering</p>
-            <div class="typing-container">
-                <span id="typing-text"></span><span class="cursor"></span>
+    <section id="hero" class="container">
+        <div class="hero-grid">
+            <div class="hero-content">
+                <h1 class="hero-name serif">Norbert<br>Muzila</h1>
+                <div class="hero-line"></div>
+                <p class="hero-subtitle uppercase tracking-wide">Space Systems Engineering</p>
+                <div class="typing-container">
+                    <span id="typing-text"></span><span class="cursor"></span>
+                </div>
             </div>
-        </div>
-    </section>
-
-    <!-- About Section -->
-    <section id="about" class="container">
-        <h2 class="section-title reveal">About Me</h2>
-        
-        <div class="about-grid reveal">
-            <div class="about-img-container">
+            <div class="hero-orbit-wrap">
                 <div class="orbit-container">
                     <img src="avatar.jpg" alt="Norbert Muzila" class="about-image">
                     <div class="orbit-ring">
@@ -988,52 +996,57 @@
                     </div>
                 </div>
             </div>
-            
-            <div class="about-content">
-                <p class="about-text">
-                    Passionate about Space Systems Engineering and the development of intelligent autonomous space systems that integrate geospatial AI, remote sensing, robotics, and data-driven technologies across landers, CubeSats, rovers, and drones for planetary exploration, Earth observation, and societal impact.
-                </p>
-                
-                <div class="stats-row">
-                    <div class="stat-item">
-                        <span class="stat-label">Languages</span>
-                        <span class="stat-val">English, French, Shona</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-label">Location</span>
-                        <span class="stat-val">Illkirch-Graffenstaden, France</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-label">Focus</span>
-                        <span class="stat-val">Space Systems Engineering, Mission Operations, Software Engineering & Data Analytics (EO & GeoAI)</span>
-                    </div>
-                </div>
+        </div>
+    </section>
 
-                <div class="skills-grid">
-                    <div class="skill-card">
-                        <h4 class="skill-title">Programming</h4>
-                        <div class="skill-list">Python, JavaScript, C++, SQL, MATLAB, R</div>
-                    </div>
-                    <div class="skill-card">
-                        <h4 class="skill-title">AI & ML</h4>
-                        <div class="skill-list">TensorFlow, PyTorch, Scikit-learn, Deep Learning, NLP</div>
-                    </div>
-                    <div class="skill-card">
-                        <h4 class="skill-title">Space Systems</h4>
-                        <div class="skill-list">Orbital Mechanics, MBSE, SatComms, Mission Planning, Astrodynamics</div>
-                    </div>
-                    <div class="skill-card">
-                        <h4 class="skill-title">Geospatial</h4>
-                        <div class="skill-list">QGIS, Google Earth Engine, Remote Sensing, Leaflet.js</div>
-                    </div>
-                    <div class="skill-card">
-                        <h4 class="skill-title">Data</h4>
-                        <div class="skill-list">Power BI, Jupyter, Pandas, ETL Pipelines, Elastic Search</div>
-                    </div>
-                    <div class="skill-card">
-                        <h4 class="skill-title">DevOps</h4>
-                        <div class="skill-list">Docker, CI/CD, Git, Linux</div>
-                    </div>
+    <!-- About Section -->
+    <section id="about" class="container">
+        <h2 class="section-title reveal">About Me</h2>
+        
+        <div class="about-content reveal">
+            <p class="about-text">
+                Passionate about Space Systems Engineering and the development of intelligent autonomous space systems that integrate geospatial AI, remote sensing, robotics, and data-driven technologies across landers, CubeSats, rovers, and drones for planetary exploration, Earth observation, and societal impact.
+            </p>
+            
+            <div class="stats-row">
+                <div class="stat-item">
+                    <span class="stat-label">Languages</span>
+                    <span class="stat-val">English, French, Shona</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Location</span>
+                    <span class="stat-val">Illkirch-Graffenstaden, France</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Focus</span>
+                    <span class="stat-val">Space Systems Engineering, Mission Operations, Software Engineering & Data Analytics (EO & GeoAI)</span>
+                </div>
+            </div>
+
+            <div class="skills-grid">
+                <div class="skill-card">
+                    <h4 class="skill-title">Programming</h4>
+                    <div class="skill-list">Python, JavaScript, C++, SQL, MATLAB, R</div>
+                </div>
+                <div class="skill-card">
+                    <h4 class="skill-title">AI & ML</h4>
+                    <div class="skill-list">TensorFlow, PyTorch, Scikit-learn, Deep Learning, NLP</div>
+                </div>
+                <div class="skill-card">
+                    <h4 class="skill-title">Space Systems</h4>
+                    <div class="skill-list">Orbital Mechanics, MBSE, SatComms, Mission Planning, Astrodynamics</div>
+                </div>
+                <div class="skill-card">
+                    <h4 class="skill-title">Geospatial</h4>
+                    <div class="skill-list">QGIS, Google Earth Engine, Remote Sensing, Leaflet.js</div>
+                </div>
+                <div class="skill-card">
+                    <h4 class="skill-title">Data</h4>
+                    <div class="skill-list">Power BI, Jupyter, Pandas, ETL Pipelines, Elastic Search</div>
+                </div>
+                <div class="skill-card">
+                    <h4 class="skill-title">DevOps</h4>
+                    <div class="skill-list">Docker, CI/CD, Git, Linux</div>
                 </div>
             </div>
         </div>
@@ -1041,7 +1054,7 @@
 
     <!-- Projects Section -->
     <section id="projects" class="container">
-        <span class="section-label uppercase tracking-wide reveal">Selected Work · 08</span>
+        <span class="section-label uppercase tracking-wide reveal">Selected Work · 09</span>
         <h2 class="section-title reveal">Projects</h2>
 
         <div class="featured-projects">
@@ -1200,6 +1213,22 @@
                         <a href="https://clearesg.vercel.app" target="_blank" class="project-link">View Platform <i class="fas fa-external-link-alt"></i></a>
                         <div class="list-tags">
                             <span class="tag">Satellite Data</span><span class="tag">ESG</span><span class="tag">Risk Analysis</span>
+                        </div>
+                    </div>
+                </div>
+                <i class="fas fa-plus list-icon"></i>
+            </div>
+
+            <!-- Project 9 -->
+            <div class="list-item" onclick="toggleAccordion(this)">
+                <div class="list-number">06</div>
+                <div class="list-content">
+                    <h3 class="serif">Urban Monitoring Platform — Multi-Task AI Framework <span class="badge live">Live</span></h3>
+                    <div class="list-desc">
+                        A Multi-Task AI Framework for Integrated Urban Monitoring using fused Copernicus Earth Observation (EO) satellite imagery and near real-time IoT sensor networks across global smart cities.<br><br>
+                        <a href="https://norbertmuzila.github.io/Urban-Monitoring-Platform/" target="_blank" class="project-link">View Platform <i class="fas fa-external-link-alt"></i></a>
+                        <div class="list-tags">
+                            <span class="tag">Copernicus EO</span><span class="tag">Multi-Task AI</span><span class="tag">IoT Data Fusion</span><span class="tag">Smart Cities</span>
                         </div>
                     </div>
                 </div>
