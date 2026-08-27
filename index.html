@@ -1,17 +1,1336 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
-    <title>Norbert Muzila - Personal Website</title>
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Norbert Muzila | Space Systems Engineer</title>
+    <meta name="description" content="Portfolio of Norbert Muzila, AI Space Systems Engineer and Data Scientist.">
+    
+    <!-- OpenGraph -->
+    <meta property="og:title" content="Norbert Muzila | Portfolio">
+    <meta property="og:description" content="AI Space Systems Engineer and Data Scientist.">
+    <meta property="og:image" content="opengraph.jpg">
+    <meta property="og:url" content="https://norbertmuzila.github.io/">
+    <meta property="og:type" content="website">
+
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <script type="module" crossorigin src="/assets/index-B-mj8GK8.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-kYgWDWdZ.css">
-  </head>
-  <body>
-    <div id="root"></div>
-  </body>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        :root {
+            --bg: #04050c;
+            --primary: #c9a84c;
+            --secondary: #38bdf8;
+            --text-90: rgba(255, 255, 255, 0.9);
+            --text-60: rgba(255, 255, 255, 0.6);
+            --text-40: rgba(255, 255, 255, 0.4);
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --card-border: rgba(255, 255, 255, 0.08);
+            
+            --font-serif: 'Playfair Display', serif;
+            --font-sans: 'Inter', sans-serif;
+            
+            --transition-smooth: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-90);
+            font-family: var(--font-sans);
+            line-height: 1.6;
+            overflow-x: hidden;
+            font-size: 16px;
+        }
+
+        /* Typography */
+        h1, h2, h3, h4, h5, h6, .serif {
+            font-family: var(--font-serif);
+            font-weight: 400;
+        }
+
+        .tracking-wide { letter-spacing: 0.2em; }
+        .uppercase { text-transform: uppercase; }
+        .text-primary { color: var(--primary); }
+        .text-secondary { color: var(--secondary); }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+            transition: var(--transition-smooth);
+        }
+
+        /* Canvas Background */
+        #starfield {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            pointer-events: none;
+            background: radial-gradient(circle at center, #090a15 0%, #04050c 100%);
+        }
+
+        /* Layout */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 5%;
+        }
+
+        section {
+            padding: 100px 0;
+            position: relative;
+        }
+
+        /* Navbar */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 24px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: linear-gradient(to bottom, rgba(4, 5, 12, 0.9) 0%, transparent 100%);
+            backdrop-filter: blur(8px);
+            animation: slideDown 1s ease-out forwards;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .logo {
+            font-family: var(--font-serif);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-90);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--text-60);
+            position: relative;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--primary);
+        }
+
+        .hamburger {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-90);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Mobile Menu */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: rgba(4, 5, 12, 0.95);
+                backdrop-filter: blur(10px);
+                flex-direction: column;
+                align-items: center;
+                padding: 2rem 0;
+                border-bottom: 1px solid var(--card-border);
+            }
+            .nav-links.show {
+                display: flex;
+            }
+            .hamburger {
+                display: block;
+            }
+        }
+
+        /* Hero */
+        #hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            padding-top: 80px;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-name {
+            font-size: clamp(4rem, 10vw, 8rem);
+            line-height: 1;
+            margin-bottom: 1rem;
+        }
+
+        .hero-line {
+            width: 80px;
+            height: 2px;
+            background-color: var(--primary);
+            margin: 2rem 0 1rem;
+            transition: width 1s ease-out;
+        }
+
+        .hero-subtitle {
+            font-size: 0.85rem;
+            color: var(--text-60);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .typing-container {
+            font-size: 1.25rem;
+            color: var(--text-90);
+            min-height: 2rem;
+            font-family: var(--font-serif);
+            font-style: italic;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 2px;
+            height: 1.2em;
+            background-color: var(--primary);
+            vertical-align: middle;
+            animation: blink 1s step-end infinite;
+        }
+
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+
+        .hero-avatar {
+            position: absolute;
+            right: -5%;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50vw;
+            max-width: 600px;
+            height: 80vh;
+            background-image: url('avatar.jpg');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.25;
+            mask-image: linear-gradient(to right, transparent, black 40%, black 80%, transparent);
+            -webkit-mask-image: linear-gradient(to right, transparent, black 40%, black 80%, transparent);
+            z-index: 1;
+        }
+
+        @media (max-width: 768px) {
+            .hero-avatar {
+                width: 100%;
+                right: 0;
+                mask-image: linear-gradient(to top, transparent, black 50%, black 80%, transparent);
+                -webkit-mask-image: linear-gradient(to top, transparent, black 50%, black 80%, transparent);
+            }
+        }
+
+        /* Section Headers */
+        .section-label {
+            font-size: 0.75rem;
+            color: var(--text-60);
+            margin-bottom: 1rem;
+            display: block;
+        }
+        
+        .section-title {
+            font-size: 3.5rem;
+            margin-bottom: 3rem;
+            color: var(--text-90);
+        }
+
+        /* Scroll Reveal */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Projects Section */
+        .featured-projects {
+            display: flex;
+            flex-direction: column;
+            gap: 4rem;
+            margin-bottom: 4rem;
+        }
+
+        .project-card-large {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            transition: var(--transition-smooth);
+            position: relative;
+        }
+
+        .project-card-large:hover {
+            transform: translateY(-5px);
+            border-color: rgba(201, 168, 76, 0.3);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+
+        @media (max-width: 900px) {
+            .project-card-large {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .project-content {
+            padding: 3rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .project-icon {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .project-title {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .tag {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.75rem;
+            background: rgba(255,255,255,0.05);
+            border-radius: 100px;
+            color: var(--text-60);
+        }
+
+        .project-desc {
+            color: var(--text-60);
+            margin-bottom: 2rem;
+        }
+
+        .project-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary);
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .project-link:hover {
+            gap: 0.75rem;
+        }
+
+        .browser-mockup {
+            background: #111;
+            border-left: 1px solid var(--card-border);
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            min-height: 300px;
+        }
+
+        @media (max-width: 900px) {
+            .browser-mockup {
+                border-left: none;
+                border-top: 1px solid var(--card-border);
+            }
+        }
+
+        .browser-header {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .browser-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #333;
+        }
+        .browser-dot:nth-child(1) { background: #ff5f56; }
+        .browser-dot:nth-child(2) { background: #ffbd2e; }
+        .browser-dot:nth-child(3) { background: #27c93f; }
+
+        .browser-url {
+            background: #222;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.75rem;
+            color: var(--text-40);
+            text-align: center;
+            margin-bottom: 1rem;
+            flex-grow: 1;
+        }
+
+        .browser-body {
+            flex-grow: 1;
+            background: #1a1a1a;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-40);
+            font-family: monospace;
+        }
+
+        /* Accordion List */
+        .project-list {
+            display: flex;
+            flex-direction: column;
+            border-top: 1px solid var(--card-border);
+        }
+
+        .list-item {
+            display: grid;
+            grid-template-columns: 50px 1fr auto;
+            gap: 1rem;
+            padding: 2rem 0;
+            border-bottom: 1px solid var(--card-border);
+            transition: var(--transition-smooth);
+            cursor: pointer;
+            align-items: start;
+        }
+
+        .list-item:hover {
+            background: rgba(255,255,255,0.01);
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+
+        .list-number {
+            font-family: var(--font-serif);
+            color: var(--text-40);
+            font-size: 1.25rem;
+        }
+
+        .list-content h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .list-desc {
+            color: var(--text-60);
+            font-size: 0.9rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+            margin-top: 0;
+        }
+        
+        .list-tags {
+            margin-top: 1rem;
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .list-item.expanded .list-desc {
+            max-height: 200px;
+            margin-top: 1rem;
+        }
+        .list-item.expanded .list-tags {
+            opacity: 1;
+        }
+
+        .list-icon {
+            color: var(--text-40);
+            font-size: 1.25rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .list-item.expanded .list-icon {
+            transform: rotate(45deg);
+        }
+
+        .badge {
+            font-size: 0.65rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            background: rgba(201, 168, 76, 0.1);
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-family: var(--font-sans);
+        }
+        
+        .badge.live {
+            background: rgba(39, 201, 63, 0.1);
+            color: #27c93f;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        
+        .badge.live::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: #27c93f;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(39, 201, 63, 0.4); }
+            70% { box-shadow: 0 0 0 6px rgba(39, 201, 63, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(39, 201, 63, 0); }
+        }
+
+        /* About Section */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 4rem;
+        }
+
+        @media (max-width: 768px) {
+            .about-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .about-image {
+            width: 100%;
+            aspect-ratio: 3/4;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid var(--card-border);
+            box-shadow: -10px 10px 0 rgba(201, 168, 76, 0.2);
+        }
+
+        .about-text {
+            font-size: 1.25rem;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            font-family: var(--font-serif);
+        }
+
+        .stats-row {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--card-border);
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-60);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-val {
+            font-size: 1rem;
+            color: var(--text-90);
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .skill-card {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid var(--card-border);
+        }
+
+        .skill-title {
+            color: var(--primary);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1rem;
+        }
+
+        .skill-list {
+            color: var(--text-60);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* CV Section */
+        .cv-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+        }
+
+        @media (max-width: 768px) {
+            .cv-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .cv-col h3 {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            color: var(--primary);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .timeline {
+            position: relative;
+            border-left: 1px solid var(--card-border);
+            padding-left: 2rem;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 3rem;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -33px;
+            top: 5px;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: var(--bg);
+            border: 2px solid var(--primary);
+            transition: var(--transition-smooth);
+        }
+
+        .timeline-item:hover::before {
+            background: var(--primary);
+            box-shadow: 0 0 10px rgba(201, 168, 76, 0.5);
+        }
+
+        .timeline-date {
+            font-size: 0.8rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .timeline-title {
+            font-size: 1.25rem;
+            margin-bottom: 0.25rem;
+            font-family: var(--font-serif);
+        }
+
+        .timeline-org {
+            font-size: 0.9rem;
+            color: var(--text-60);
+            margin-bottom: 1rem;
+        }
+
+        .timeline-desc {
+            font-size: 0.9rem;
+            color: var(--text-60);
+            line-height: 1.6;
+        }
+
+        .certs-title {
+            margin-top: 4rem;
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .certs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .cert-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: var(--transition-smooth);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .cert-card:hover {
+            border-color: rgba(255,255,255,0.2);
+            transform: translateY(-5px);
+        }
+
+        .cert-img {
+            max-width: 100px;
+            max-height: 100px;
+            margin-bottom: 1rem;
+            object-fit: contain;
+            filter: grayscale(100%) opacity(0.8);
+            transition: var(--transition-smooth);
+        }
+        
+        .cert-card:hover .cert-img {
+            filter: grayscale(0%) opacity(1);
+        }
+
+        .cert-name {
+            font-size: 0.85rem;
+            color: var(--text-90);
+        }
+
+        /* Contact Section */
+        #contact {
+            text-align: center;
+            padding-bottom: 50px;
+        }
+        
+        .contact-subtitle {
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            color: var(--text-60);
+            font-size: 1.1rem;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 4rem;
+        }
+
+        .social-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            color: var(--text-90);
+            transition: var(--transition-smooth);
+        }
+
+        .social-btn:hover {
+            background: var(--primary);
+            color: var(--bg);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(201, 168, 76, 0.2);
+        }
+
+        footer {
+            border-top: 1px solid var(--card-border);
+            padding-top: 2rem;
+            color: var(--text-40);
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Starfield Background -->
+    <canvas id="starfield"></canvas>
+
+    <!-- Navigation -->
+    <nav>
+        <a href="#hero" class="logo">NM</a>
+        <button class="hamburger" aria-label="Toggle Menu">
+            <i class="fas fa-bars"></i>
+        </button>
+        <ul class="nav-links uppercase tracking-wide">
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#about">About Me</a></li>
+            <li><a href="#cv">My CV</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero">
+        <div class="hero-avatar"></div>
+        <div class="container hero-content">
+            <h1 class="hero-name serif">Norbert<br>Muzila</h1>
+            <div class="hero-line"></div>
+            <p class="hero-subtitle uppercase tracking-wide">Space Systems Engineering</p>
+            <div class="typing-container">
+                <span id="typing-text"></span><span class="cursor"></span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="container">
+        <span class="section-label uppercase tracking-wide reveal">Selected Work · 08</span>
+        <h2 class="section-title reveal">Projects</h2>
+
+        <div class="featured-projects">
+            <!-- Project 1 -->
+            <div class="project-card-large reveal">
+                <div class="project-content">
+                    <i class="fas fa-satellite-dish project-icon"></i>
+                    <h3 class="project-title serif">ISU Groundstation & Satellite Command Deck</h3>
+                    <div class="project-tags">
+                        <span class="tag">OBC Serial Telemetry</span>
+                        <span class="tag">Leaflet 2D</span>
+                        <span class="tag">Globe.gl 3D</span>
+                        <span class="tag">SGP4 Orbitals</span>
+                    </div>
+                    <p class="project-desc">A real-time Mission Operations space cockpit designed for orbital mechanics tracking, sensor telemetry stream unpacking, and wireless camera downlinks. Features custom 2D Leaflet maps with Esri Satellite imagery and dynamic 3D Globe.gl orbit predictions.</p>
+                    <a href="https://norbertmuzila.github.io/ground_station_iss_isugs/" target="_blank" class="project-link uppercase tracking-wide">View Project <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="browser-mockup">
+                    <div class="browser-header">
+                        <div class="browser-dot"></div>
+                        <div class="browser-dot"></div>
+                        <div class="browser-dot"></div>
+                    </div>
+                    <div class="browser-url">norbertmuzila.github.io/ground_station...</div>
+                    <div class="browser-body">
+                        [Command Deck UI Loading...]
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project 2 -->
+            <div class="project-card-large reveal">
+                <div class="project-content">
+                    <i class="fas fa-chart-line project-icon"></i>
+                    <h3 class="project-title serif">Pension Fund Digital Twin</h3>
+                    <div class="project-tags">
+                        <span class="tag">Zimbabwe</span>
+                        <span class="tag">ZAPF</span>
+                        <span class="tag">RBZ Exchange Rates</span>
+                        <span class="tag">IPEC Compliance</span>
+                    </div>
+                    <p class="project-desc">An interactive digital twin dashboard for Zimbabwe's pension fund sector, built for the Zimbabwe Association of Pension Funds (ZAPF) Research Competition. Features live RBZ exchange rates, IPEC regulatory compliance modelling, and economic scenario simulations.</p>
+                    <a href="https://norbertmuzila.github.io/pension-fund-digital-twin" target="_blank" class="project-link uppercase tracking-wide">View Project <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="browser-mockup">
+                    <div class="browser-header">
+                        <div class="browser-dot"></div>
+                        <div class="browser-dot"></div>
+                        <div class="browser-dot"></div>
+                    </div>
+                    <div class="browser-url">norbertmuzila.github.io/pension-fund...</div>
+                    <div class="browser-body">
+                        [Dashboard Data Viz...]
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project 3 -->
+            <div class="project-card-large reveal">
+                <div class="project-content">
+                    <i class="fas fa-wave-square project-icon"></i>
+                    <h3 class="project-title serif">Umbrella Seismic Sensing Model</h3>
+                    <div class="project-tags">
+                        <span class="tag">Seismology</span>
+                        <span class="tag">Data Visualization</span>
+                        <span class="tag">Earth Science</span>
+                    </div>
+                    <p class="project-desc">Interactive seismic wave propagation model and sensing visualization dashboard for geophysical analysis and Earth observation research.</p>
+                    <a href="https://norbertmuzila.github.io/umbrella-seismic-sensing-model/" target="_blank" class="project-link uppercase tracking-wide">View Project <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="browser-mockup">
+                    <div class="browser-header">
+                        <div class="browser-dot"></div>
+                        <div class="browser-dot"></div>
+                        <div class="browser-dot"></div>
+                    </div>
+                    <div class="browser-url">norbertmuzila.github.io/umbrella...</div>
+                    <div class="browser-body">
+                        [Seismic Waves Viz...]
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Accordion Projects -->
+        <div class="project-list reveal">
+            <!-- Project 4 -->
+            <div class="list-item" onclick="toggleAccordion(this)">
+                <div class="list-number">01</div>
+                <div class="list-content">
+                    <h3 class="serif">ESA Member States Space Agency Atlas</h3>
+                    <div class="list-desc">
+                        An interactive digital geographic catalog detailing headquarters, coordinates, and contact indices across all 22 European Space Agency member nations. Features customized map pins, Leaflet geometries, and detailed metadata parsing.<br><br>
+                        <a href="https://norbertmuzila.github.io/roundtwo/esa-atlas/" target="_blank" class="project-link">View Atlas <i class="fas fa-external-link-alt"></i></a>
+                        <div class="list-tags">
+                            <span class="tag">GIS Atlas</span><span class="tag">Leaflet.js</span><span class="tag">OpenStreetMap</span>
+                        </div>
+                    </div>
+                </div>
+                <i class="fas fa-plus list-icon"></i>
+            </div>
+
+            <!-- Project 5 -->
+            <div class="list-item" onclick="toggleAccordion(this)">
+                <div class="list-number">02</div>
+                <div class="list-content">
+                    <h3 class="serif">ISU Mars Rover & Drone Mission Concept <span class="badge">ISU Project</span></h3>
+                    <div class="list-desc">
+                        AI & Software Lead for a Mars Rover and Drone Mission Concept for Lava Tube Exploration at the International Space University. Designed autonomous navigation and exploration algorithms.
+                        <div class="list-tags">
+                            <span class="tag">Mars Exploration</span><span class="tag">Autonomous Systems</span>
+                        </div>
+                    </div>
+                </div>
+                <i class="fas fa-plus list-icon"></i>
+            </div>
+
+            <!-- Project 6 -->
+            <div class="list-item" onclick="toggleAccordion(this)">
+                <div class="list-number">03</div>
+                <div class="list-content">
+                    <h3 class="serif">ISU Robotics Competition <span class="badge">ISU Project</span></h3>
+                    <div class="list-desc">
+                        Chief Programmer for the ISU Robotics Competition featuring Autonomous Navigation and GemStones Collection. Led software development for an autonomous robotics system using LEGO robotics kits and Python.
+                        <div class="list-tags">
+                            <span class="tag">Python</span><span class="tag">LEGO Robotics</span><span class="tag">AI</span>
+                        </div>
+                    </div>
+                </div>
+                <i class="fas fa-plus list-icon"></i>
+            </div>
+
+            <!-- Project 7 -->
+            <div class="list-item" onclick="toggleAccordion(this)">
+                <div class="list-number">04</div>
+                <div class="list-content">
+                    <h3 class="serif">Adversarial Research Paper</h3>
+                    <div class="list-desc">
+                        Published research exploring adversarial machine learning techniques and AI security vulnerabilities in autonomous systems.<br><br>
+                        <a href="https://norbertmuzila.github.io/adversarial-paper/" target="_blank" class="project-link">Read Paper <i class="fas fa-external-link-alt"></i></a>
+                        <div class="list-tags">
+                            <span class="tag">AI Security</span><span class="tag">Adversarial ML</span>
+                        </div>
+                    </div>
+                </div>
+                <i class="fas fa-plus list-icon"></i>
+            </div>
+
+            <!-- Project 8 -->
+            <div class="list-item" onclick="toggleAccordion(this)">
+                <div class="list-number">05</div>
+                <div class="list-content">
+                    <h3 class="serif">ABIL — Environmental Scoring Platform <span class="badge live">Live</span></h3>
+                    <div class="list-desc">
+                        ABIL condenses satellite readings into a single environmental score for any site, made for risk, insurance, investment and ESG. Every score links back to the measurement behind it and the regulation it answers to.<br><br>
+                        <a href="https://clearesg.vercel.app" target="_blank" class="project-link">View Platform <i class="fas fa-external-link-alt"></i></a>
+                        <div class="list-tags">
+                            <span class="tag">Satellite Data</span><span class="tag">ESG</span><span class="tag">Risk Analysis</span>
+                        </div>
+                    </div>
+                </div>
+                <i class="fas fa-plus list-icon"></i>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="container">
+        <h2 class="section-title reveal">About Me</h2>
+        
+        <div class="about-grid reveal">
+            <div class="about-img-container">
+                <img src="avatar.jpg" alt="Norbert Muzila" class="about-image" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiMzMzMiLz48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZmlsbD0iI2ZmZiIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+QXZhdGFyPC90ZXh0Pjwvc3ZnPg=='">
+            </div>
+            
+            <div class="about-content">
+                <p class="about-text">
+                    Passionate about Space Systems Engineering and the development of intelligent autonomous space systems that integrate geospatial AI, remote sensing, robotics, and data-driven technologies across landers, CubeSats, rovers, and drones for planetary exploration, Earth observation, and societal impact.
+                </p>
+                
+                <div class="stats-row">
+                    <div class="stat-item">
+                        <span class="stat-label">Languages</span>
+                        <span class="stat-val">English, French, Shona</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Location</span>
+                        <span class="stat-val">Illkirch-Graffenstaden, France</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Focus</span>
+                        <span class="stat-val">Space Engineering & AI</span>
+                    </div>
+                </div>
+
+                <div class="skills-grid">
+                    <div class="skill-card">
+                        <h4 class="skill-title">Programming</h4>
+                        <div class="skill-list">Python, JavaScript, C++, SQL, MATLAB, R</div>
+                    </div>
+                    <div class="skill-card">
+                        <h4 class="skill-title">AI & ML</h4>
+                        <div class="skill-list">TensorFlow, PyTorch, Scikit-learn, Deep Learning, NLP</div>
+                    </div>
+                    <div class="skill-card">
+                        <h4 class="skill-title">Space Systems</h4>
+                        <div class="skill-list">Orbital Mechanics, MBSE, SatComms, Mission Planning, Astrodynamics</div>
+                    </div>
+                    <div class="skill-card">
+                        <h4 class="skill-title">Geospatial</h4>
+                        <div class="skill-list">QGIS, Google Earth Engine, Remote Sensing, Leaflet.js</div>
+                    </div>
+                    <div class="skill-card">
+                        <h4 class="skill-title">Data</h4>
+                        <div class="skill-list">Power BI, Jupyter, Pandas, ETL Pipelines, Elastic Search</div>
+                    </div>
+                    <div class="skill-card">
+                        <h4 class="skill-title">DevOps</h4>
+                        <div class="skill-list">Docker, CI/CD, Git, Linux</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CV Section -->
+    <section id="cv" class="container">
+        <h2 class="section-title reveal">My CV</h2>
+
+        <div class="cv-grid">
+            <div class="cv-col reveal">
+                <h3>Education</h3>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <span class="timeline-date">2025 – 2026</span>
+                        <h4 class="timeline-title">MSS Space Engineering & Applications</h4>
+                        <div class="timeline-org">International Space University (ISU), France</div>
+                        <p class="timeline-desc">Coursework: Space Systems Engineering, Astrodynamics, Satellite Communications, Orbital Mechanics, Mission Planning, MBSE, Remote Sensing.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <span class="timeline-date">2020 – 2024</span>
+                        <h4 class="timeline-title">BSc (Hons) Data Science & Systems</h4>
+                        <div class="timeline-org">University of Zimbabwe</div>
+                        <p class="timeline-desc">Graduated with Honours. Foundation in Python, statistical modelling, predictive analytics, ML, and software development.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cv-col reveal">
+                <h3>Experience</h3>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <span class="timeline-date">2026</span>
+                        <h4 class="timeline-title">SGAC Organising Team Member</h4>
+                        <div class="timeline-org">Space Generation Advisory Council</div>
+                        <p class="timeline-desc">Organising team member for SG[FRANCE 2026]. Responsible for engaging with local sponsors, developing partnerships, and executing sponsor agreements.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <span class="timeline-date">2025 – Present</span>
+                        <h4 class="timeline-title">NASA Open Science Working Groups</h4>
+                        <div class="timeline-org">NASA</div>
+                        <p class="timeline-desc">Active contributor to NASA Open Science Data Repository within two specialized working groups.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <span class="timeline-date">2024</span>
+                        <h4 class="timeline-title">Data Science Intern</h4>
+                        <div class="timeline-org">ZCHPC, Zimbabwe</div>
+                        <p class="timeline-desc">Processed large-scale datasets and designed Python ETL pipelines for analytics. Applied ML optimization techniques for high-performance computing.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <span class="timeline-date">2023 – 2024</span>
+                        <h4 class="timeline-title">Software Developer</h4>
+                        <div class="timeline-org">Steward Bank, Zimbabwe</div>
+                        <p class="timeline-desc">Leveraged ML for churn prediction. Built performance tools, automated CI/CD pipelines using Docker, and designed Power BI dashboards. Improved dev efficiency by 70%.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h3 class="certs-title serif reveal">Certifications</h3>
+        <div class="certs-grid reveal">
+            <div class="cert-card">
+                <div class="cert-name">Executive Space Course</div>
+                <div class="tag" style="margin-top: 10px;">ISU (Oct 2025)</div>
+            </div>
+            <div class="cert-card">
+                <div class="cert-name">AI & Big Data Analytics</div>
+                <div class="tag" style="margin-top: 10px;">ZCHPC (Aug 2025)</div>
+            </div>
+            <div class="cert-card">
+                <img src="aws-cert.png" alt="AWS Certified Cloud Practitioner" class="cert-img" onerror="this.style.display='none'">
+                <div class="cert-name">AWS Cloud Practitioner</div>
+            </div>
+            <div class="cert-card">
+                <img src="google-data-cert.png" alt="Google Advanced Data Analytics" class="cert-img" onerror="this.style.display='none'">
+                <div class="cert-name">Google Advanced Data Analytics</div>
+            </div>
+            <div class="cert-card">
+                <div class="cert-name">Cisco Cybersecurity Essentials</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="container reveal">
+        <h2 class="section-title">Let's Connect</h2>
+        <p class="contact-subtitle">I'm always open to discussing new opportunities, collaborations, and interesting projects.</p>
+        
+        <div class="social-links">
+            <a href="mailto:norbertmuzila@gmail.com" class="social-btn" aria-label="Email">
+                <i class="fas fa-envelope"></i>
+            </a>
+            <a href="https://www.linkedin.com/in/norbert-muzila" target="_blank" class="social-btn" aria-label="LinkedIn">
+                <i class="fab fa-linkedin-in"></i>
+            </a>
+            <a href="https://github.com/norbertmuzila" target="_blank" class="social-btn" aria-label="GitHub">
+                <i class="fab fa-github"></i>
+            </a>
+            <a href="https://www.kaggle.com/norbertmuzila" target="_blank" class="social-btn" aria-label="Kaggle">
+                <i class="fab fa-kaggle"></i>
+            </a>
+        </div>
+
+        <footer>
+            <p>&copy; 2026 Norbert Muzila. All rights reserved.</p>
+        </footer>
+    </section>
+
+    <script>
+        // Starfield Canvas Animation
+        const canvas = document.getElementById('starfield');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+        let stars = [];
+
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+            initStars();
+        }
+
+        function initStars() {
+            stars = [];
+            const numStars = Math.floor((width * height) / 3000);
+            for (let i = 0; i < numStars; i++) {
+                stars.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    radius: Math.random() * 1.5,
+                    vx: (Math.random() - 0.5) * 0.2,
+                    vy: (Math.random() - 0.5) * 0.2,
+                    alpha: Math.random(),
+                    alphaChange: (Math.random() - 0.5) * 0.02
+                });
+            }
+        }
+
+        function drawStars() {
+            ctx.clearRect(0, 0, width, height);
+            stars.forEach(star => {
+                ctx.beginPath();
+                ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(255, 255, 255, ${star.alpha})`;
+                ctx.fill();
+
+                star.x += star.vx;
+                star.y += star.vy;
+                
+                star.alpha += star.alphaChange;
+                if (star.alpha <= 0.1 || star.alpha >= 0.8) {
+                    star.alphaChange = -star.alphaChange;
+                }
+
+                if (star.x < 0) star.x = width;
+                if (star.x > width) star.x = 0;
+                if (star.y < 0) star.y = height;
+                if (star.y > height) star.y = 0;
+            });
+            requestAnimationFrame(drawStars);
+        }
+
+        window.addEventListener('resize', resize);
+        resize();
+        drawStars();
+
+        // Typing Effect
+        const phrases = [
+            "AI Space Systems Engineer",
+            "Data Scientist",
+            "Space Robotics Engineer",
+            "Geospatial Intelligence"
+        ];
+        
+        let currentPhraseIndex = 0;
+        let currentCharIndex = 0;
+        let isDeleting = false;
+        const typingEl = document.getElementById('typing-text');
+        
+        function type() {
+            const currentPhrase = phrases[currentPhraseIndex];
+            
+            if (isDeleting) {
+                typingEl.textContent = currentPhrase.substring(0, currentCharIndex - 1);
+                currentCharIndex--;
+            } else {
+                typingEl.textContent = currentPhrase.substring(0, currentCharIndex + 1);
+                currentCharIndex++;
+            }
+            
+            let typeSpeed = isDeleting ? 50 : 100;
+            
+            if (!isDeleting && currentCharIndex === currentPhrase.length) {
+                typeSpeed = 2000;
+                isDeleting = true;
+            } else if (isDeleting && currentCharIndex === 0) {
+                isDeleting = false;
+                currentPhraseIndex = (currentPhraseIndex + 1) % phrases.length;
+                typeSpeed = 500;
+            }
+            
+            setTimeout(type, typeSpeed);
+        }
+        
+        setTimeout(type, 1000);
+
+        // Scroll Reveal
+        const revealElements = document.querySelectorAll('.reveal');
+        
+        const revealOptions = {
+            threshold: 0.1,
+            rootMargin: "0px 0px -50px 0px"
+        };
+        
+        const revealOnScroll = new IntersectionObserver(function(entries, observer) {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) {
+                    return;
+                } else {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, revealOptions);
+        
+        revealElements.forEach(el => {
+            revealOnScroll.observe(el);
+        });
+
+        // Mobile Menu
+        const hamburger = document.querySelector('.hamburger');
+        const navLinks = document.querySelector('.nav-links');
+        
+        hamburger.addEventListener('click', () => {
+            navLinks.classList.toggle('show');
+            const icon = hamburger.querySelector('i');
+            if (navLinks.classList.contains('show')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            } else {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        });
+
+        // Close mobile menu on click
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('show');
+                const icon = hamburger.querySelector('i');
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            });
+        });
+
+        // Active Nav Link on Scroll
+        const sections = document.querySelectorAll('section');
+        const navItems = document.querySelectorAll('.nav-links a');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= (sectionTop - 200)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navItems.forEach(item => {
+                item.classList.remove('active');
+                if (item.getAttribute('href').substring(1) === current) {
+                    item.classList.add('active');
+                }
+            });
+        });
+
+        // Accordion functionality for list items
+        function toggleAccordion(element) {
+            const isExpanded = element.classList.contains('expanded');
+            
+            // Close all items
+            document.querySelectorAll('.list-item').forEach(item => {
+                item.classList.remove('expanded');
+            });
+            
+            // Open clicked if it wasn't open
+            if (!isExpanded) {
+                element.classList.add('expanded');
+            }
+        }
+    </script>
+</body>
 </html>
