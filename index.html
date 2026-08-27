@@ -186,6 +186,8 @@
         .hero-content {
             position: relative;
             z-index: 2;
+            max-width: 1200px;
+            padding-left: 2%;
         }
 
         .hero-name {
@@ -679,6 +681,18 @@
         }
 
         /* CV Section */
+        .cv-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .cv-header .section-title {
+            margin-bottom: 0;
+        }
+
         .cv-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -1196,7 +1210,12 @@
 
     <!-- CV Section -->
     <section id="cv" class="container">
-        <h2 class="section-title reveal">My CV</h2>
+        <div class="cv-header">
+            <h2 class="section-title reveal">My CV</h2>
+            <a href="Norbert_Muzila_CV.pdf" download class="cv-download-btn reveal">
+                <i class="fas fa-download"></i> Download My CV
+            </a>
+        </div>
 
         <div class="cv-grid">
             <div class="cv-col reveal">
@@ -1225,7 +1244,7 @@
                     <div class="timeline-item">
                         <div class="timeline-logo"><img src="images/space4climate-logo.png" alt="Space4Climate" class="org-logo"></div>
                         <span class="timeline-date">July 2026 – Present</span>
-                        <h4 class="timeline-title">Volunteer Chief Technology Officer</h4>
+                        <h4 class="timeline-title">Chief Technology and Strategy Officer — Voluntary</h4>
                         <div class="timeline-org">Space4Climate</div>
                         <p class="timeline-desc">Led technical strategy and digital transformation by designing a secure, cloud-based document database with granular access governance. Programmed a centralised intelligence platform integrated with Discord, creating a self-organising digital ecosystem for cross-functional teams. Directed engineering pipelines and optimised high-availability infrastructure to process, analyse, and translate complex satellite data into AI-driven public climate media.</p>
                     </div>
@@ -1239,7 +1258,7 @@
                     <div class="timeline-item">
                         <div class="timeline-logo"><img src="sgac-logo.png" alt="SGAC" class="org-logo"></div>
                         <span class="timeline-date">2026</span>
-                        <h4 class="timeline-title">SGAC Organising Team Member — Volunteer</h4>
+                        <h4 class="timeline-title">SGAC Organising Team Member — SGFR26 Sponsorship Manager</h4>
                         <div class="timeline-org">Space Generation Advisory Council</div>
                         <p class="timeline-desc">Organising team member for SG[FRANCE 2026]. Successfully engaged with numerous high-profile corporate sponsors and negotiated partnerships securing over €8,000 in event logistics sponsorship from major industry companies, under the supervision of SGAC's Business Development Officer and Executive Director.</p>
                     </div>
@@ -1290,11 +1309,6 @@
             <div class="cert-card">
                 <div class="cert-name">Cisco Cybersecurity Essentials</div>
             </div>
-        </div>
-        <div style="text-align: center; margin-top: 3rem;" class="reveal">
-            <a href="Norbert_Muzila_CV.pdf" download class="cv-download-btn">
-                <i class="fas fa-download"></i> Download My CV
-            </a>
         </div>
     </section>
 
