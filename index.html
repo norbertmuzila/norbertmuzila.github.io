@@ -392,59 +392,108 @@
             gap: 0.75rem;
         }
 
-        .browser-mockup {
-            background: #111;
+        .project-preview {
+            background: linear-gradient(135deg, rgba(10, 22, 40, 0.85) 0%, rgba(26, 39, 68, 0.6) 50%, rgba(13, 26, 48, 0.9) 100%);
             border-left: 1px solid var(--card-border);
-            padding: 1rem;
             display: flex;
             flex-direction: column;
-            min-height: 300px;
-        }
-
-        @media (max-width: 900px) {
-            .browser-mockup {
-                border-left: none;
-                border-top: 1px solid var(--card-border);
-            }
-        }
-
-        .browser-header {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .browser-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: #333;
-        }
-        .browser-dot:nth-child(1) { background: #ff5f56; }
-        .browser-dot:nth-child(2) { background: #ffbd2e; }
-        .browser-dot:nth-child(3) { background: #27c93f; }
-
-        .browser-url {
-            background: #222;
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-            font-family: monospace;
-            font-size: 0.75rem;
-            color: var(--text-40);
+            align-items: center;
+            justify-content: center;
+            padding: 3rem 2rem;
             text-align: center;
-            margin-bottom: 1rem;
-            flex-grow: 1;
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition-smooth);
+            min-height: 280px;
         }
 
-        .browser-body {
-            flex-grow: 1;
-            background: #1a1a1a;
-            border-radius: 4px;
+        .project-preview::before {
+            content: '';
+            position: absolute;
+            width: 180px;
+            height: 180px;
+            background: radial-gradient(circle, rgba(201, 168, 76, 0.12) 0%, transparent 70%);
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            transition: var(--transition-smooth);
+        }
+
+        .project-card-large:hover .project-preview::before {
+            width: 260px;
+            height: 260px;
+            background: radial-gradient(circle, rgba(201, 168, 76, 0.22) 0%, transparent 70%);
+        }
+
+        .preview-icon-wrap {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: rgba(201, 168, 76, 0.06);
+            border: 1px solid rgba(201, 168, 76, 0.25);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--text-40);
-            font-family: monospace;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+            transition: var(--transition-smooth);
+            box-shadow: 0 0 30px rgba(201, 168, 76, 0.12);
+        }
+
+        .project-card-large:hover .preview-icon-wrap {
+            transform: scale(1.1);
+            border-color: rgba(201, 168, 76, 0.5);
+            box-shadow: 0 0 45px rgba(201, 168, 76, 0.3);
+        }
+
+        .preview-icon-wrap i {
+            font-size: 2.5rem;
+            color: var(--primary);
+        }
+
+        .preview-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.4rem 1.1rem;
+            background: rgba(201, 168, 76, 0.1);
+            border: 1px solid rgba(201, 168, 76, 0.3);
+            border-radius: 100px;
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            margin-bottom: 0.75rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .preview-badge .pulse-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--primary);
+            box-shadow: 0 0 8px var(--primary);
+        }
+
+        .preview-label {
+            font-size: 0.85rem;
+            color: var(--text-60);
+            letter-spacing: 0.05em;
+            position: relative;
+            z-index: 1;
+        }
+
+        @media (max-width: 900px) {
+            .project-preview {
+                border-left: none;
+                border-top: 1px solid var(--card-border);
+                padding: 2.5rem 1.5rem;
+            }
         }
 
         /* Accordion List */
@@ -1087,20 +1136,15 @@
                     <p class="project-desc">A real-time Mission Operations space cockpit designed for orbital mechanics tracking, sensor telemetry stream unpacking, and wireless camera downlinks. Features custom 2D Leaflet maps with Esri Satellite imagery and dynamic 3D Globe.gl orbit predictions.</p>
                     <a href="https://norbertmuzila.github.io/ground_station_iss_isugs/" target="_blank" class="project-link uppercase tracking-wide">View Project <i class="fas fa-arrow-right"></i></a>
                 </div>
-                <div class="browser-mockup">
-                    <div class="browser-header">
-                        <div class="browser-dot"></div>
-                        <div class="browser-dot"></div>
-                        <div class="browser-dot"></div>
+                <div class="project-preview">
+                    <div class="preview-icon-wrap">
+                        <i class="fas fa-satellite-dish"></i>
                     </div>
-                    <div class="browser-url">norbertmuzila.github.io/ground_station...</div>
-                    <div class="browser-body">
-                        <div style="padding: 30px; background: linear-gradient(135deg, #0a1628 0%, #1a2744 50%, #0d1a30 100%); height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; text-align: center;">
-                            <i class="fas fa-satellite-dish" style="font-size: 2.5rem; color: var(--primary); filter: drop-shadow(0 0 15px rgba(201, 168, 76, 0.4));"></i>
-                            <span style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.25em; color: var(--primary); font-weight: 600;">Launching Soon</span>
-                            <span style="font-size: 0.7rem; color: var(--text-40);">Mission Operations Cockpit</span>
-                        </div>
+                    <div class="preview-badge">
+                        <span class="pulse-dot"></span>
+                        Launching Soon
                     </div>
+                    <div class="preview-label">Mission Operations Cockpit</div>
                 </div>
             </div>
 
@@ -1118,20 +1162,15 @@
                     <p class="project-desc">An interactive digital twin dashboard for Zimbabwe's pension fund sector, built for the Zimbabwe Association of Pension Funds (ZAPF) Research Competition. Features live RBZ exchange rates, IPEC regulatory compliance modelling, and economic scenario simulations.</p>
                     <a href="https://norbertmuzila.github.io/pension-fund-digital-twin" target="_blank" class="project-link uppercase tracking-wide">View Project <i class="fas fa-arrow-right"></i></a>
                 </div>
-                <div class="browser-mockup">
-                    <div class="browser-header">
-                        <div class="browser-dot"></div>
-                        <div class="browser-dot"></div>
-                        <div class="browser-dot"></div>
+                <div class="project-preview">
+                    <div class="preview-icon-wrap">
+                        <i class="fas fa-chart-line"></i>
                     </div>
-                    <div class="browser-url">norbertmuzila.github.io/pension-fund...</div>
-                    <div class="browser-body">
-                        <div style="padding: 30px; background: linear-gradient(135deg, #0a1628 0%, #1a2744 50%, #0d1a30 100%); height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; text-align: center;">
-                            <i class="fas fa-chart-line" style="font-size: 2.5rem; color: var(--primary); filter: drop-shadow(0 0 15px rgba(201, 168, 76, 0.4));"></i>
-                            <span style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.25em; color: var(--primary); font-weight: 600;">Launching Soon</span>
-                            <span style="font-size: 0.7rem; color: var(--text-40);">Interactive Financial Dashboard</span>
-                        </div>
+                    <div class="preview-badge">
+                        <span class="pulse-dot"></span>
+                        Launching Soon
                     </div>
+                    <div class="preview-label">Interactive Financial Dashboard</div>
                 </div>
             </div>
 
@@ -1148,20 +1187,15 @@
                     <p class="project-desc">Interactive seismic wave propagation model and sensing visualization dashboard for geophysical analysis and Earth observation research.</p>
                     <a href="https://norbertmuzila.github.io/umbrella-seismic-sensing-model/" target="_blank" class="project-link uppercase tracking-wide">View Project <i class="fas fa-arrow-right"></i></a>
                 </div>
-                <div class="browser-mockup">
-                    <div class="browser-header">
-                        <div class="browser-dot"></div>
-                        <div class="browser-dot"></div>
-                        <div class="browser-dot"></div>
+                <div class="project-preview">
+                    <div class="preview-icon-wrap">
+                        <i class="fas fa-wave-square"></i>
                     </div>
-                    <div class="browser-url">norbertmuzila.github.io/umbrella...</div>
-                    <div class="browser-body">
-                        <div style="padding: 30px; background: linear-gradient(135deg, #0a1628 0%, #1a2744 50%, #0d1a30 100%); height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; text-align: center;">
-                            <i class="fas fa-wave-square" style="font-size: 2.5rem; color: var(--primary); filter: drop-shadow(0 0 15px rgba(201, 168, 76, 0.4));"></i>
-                            <span style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.25em; color: var(--primary); font-weight: 600;">Launching Soon</span>
-                            <span style="font-size: 0.7rem; color: var(--text-40);">Seismic Wave Analysis</span>
-                        </div>
+                    <div class="preview-badge">
+                        <span class="pulse-dot"></span>
+                        Launching Soon
                     </div>
+                    <div class="preview-label">Seismic Wave Analysis</div>
                 </div>
             </div>
         </div>
