@@ -254,10 +254,32 @@
 
         .hero-orbit-wrap {
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             position: relative;
             z-index: 2;
+        }
+
+        .hero-location {
+            margin-top: 1.5rem;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .hero-location .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-60);
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            margin-bottom: 0.35rem;
+        }
+
+        .hero-location .stat-val {
+            font-size: 0.95rem;
+            color: var(--text-90);
         }
 
         @media (max-width: 900px) {
@@ -1113,6 +1135,10 @@
                         </div>
                     </div>
                 </div>
+                <div class="hero-location stat-item">
+                    <span class="stat-label">Location</span>
+                    <span class="stat-val">Illkirch-Graffenstaden, France(Open to relocate)</span>
+                </div>
             </div>
         </div>
     </section>
@@ -1130,10 +1156,6 @@
                 <div class="stat-item">
                     <span class="stat-label">Languages</span>
                     <span class="stat-val">English, French, Shona</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-label">Location</span>
-                    <span class="stat-val">Illkirch-Graffenstaden, France</span>
                 </div>
                 <div class="stat-item">
                     <span class="stat-label">Focus</span>
