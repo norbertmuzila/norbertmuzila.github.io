@@ -480,6 +480,17 @@
             box-shadow: 0 0 8px var(--primary);
         }
 
+        .preview-badge.live {
+            background: rgba(39, 201, 63, 0.1);
+            border-color: rgba(39, 201, 63, 0.35);
+            color: #27c93f;
+        }
+
+        .preview-badge.live .pulse-dot {
+            background: #27c93f;
+            box-shadow: 0 0 8px #27c93f;
+        }
+
         .preview-label {
             font-size: 0.85rem;
             color: var(--text-60);
@@ -1164,7 +1175,34 @@
         <h2 class="section-title reveal">Projects</h2>
 
         <div class="featured-projects">
-            <!-- Project 1 -->
+            <!-- Project 1: ARGUS -->
+            <div class="project-card-large reveal">
+                <div class="project-content">
+                    <i class="fas fa-shield-halved project-icon"></i>
+                    <h3 class="project-title serif">ARGUS — Maritime GNSS Resilience & Forensic Intelligence <span class="badge live" style="display: inline-flex; vertical-align: middle; margin-left: 0.5rem; font-size: 0.65rem;">Live</span></h3>
+                    <div class="project-tags">
+                        <span class="tag">Maritime GNSS</span>
+                        <span class="tag">Interference Detection</span>
+                        <span class="tag">Forensic Intelligence</span>
+                        <span class="tag">Space Security</span>
+                        <span class="tag">Early Warning</span>
+                    </div>
+                    <p class="project-desc">Early-warning, pre-transit risk forecasting and post-loss forensic dossiers for maritime GNSS interference across European and international waters. Delivers 12–24 hour advance interference warnings and legally admissible forensic dossiers to protect commercial shipping fleets against GPS/GNSS spoofing, jamming, and navigation disruption.</p>
+                    <a href="https://argusgrid.vercel.app/" target="_blank" class="project-link uppercase tracking-wide">View Platform <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="project-preview">
+                    <div class="preview-icon-wrap">
+                        <i class="fas fa-shield-halved"></i>
+                    </div>
+                    <div class="preview-badge live">
+                        <span class="pulse-dot"></span>
+                        Live Platform
+                    </div>
+                    <div class="preview-label">Maritime GNSS Resilience Grid</div>
+                </div>
+            </div>
+
+            <!-- Project 2 -->
             <div class="project-card-large reveal">
                 <div class="project-content">
                     <i class="fas fa-satellite-dish project-icon"></i>
